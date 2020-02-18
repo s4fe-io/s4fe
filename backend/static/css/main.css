@@ -1,0 +1,27 @@
+body {
+    background-image: url(/static/img/S4FE_LANDINGPAGE1.png);
+    background-size: cover;
+    /*background-position: center; */
+    height: 100%;
+    min-height: 100vh;
+}
+.top-right {
+    position: absolute;
+    top: 20px;
+    right:50px;
+}
+.badge-success {
+  color: #000000c4;
+  background-color: #e9ecef;
+  padding: 8px 8px 8px 8px;
+}
+.sticky{
+  position: -webkit-sticky;
+  position: sticky;
+}
+.top-140-pad{
+    padding-top: 140px;
+}
+.pull-right {
+    float: right;
+}
