@@ -1,5 +1,28 @@
-# S4FE
-S4FE is the world’s first blockchain-based global database for the registration and identification of stolen and lost items. The database is accessible to everyone and enables users to register and search for property. The types of property include electronic devices, jewelry, personal collections, documents, sports and hobby equipment, vehicles and machines and any other conceivable item representing value to its owner.
+# S4FE Backend App
+This is a repository for a web application developed with Django
 
-[s4fe.io](https://www.s4fe.io)
+### Features
+1. **Local Authentication** using email and password with [allauth](https://pypi.org/project/django-allauth/)
+2. **Rest API** using [django rest framework](http://www.django-rest-framework.org/)
+3. **Forgot Password**
 
+### Recommended Installation
+1. [Postgresql](https://www.postgresql.org/download/)
+2. [Python](https://www.python.org/downloads/release/python-365/)
+
+### Installation
+1. Install [pipenv](https://pypi.org/project/pipenv/)
+2. Clone this repo and `cd s4fe`
+3. Run `pip install --user --upgrade pipenv` to get the latest pipenv version.
+4. Run `pipenv --python 3.7`
+5. Run `pipenv install`
+6. Run `cp .env.example .env`
+7. Update .env file `DATABASE_URL` with your `database_name`, `database_user`, `database_password`, if you use postgresql. 
+    Can alternatively set it to `sqlite:////tmp/my-tmp-sqlite.db`, if you want to use sqlite for local development.
+
+
+### Getting Started
+1. Run `pipenv shell`
+2. Run `python manage.py makemigrations`
+3. Run `python manage.py migrate`
+4. Run `python manage.py runserver`

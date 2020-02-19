@@ -1,30 +1,17 @@
 {
-  "expo": {
-    "name": "rn-material-kit-pro",
-    "description": "React Native - Material Kit PRO",
-    "slug": "rn-material-kit-pro",
-    "privacy": "unlisted",
-    "sdkVersion": "35.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "version": "1.4.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#6C24AA"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    }
+  "name": "S4fe-App",
+  "description": "This is django application S4FE www.s4fe.io",
+  "repository": "https://github.com/s4fe-io/s4fe",
+  "keywords": ["web", "django"],
+  "env": {
+    "DISABLE_COLLECTSTATIC": "1"
+  },
+  "addons": [
+    "heroku-postgresql:hobby-dev",
+    "sendgrid:starter",
+    "papertrail:choklad"
+  ],
+  "scripts": {
+    "postdeploy": "./postdeploy.sh"
   }
 }
