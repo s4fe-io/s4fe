@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("SECRET_KEY", "")
+SECRET_KEY = "goran_test_bla_bla_bla"
 
 ALLOWED_HOSTS = env.list("HOST", default=["*"])
 SITE_ID = 1
