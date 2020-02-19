@@ -3,7 +3,7 @@ build:
     web: Dockerfile
   config:
     DEBUG_COLLECTSTATIC: 1
-    SECRET_KEY: build
+    SECRET_KEY: ENV['SECRET_KEY']
 release:
   image: web
   command:
