@@ -32,8 +32,6 @@ SITE_ID = 1
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
 
 # Application definition
 
@@ -225,3 +223,6 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
