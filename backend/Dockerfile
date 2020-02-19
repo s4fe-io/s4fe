@@ -14,7 +14,7 @@ RUN apk add --no-cache --update \
   'python3~=3.7.5' \
   'python3-dev~=3.7.5' \
   curl \
-# zlib, zlib-dev, and libjpeg-turbo are required by pillow
+# zlib, zlib-dev,  and libjpeg-turbo are required by pillow
   zlib \
   libffi-dev \
   zlib-dev \
@@ -30,12 +30,12 @@ WORKDIR /opt/webapp
 RUN pipenv install --deploy --system
 
 # Allow SECRET_KEY to be passed via arg so collectstatic can run during build time
-ARG SECRET_KEY
-RUN python3 manage.py collectstatic --no-input
+# ARG SECRET_KEY
+# RUN python3 manage.py collectstatic --no-input
 
 # Run the image as a non-root user
 RUN adduser -D myuser
 USER myuser
 
-# Run the web server on port $PORT
-CMD waitress-serve --port=$PORT s4fe.wsgi:application
+# Run the web server on port  $PORT
+CMD waitress-serve --port=8000 s4fe.wsgi:application

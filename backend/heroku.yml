@@ -2,8 +2,9 @@ build:
   docker:
     web: Dockerfile
   config:
-    DEBUG_COLLECTSTATIC: 1
-    SECRET_KEY: build
+    DISABLE_COLLECTSTATIC: 1
+run:
+  web: waitress-serve --port=8000 s4fe.wsgi:application
 release:
   image: web
   command:
