@@ -105,7 +105,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 's4fe.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
