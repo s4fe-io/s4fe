@@ -1,9 +1,0 @@
-build:
-  docker:
-    web: ./backend/Dockerfile
-  config:
-    DISABLE_COLLECTSTATIC: 1
-release:
-  image: web
-  command:
-    - python3 manage.py migrate
