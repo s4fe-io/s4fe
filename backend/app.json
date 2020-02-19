@@ -4,7 +4,7 @@
   "repository": "https://github.com/s4fe-io/s4fe",
   "keywords": ["web", "django"],
   "env": {
-    "DEBUG_COLLECTSTATIC": "1"
+    "DISABLE_COLLECTSTATIC": "1"
   },
   "addons": [
     "heroku-postgresql:hobby-dev",
