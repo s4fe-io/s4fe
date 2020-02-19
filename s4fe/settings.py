@@ -22,7 +22,6 @@ DEBUG = env.bool("DEBUG", default=False)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "goran_test_bla_bla_bla"
 
@@ -31,7 +30,6 @@ SITE_ID = 1
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
-
 
 # Application definition
 
