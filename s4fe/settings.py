@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import environ
-import django_heroku
 
 env = environ.Env()
 
@@ -224,5 +223,3 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# Activate Django-Heroku.
-django_heroku.settings(locals())
