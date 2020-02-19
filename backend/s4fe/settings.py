@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import environ
+import django_heroku
 
 env = environ.Env()
 
@@ -31,6 +32,8 @@ SITE_ID = 1
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
 
+# Activate Django-Heroku.
+django_heroku.settings(locals())
 
 # Application definition
 
