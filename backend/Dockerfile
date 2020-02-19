@@ -37,5 +37,5 @@ RUN pipenv install --deploy --system
 RUN adduser -D myuser
 USER myuser
 
-# Run the web server on port $PORT
+# Run the web server on port  $PORT
 CMD waitress-serve --port=8000 s4fe.wsgi:application
