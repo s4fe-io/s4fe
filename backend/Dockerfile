@@ -30,8 +30,8 @@ WORKDIR /opt/webapp
 RUN pipenv install --deploy --system
 
 # Allow SECRET_KEY to be passed via arg so collectstatic can run during build time
-ARG SECRET_KEY
-RUN python3 manage.py collectstatic --no-input
+#ARG SECRET_KEY
+#RUN python3 manage.py collectstatic --no-input
 
 # Run the image as a non-root user
 RUN adduser -D myuser

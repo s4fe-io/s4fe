@@ -3,7 +3,6 @@ build:
     web: Dockerfile
   config:
     DISABLE_COLLECTSTATIC: 1
-    SECRET_KEY: build
 release:
   image: web
   command:
