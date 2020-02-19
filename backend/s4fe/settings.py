@@ -207,12 +207,9 @@ EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-
-# start fcm_django push notifications
 FCM_DJANGO_SETTINGS = {
     "FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "")
 }
-# end fcm_django push notifications
 
 PUSH_NOTIFICATIONS_SETTINGS = {
         "FCM_API_KEY": env.str("FCM_API_KEY", ""),
@@ -227,5 +224,4 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 }
 
 if DEBUG:
-    # output email to console instead of sending
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
