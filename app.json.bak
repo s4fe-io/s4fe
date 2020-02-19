@@ -10,5 +10,8 @@
     "heroku-postgresql:hobby-dev",
     "sendgrid:starter",
     "papertrail:choklad"
-  ]
+  ],
+  "scripts": {
+    "postdeploy": "./postdeploy.sh"
+  }
 }
