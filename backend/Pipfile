@@ -25,4 +25,3 @@ fcm-django = "~=0.3.3"
 django-filter = "*"
 django-push-notifications = "*"
 gunicorn
-django-heroku
