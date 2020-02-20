@@ -12,10 +12,66 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from home.api.v1.serializers import SignupSerializer, UserSerializer
+import os
+from home.api.v1.serializers import SignupSerializer, UserSerializer, ItemSerializer, CategorySerializer,\
+    MessageSerializer
 from users.models import User
 from django.core.mail import send_mail
+from home.models import Item, OTP, Category, Message
+from  .filters import ItemFilter, CategoryFilter, MessageFilter
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
+import logging
+from random import randint
+from .helpers import sendSMS
+
+
+logger = logging.getLogger(__name__)
+
+
+class ItemViewSet(ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    filter_class = ItemFilter
+
+
+class CategoryViewSet(ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filter_class = CategoryFilter
+
+
+class MessageViewSet(ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    filter_class = MessageFilter
+
+
+@api_view(['POST',])
+@permission_classes([permissions.AllowAny])
+def get_otp(request):
+    if 'phone_number' not in request.data or not request.data['phone_number']:
+        return Response(data={"error": "Phone Number not specified!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    now = timezone.now()
+    phone_number = request.data['phone_number']
+    otp = list(OTP.objects.filter(phone_number=phone_number).order_by('created'))
+    if len(otp) > 2 and otp[-1].created > (now - relativedelta(minutes=5)):
+        return Response(data={"error": "Try again in 5 minutes !!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if os.getenv('BYPASS_OTP', '0') == '1':
+        otp = 1111
+    else:
+        otp = randint(1000, 9999)
+    body = "Use {} Code to Verify your Account".format(otp)
+    OTP.objects.create(otp=otp, phone_number=phone_number)
+
+    if os.getenv('BYPASS_OTP', '0') == '1':
+        logger.info(body)
+    else:
+        sendSMS(phone_number, body)
+    return Response(otp)
 
 
 class SignupViewSet(ModelViewSet):

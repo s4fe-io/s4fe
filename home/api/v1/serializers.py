@@ -10,18 +10,51 @@ from rest_framework import serializers
 from rest_auth.serializers import PasswordResetSerializer
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.models import TokenModel
+from home.models import Item, OTP, Category, Message
+
 
 User = get_user_model()
 
 
+class ItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
+
+
 class MyRegisterSerializer(RegisterSerializer):
+    phone_number = serializers.CharField()
+    otp = serializers.CharField()
+
+    def validate_otp(self, otp):
+        temp_otp = OTP.objects.filter(phone_number=self.initial_data.get('phone_number', '')).order_by(
+            '-created').first().otp
+        req_otp = self.initial_data.get('otp', '')
+        if temp_otp != req_otp:
+            raise serializers.ValidationError("Wrong OTP !")
+        else:
+            return otp
 
     def get_cleaned_data(self):
         super(MyRegisterSerializer, self).get_cleaned_data()
         return {
             'name': self.validated_data.get('name', ''),
             'email': self.validated_data.get('email', ''),
-            'password1': self.validated_data.get('password1', '')
+            'password1': self.validated_data.get('password1', ''),
+            'phone_number': self.validated_data.get('phone_number', ''),
+            'otp': self.validated_data.get('otp', '')
         }
 
 
@@ -30,21 +63,30 @@ class TokenSerializer(serializers.ModelSerializer):
     Serializer for Token model.
     """
     id = serializers.SerializerMethodField('get_id')
-    name = serializers.SerializerMethodField('get_name')
     email = serializers.SerializerMethodField('get_email')
+    first_name = serializers.SerializerMethodField('get_first_name')
+    last_name = serializers.SerializerMethodField('get_last_name')
+    email = serializers.SerializerMethodField('get_email')
+    phone_number = serializers.SerializerMethodField('get_phone_number')
 
     def get_id(self, obj):
         return obj.user.id
 
-    def get_name(self, obj):
-        return obj.user.name
+    def get_first_name(self, obj):
+        return obj.user.first_name
+
+    def get_last_name(self, obj):
+        return obj.user.last_name
 
     def get_email(self, obj):
         return obj.user.email
 
+    def get_phone_number(self, obj):
+        return obj.user.phone_number
+
     class Meta:
         model = TokenModel
-        fields = ('key', 'id', 'name', 'email')
+        fields = ('key', 'id', 'first_name', 'last_name', 'email', 'phone_number')
 
 
 class SignupSerializer(serializers.ModelSerializer):

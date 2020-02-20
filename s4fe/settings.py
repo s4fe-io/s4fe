@@ -206,6 +206,8 @@ FCM_DJANGO_SETTINGS = {
     "FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "")
 }
 
+SENDERNUMBER = {'number': '+444444444444'}
+
 PUSH_NOTIFICATIONS_SETTINGS = {
         "FCM_API_KEY": env.str("FCM_API_KEY", ""),
         "GCM_API_KEY": env.str("GCM_API_KEY", ""),
