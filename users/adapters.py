@@ -15,6 +15,8 @@ class AccountAdapter(DefaultAccountAdapter):
 
         user = super().save_user(request, user, form, False)
         user_field(user, 'name', request.data.get('name', ''))
+        user_field(user, 'first_name', request.data.get('first_name', ''))
+        user_field(user, 'last_name', request.data.get('last_name', ''))
         user_field(user, 'phone_number', request.data.get('phone_number', ''))
         user.save()
         return user
