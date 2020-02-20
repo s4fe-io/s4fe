@@ -52,6 +52,8 @@ class MyRegisterSerializer(RegisterSerializer):
         return {
             'name': self.validated_data.get('name', ''),
             'email': self.validated_data.get('email', ''),
+            'first_name': self.validated_data.get('first_name', ''),
+            'last_name': self.validated_data.get('last_name', ''),
             'password1': self.validated_data.get('password1', ''),
             'phone_number': self.validated_data.get('phone_number', ''),
             'otp': self.validated_data.get('otp', '')
