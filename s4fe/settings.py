@@ -23,7 +23,7 @@ DEBUG = env.bool("DEBUG", default=False)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "goran_test_bla_bla_bla"
+SECRET_KEY = "$#FT#@G@$#G@#G@#G@#%HY@$GH@GHwefwefwefgweg"
 
 ALLOWED_HOSTS = env.list("HOST", default=["*"])
 SITE_ID = 1
