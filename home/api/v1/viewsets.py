@@ -24,6 +24,9 @@ from dateutil.relativedelta import relativedelta
 import logging
 from random import randint
 from .helpers import sendSMS
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
 
 
 logger = logging.getLogger(__name__)
@@ -95,4 +98,10 @@ class LoginViewSet(ViewSet):
         return Response({'token': token.key, 'user': user_serializer.data})
 
 
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+
+
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
 
