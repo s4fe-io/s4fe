@@ -10,7 +10,7 @@ from rest_framework import serializers
 from rest_auth.serializers import PasswordResetSerializer
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.models import TokenModel
-from home.models import Item, OTP, Category, Message
+from home.models import Item, OTP, Category, Message, DeviceInfo
 
 
 User = get_user_model()
@@ -36,7 +36,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Message
+        model = DeviceInfo
         fields = ('user', 'device_id', 'push_token', 'is_active')
 
 

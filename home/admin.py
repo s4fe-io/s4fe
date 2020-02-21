@@ -30,6 +30,7 @@ class DeviceInfoAdmin(admin.ModelAdmin):
     search_fields = ('device_id', )
 
 
+admin.site.register(Item, ItemAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(OTP, OTPAdmin)
