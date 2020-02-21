@@ -58,10 +58,6 @@ class DeviceViewSet(ModelViewSet):
     queryset = DeviceInfo.objects.all()
     serializer_class = DeviceSerializer
 
-    def perform_create(self, serializer):
-        user = self.request.user
-        serializer.save(user=user)
-
 
 @api_view(['POST',])
 @permission_classes([permissions.AllowAny])

@@ -35,9 +35,12 @@ class MessageSerializer(serializers.ModelSerializer):
 
 
 class DeviceSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+
     class Meta:
         model = DeviceInfo
         fields = ('id', 'user', 'device_id', 'push_token', 'is_active')
+
 
 
 class MyRegisterSerializer(RegisterSerializer):
