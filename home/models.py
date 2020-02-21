@@ -5,7 +5,8 @@ from django.db import models
 from django.db import models
 from users.models import User
 import sys
-
+from django.dispatch import receiver
+from home.notifications import send_push_message
 
 class Category(models.Model):
 
@@ -66,6 +67,30 @@ class Message(models.Model):
 
     class Meta:
         verbose_name_plural = 'Messages'
+        ordering = ('-created',)
+
+    def __str__(self):
+        return str(self.pk)
+
+
+@receiver(models.signals.post_save, sender=Message)
+def message_notify(sender, instance, *args, **kwargs):
+    title = "{} send you a message".format(instance.sender.first_name)
+    devices = DeviceInfo.objects.filter(user=instance.receiver, active=True)
+    for device in devices:
+        if device.push_token:
+            send_push_message(device.push_token, title)
+
+
+class DeviceInfo(models.Model):
+    user = models.ForeignKey(User, related_name="device_user", on_delete=models.PROTECT)
+    device_id = models.CharField(max_length=128, null=False, blank=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    is_active = models.BooleanField(default=True)
+    push_token = models.CharField(max_length=256, null=True, default=None)
+
+    class Meta:
+        verbose_name_plural = 'Devices'
         ordering = ('-created',)
 
     def __str__(self):

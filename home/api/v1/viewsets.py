@@ -14,10 +14,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import os
 from home.api.v1.serializers import SignupSerializer, UserSerializer, ItemSerializer, CategorySerializer,\
-    MessageSerializer
+    MessageSerializer, DeviceSerializer
 from users.models import User
 from django.core.mail import send_mail
-from home.models import Item, OTP, Category, Message
+from home.models import Item, OTP, Category, Message, DeviceInfo
 from  .filters import ItemFilter, CategoryFilter, MessageFilter
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
@@ -39,6 +39,7 @@ class ItemViewSet(ModelViewSet):
 
 
 class CategoryViewSet(ModelViewSet):
+    http_method_names = ('get',)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_class = CategoryFilter
@@ -48,6 +49,18 @@ class MessageViewSet(ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     filter_class = MessageFilter
+
+    def get_queryset(self):
+        return Message.objects.filter(receiver=self.request.user)
+
+
+class DeviceViewSet(ModelViewSet):
+    queryset = DeviceInfo.objects.all()
+    serializer_class = DeviceSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)
 
 
 @api_view(['POST',])

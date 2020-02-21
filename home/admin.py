@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Category, Message, OTP
+from .models import Item, Category, Message, OTP, DeviceInfo
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -24,7 +24,13 @@ class OTPAdmin(admin.ModelAdmin):
     search_fields = ('phone_number', 'otp')
 
 
-admin.site.register(Item, ItemAdmin)
+class DeviceInfoAdmin(admin.ModelAdmin):
+    list_display = ('user', 'device_id', 'is_active', 'push_token')
+    list_filter = ['user',]
+    search_fields = ('device_id', )
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(OTP, OTPAdmin)
+admin.site.register(DeviceInfo, DeviceInfoAdmin)

@@ -31,7 +31,13 @@ class CategorySerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ('created', 'sender', 'content', 'is_read')
+
+
+class DeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('user', 'device_id', 'push_token', 'is_active')
 
 
 class MyRegisterSerializer(RegisterSerializer):
