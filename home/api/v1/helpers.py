@@ -15,7 +15,7 @@ def sendSMS(to_number, body):
         message = client.messages \
             .create(
             body=body,
-            from_=settings.SENDERNUMBER['number'],
+            from_="S4FE",
             to=to_number
         )
         logger.info(account_sid)
