@@ -68,6 +68,7 @@ def get_otp(request):
 
     now = timezone.now()
     phone_number = request.data['phone_number']
+    OTP.objects.filter(phone_number=phone_number, created__lte=now - relativedelta(minutes=5)).delete()
     otp = list(OTP.objects.filter(phone_number=phone_number).order_by('created'))
     if len(otp) > 2 and otp[-1].created > (now - relativedelta(minutes=5)):
         return Response(data={"error": "Try again in 5 minutes !!"},
