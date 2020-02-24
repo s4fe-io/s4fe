@@ -1,6 +1,10 @@
 from django.conf import settings
 from twilio.rest import Client
 import os
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def sendSMS(to_number, body):
@@ -14,6 +18,10 @@ def sendSMS(to_number, body):
             from_=settings.SENDERNUMBER['number'],
             to=to_number
         )
+        logger.info(account_sid)
+        logger.info(auth_token)
+        logger.info('SMS sent !')
         return True
     except Exception as e:
+        logger.info('SMS error !' + str(e))
         return False
