@@ -33,9 +33,12 @@ logger = logging.getLogger(__name__)
 
 
 class ItemViewSet(ModelViewSet):
-    queryset = Item.objects.all()
+
     serializer_class = ItemSerializer
     filter_class = ItemFilter
+
+    def get_queryset(self):
+        return Item.objects.filter(user=self.request.user)
 
 
 class CategoryViewSet(ModelViewSet):
