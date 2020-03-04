@@ -40,6 +40,18 @@ class ItemViewSet(ModelViewSet):
     def get_queryset(self):
         return Item.objects.filter(user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        user = self.request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)
+
 
 class CategoryViewSet(ModelViewSet):
     http_method_names = ('get',)
