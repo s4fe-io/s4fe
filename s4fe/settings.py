@@ -34,6 +34,7 @@ SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
 # Application definition
 
 INSTALLED_APPS = [
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -220,6 +221,27 @@ PUSH_NOTIFICATIONS_SETTINGS = {
         "WP_PRIVATE_KEY": "/path/to/your/private.pem",
         "WP_CLAIMS": {'sub': "mailto: development@example.com"}
 }
+
+# Jet admin theme
+JET_SIDE_MENU_COMPACT = True
+
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#1e72f6',
+        'title': 'PT Blue'
+    },
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
+]
 
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
