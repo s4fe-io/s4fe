@@ -92,7 +92,7 @@ def get_otp(request):
         otp = 1111
     else:
         otp = randint(1000, 9999)
-    body = "Use {} Code to Verify your Account".format(otp)
+    body = "For S4FE account verification, use this code {} .".format(otp)
     OTP.objects.create(otp=otp, phone_number=phone_number)
 
     if os.getenv('BYPASS_OTP', '0') == '1':
