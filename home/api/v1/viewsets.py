@@ -61,12 +61,23 @@ class CategoryViewSet(ModelViewSet):
 
 
 class MessageViewSet(ModelViewSet):
-    queryset = Message.objects.all()
     serializer_class = MessageSerializer
     filter_class = MessageFilter
 
     def get_queryset(self):
         return Message.objects.filter(receiver=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        user = self.request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)
 
 
 class DeviceViewSet(ModelViewSet):
@@ -100,6 +111,28 @@ def get_otp(request):
     else:
         sendSMS(phone_number, body)
     return Response(otp)
+
+
+@api_view(['POST',])
+def get_item_status(request):
+    if 'key' not in request.data or not request.data['key']:
+        return Response(data={"error": "Key not specified!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    your_device = False
+    item = Item.objects.filter(key=request.data['key'])
+
+    if len(item) == 0:
+        return Response(data={"status": "Key not found !!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    else:
+        if request.user == item[0].user:
+            your_device = True
+        return_obj = {
+           "user": item[0].user.id,
+           "your_device": your_device,
+           "status": item[0].status
+        }
+        return Response(return_obj)
 
 
 class SignupViewSet(ModelViewSet):

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from django.conf.urls import url
 
 from home.api.v1.viewsets import SignupViewSet, LoginViewSet, ItemViewSet, CategoryViewSet, MessageViewSet, get_otp,\
-    DeviceViewSet
+    DeviceViewSet, get_item_status
 
 router = DefaultRouter()
 router.register('signup', SignupViewSet, basename='signup')
@@ -16,4 +16,5 @@ router.register('device', DeviceViewSet, basename='device')
 urlpatterns = [
     path("", include(router.urls)),
     url(r'get-otp', get_otp),
+    url(r'item-status', get_item_status),
 ]

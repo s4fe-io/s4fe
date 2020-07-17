@@ -31,7 +31,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('created', 'sender', 'content', 'is_read')
+        fields = ('created', 'sender', 'receiver', 'content', 'is_read')
 
 
 class DeviceSerializer(serializers.ModelSerializer):
@@ -40,7 +40,6 @@ class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeviceInfo
         fields = ('id', 'user', 'device_id', 'push_token', 'is_active')
-
 
 
 class MyRegisterSerializer(RegisterSerializer):
