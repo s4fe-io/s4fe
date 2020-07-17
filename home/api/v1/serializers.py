@@ -31,7 +31,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('created', 'sender', 'receiver', 'content', 'is_read')
+        fields = ('created', 'receiver', 'content', 'is_read')
 
 
 class DeviceSerializer(serializers.ModelSerializer):

@@ -77,7 +77,7 @@ class MessageViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user
-        serializer.save(user=user)
+        serializer.save(sender=user)
 
 
 class DeviceViewSet(ModelViewSet):
