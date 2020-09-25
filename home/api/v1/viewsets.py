@@ -150,6 +150,26 @@ def get_item_status(request):
         return Response(return_obj)
 
 
+@api_view(['GET',])
+@permission_classes([permissions.AllowAny])
+def search_by_serial(request):
+    if 'serial' not in request.data or not request.data['serial']:
+        return Response(data={"error": "Serial not specified!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    item = Item.objects.filter(serial=request.data['serial'])
+
+    if len(item) == 0:
+        return Response(data={"status": "Item not found !!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return_obj = {
+           "title": item[0].title,
+           "status": item.get_status_display()
+        }
+        return Response(return_obj)
+
+
 class SignupViewSet(ModelViewSet):
     serializer_class = SignupSerializer
     http_method_names = ['post']
