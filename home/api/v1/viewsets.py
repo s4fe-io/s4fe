@@ -153,7 +153,7 @@ def get_item_status(request):
 @api_view(['GET',])
 @permission_classes([permissions.AllowAny])
 def search_by_serial(request):
-    if 'serial' not in request.data or not request.data['serial']:
+    if 'serial' not in request.GET:
         return Response(data={"error": "Serial not specified!"},
                         status=status.HTTP_400_BAD_REQUEST)
 
