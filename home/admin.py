@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Category, Message, OTP, DeviceInfo
+from .models import Item, Category, Message, OTP, DeviceInfo, Transaction
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -30,8 +30,15 @@ class DeviceInfoAdmin(admin.ModelAdmin):
     search_fields = ('device_id', )
 
 
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('user_from', 'user_to', 'item', 'created')
+    list_filter = ['user_from', 'user_to', 'item']
+    search_fields = ('user_from', 'user_to', 'item', )
+
+
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(OTP, OTPAdmin)
 admin.site.register(DeviceInfo, DeviceInfoAdmin)
+admin.site.register(Transaction, TransactionAdmin)

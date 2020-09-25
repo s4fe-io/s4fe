@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from django.conf.urls import url
 
 from home.api.v1.viewsets import SignupViewSet, LoginViewSet, ItemViewSet, CategoryViewSet, MessageViewSet, get_otp,\
-    DeviceViewSet, get_item_status
+    DeviceViewSet, get_item_status, TransactionsViewSet
 
 router = DefaultRouter()
 router.register('signup', SignupViewSet, basename='signup')
@@ -12,6 +12,7 @@ router.register('items', ItemViewSet, basename='items')
 router.register('categories', CategoryViewSet, basename='categories')
 router.register('messages', MessageViewSet, basename='messages')
 router.register('device', DeviceViewSet, basename='device')
+router.register('transactions', TransactionsViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

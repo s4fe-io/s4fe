@@ -35,6 +35,7 @@ SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
 
 INSTALLED_APPS = [
     'jet',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -67,6 +68,7 @@ THIRD_PARTY_APPS = [
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

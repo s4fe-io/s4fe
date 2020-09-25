@@ -10,7 +10,7 @@ from rest_framework import serializers
 from rest_auth.serializers import PasswordResetSerializer
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.models import TokenModel
-from home.models import Item, OTP, Category, Message, DeviceInfo
+from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction
 
 
 User = get_user_model()
@@ -19,7 +19,7 @@ User = get_user_model()
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ('id', 'title', 'key', 'category', 'desc', 'status', 'created')
+        fields = ('id', 'title', 'key', 'serial', 'unique_identifier', 'category', 'desc', 'status', 'created', 'user')
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -40,6 +40,17 @@ class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeviceInfo
         fields = ('id', 'user', 'device_id', 'push_token', 'is_active')
+
+
+class TransactionsSerializer(serializers.ModelSerializer):
+    # user_from = serializers.CharField(read_only=True, source="user.unique_identifier")
+    item = serializers.CharField(read_only=True, source="item.unique_identifier")
+    from_user = serializers.CharField(read_only=True, source="user_from.unique_identifier")
+    to_user = serializers.CharField(read_only=True, source="user_to.unique_identifier")
+
+    class Meta:
+        model = Transaction
+        fields = ('id', 'created', 'item', 'from_user', 'to_user')
 
 
 class MyRegisterSerializer(RegisterSerializer):
@@ -154,7 +165,7 @@ class SignupSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'name']
+        fields = ['id', 'email', 'name', 'unique_identifier']
 
 
 class PasswordSerializer(PasswordResetSerializer):

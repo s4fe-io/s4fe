@@ -7,6 +7,8 @@ from users.models import User
 import sys
 from django.dispatch import receiver
 from home.notifications import send_push_message
+import uuid
+
 
 class Category(models.Model):
 
@@ -31,6 +33,8 @@ class Item(models.Model):
 
     title = models.CharField(max_length=255)
     key = models.CharField(max_length=255, blank=False, null=False)
+    serial = models.CharField(max_length=255, blank=True, null=True)
+    unique_identifier = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(User, related_name="item_user", on_delete=models.PROTECT)
     category = models.ForeignKey(Category, related_name="item_category", on_delete=models.PROTECT)
     desc = models.TextField(default="", blank=True, null=True)
@@ -44,6 +48,10 @@ class Item(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        self.unique_identifier = str(uuid.uuid4())
+        super(Item, self).save(*args, **kwargs)
+
 
 class OTP(models.Model):
     otp = models.CharField(max_length=4, default="")
@@ -56,6 +64,20 @@ class OTP(models.Model):
 
     def __str__(self):
         return str(self.otp)
+
+
+class Transaction(models.Model):
+    user_from = models.ForeignKey(User, related_name="trans_user_from", on_delete=models.PROTECT)
+    user_to = models.ForeignKey(User, related_name="trans_user_to", on_delete=models.PROTECT)
+    item = models.ForeignKey(Item, related_name="trans_item", on_delete=models.PROTECT)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        verbose_name_plural = 'Transactions'
+        ordering = ('-created',)
+
+    def __str__(self):
+        return str(self.item)
 
 
 class Message(models.Model):

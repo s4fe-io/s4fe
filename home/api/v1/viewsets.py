@@ -14,10 +14,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import os
 from home.api.v1.serializers import SignupSerializer, UserSerializer, ItemSerializer, CategorySerializer,\
-    MessageSerializer, DeviceSerializer
+    MessageSerializer, DeviceSerializer, TransactionsSerializer
 from users.models import User
 from django.core.mail import send_mail
-from home.models import Item, OTP, Category, Message, DeviceInfo
+from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction
 from  .filters import ItemFilter, CategoryFilter, MessageFilter
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
@@ -52,6 +52,14 @@ class ItemViewSet(ModelViewSet):
         user = self.request.user
         serializer.save(user=user)
 
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        if self.request.data['user']:
+            trans = Transaction(user_from=self.get_object().user, user_to_id=request.data['user'],
+                                item_id=self.get_object().pk)
+            trans.save()
+        return self.update(request, *args, **kwargs)
+
 
 class CategoryViewSet(ModelViewSet):
     http_method_names = ('get',)
@@ -83,6 +91,13 @@ class MessageViewSet(ModelViewSet):
 class DeviceViewSet(ModelViewSet):
     queryset = DeviceInfo.objects.all()
     serializer_class = DeviceSerializer
+
+
+class TransactionsViewSet(ModelViewSet):
+    http_method_names = ['get', ]
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionsSerializer
+    permission_classes = [permissions.AllowAny, ]
 
 
 @api_view(['POST',])
