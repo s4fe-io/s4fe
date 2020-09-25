@@ -157,7 +157,7 @@ def search_by_serial(request):
         return Response(data={"error": "Serial not specified!"},
                         status=status.HTTP_400_BAD_REQUEST)
 
-    item = Item.objects.filter(serial=request.data['serial'])
+    item = Item.objects.filter(serial=request.GET['serial'])
 
     if len(item) == 0:
         return Response(data={"status": "Item not found !!"},
@@ -165,7 +165,7 @@ def search_by_serial(request):
     else:
         return_obj = {
            "title": item[0].title,
-           "status": item.get_status_display()
+           "status": item[0].get_status_display()
         }
         return Response(return_obj)
 
