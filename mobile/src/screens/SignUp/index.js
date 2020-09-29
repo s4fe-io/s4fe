@@ -173,9 +173,9 @@ export default class PhoneNumber extends ValidationComponent {
 							</View>
 
 							<View style={styles.footerTexts}>
-								<View style={{flex: 1, marginTop: 10}}>
+								<View style={{flex: 1, marginTop: 0}}>
 									<TouchableOpacity
-										onPress={() => navigation.navigate('SignUp')}
+										onPress={() => navigation.navigate('SocialAuth')}
 										style={styles.button4}>
 										<View style={styles.createAccount2Filler} />
 										<Text style={styles.createAccount2}>

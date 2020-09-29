@@ -16,6 +16,8 @@ import EditItemScreen from '../screens/Items/EditItem'
 import ChatScreen from '../screens/Chat'
 import ScanNFCTagScreen from '../screens/Items/ScanNFCTag'
 
+// import SocialAuthScreen from '../screens/SocialAuth'
+
 const AppStack = createStackNavigator({
 	UserProfile: {
 		screen: UserProfileScreen,
@@ -65,6 +67,10 @@ const AuthStack = createStackNavigator({
 		screen: ForgotPasswordScreen,
 		navigationOptions: {headerShown: false},
 	},
+	// SocialAuth: {
+	// 	screen: SocialAuthScreen,
+	// 	navigationOptions: {headerShown: false},
+	// },
 })
 
 export default createAppContainer(
