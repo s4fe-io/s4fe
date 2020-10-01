@@ -8,23 +8,23 @@ function HeaderX(props) {
 		<View style={[styles.container, props.style]}>
 			<View style={styles.group}>
 
-				<View style={styles.iconRow}>
+				<TouchableOpacity style={styles.iconRow}>
 					<MaterialIconsIcon name="dehaze" style={styles.icon} />
 					<Image
 						source={require('../assets/images/S4FE_Logo_White.png')}
 						resizeMode="contain"
 						style={styles.image}
 					/>
-				</View>
-				{/*<View style={styles.iconRowFiller} />*/}
-				{/*<TouchableOpacity*/}
-				{/*	onPress={() => console.log('Navigate to Settings')}*/}
-				{/*	style={styles.button}>*/}
-				{/*	<FeatherIcon*/}
-				{/*		name={props.icon2Name || 'settings'}*/}
-				{/*		style={styles.icon2}*/}
-				{/*	/>*/}
-				{/*</TouchableOpacity>*/}
+				</TouchableOpacity>
+				<View style={styles.iconRowFiller} />
+				<TouchableOpacity
+					onPress={() => console.log('Navigate to Settings')}
+					style={styles.button}>
+					<FeatherIcon
+						name={props.icon2Name || 'settings'}
+						style={styles.icon2}
+					/>
+				</TouchableOpacity>
 			</View>
 		</View>
 	)

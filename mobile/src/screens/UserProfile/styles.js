@@ -169,16 +169,17 @@ export default StyleSheet.create({
 		borderRadius: 500,
 	},
 	userName: {
-		color: '#1fb2cc',
-		fontSize: 30,
+		color: '#4a4a4a',
+		fontSize: 35,
 	},
 	userEmail: {
-		color: 'rgba(0,0,0,1)',
+		color: 'rgb(69,69,69)',
 		fontSize: 16,
 	},
 	userNameColumn: {
-		marginLeft: 56,
-		marginTop: 18,
+		marginLeft: 40,
+		marginTop: 15,
+		marginBottom: 10
 	},
 	avatarRow: {
 		flexDirection: 'row',
@@ -194,7 +195,7 @@ export default StyleSheet.create({
 	},
 	containerScroll: {
 		marginTop: 5,
-		height: height * 0.35
+		height: height * 0.35,
 	},
 	scrollView: {
 		backgroundColor: 'pink',

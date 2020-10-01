@@ -1,29 +1,26 @@
 import React, {Component, Fragment} from 'react'
 import {
-	StyleSheet,
 	View,
 	StatusBar,
 	Text,
 	TouchableOpacity,
-	Image,
 	SafeAreaView,
-	ScrollView,
 	FlatList,
 	AsyncStorage,
 } from 'react-native'
 
 import {
-	Button,
-	Left,
-	Switch,
-	List,
 	ListItem,
-	Content,
-	Card,
-	CardItem,
 	Body,
 	Right,
 	Icon,
+	Fab,
+	Button,
+	Card,
+	CardItem,
+	Content,
+	List,
+	Left
 } from 'native-base'
 
 import Header from '../../components/Header'
@@ -42,27 +39,13 @@ const cy = height * 0.7
 const rx = width * 2.6
 const ry = height * 1.2
 
-const DATA = [
-	{
-		id: 1,
-		title: 'MacBook Pro',
-	},
-	{
-		id: 2,
-		title: 'Rolex President',
-	},
-	{
-		id: 3,
-		title: 'iPhone X',
-	},
-]
-
 export default class UserProfile extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			userData: {},
 			items: [],
+			active: false
 		}
 		// this.state.userData = this.props.navigation.getParam('userData')
 	}
@@ -111,6 +94,32 @@ export default class UserProfile extends React.Component {
 			})
 	}
 
+	_renderItems () {
+		const {items} = this.state
+			return (
+				items.map(item => {
+					console.log(item)
+
+					return (
+						<View style={styles.item}>
+							<ListItem onPress={() =>
+								this.props.navigation.navigate('EditItem', {item})
+							}>
+								<Body>
+									<Text style={{fonsSize: 20}}>{item.title}</Text>
+									<Text note>{item.desc}</Text>
+								</Body>
+								<Right>
+									<Icon name="arrow-forward" />
+								</Right>
+							</ListItem>
+						</View>
+					)
+				})
+
+			)
+	}
+
 	render() {
 		const {navigation} = this.props
 		const {items} = this.state
@@ -121,7 +130,7 @@ export default class UserProfile extends React.Component {
 		return (
 			<View style={styles.root}>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
-				<Header icon2Name="power" style={styles.headerX} />
+				<Header navigation={navigation} icon2Name="power" style={styles.headerX} />
 				<View style={styles.body}>
 					<View style={styles.ellipseStack}>
 						<Svg viewBox="0 0 859.43 890.3" style={styles.ellipse}>
@@ -135,87 +144,43 @@ export default class UserProfile extends React.Component {
 							/>
 						</Svg>
 						<Fragment>
-							<SafeAreaView style={styles.container}>
+							<Content>
 								<View style={styles.container}>
-									<Text style={styles.account4}>ACCOUNT</Text>
-									<View style={styles.userInfo}>
-										<View style={styles.avatarRow}>
-											<Image
-												source={require('../../assets/images/actor-adult-black-and-white-1040880.jpg')}
-												resizeMode="stretch"
-												style={styles.avatar}
-											/>
-											<View style={styles.userNameColumn}>
-												<Text style={styles.userName}>
-													{`${userData.firstName} ${userData.lastName}`}
-												</Text>
-												<Text style={styles.userEmail}>{userData.email}</Text>
-											</View>
-										</View>
+									<View style={styles.userNameColumn}>
+										<Text style={styles.userName}>
+											{`${userData.first_name} ${userData.last_name}`}
+										</Text>
+										<Text style={styles.userEmail}>{userData.email}</Text>
 									</View>
 
 									{/*	 ITEMS */}
-									<SafeAreaView style={styles.containerScroll}>
-										<FlatList
-											data={items}
-											renderItem={({item}) => (
-												<Item
-													title={item.title}
-													item={item}
-													navigation={navigation}
-												/>
-											)}
-											keyExtractor={item => item.title}
-										/>
-									</SafeAreaView>
+									<List style={{padding: 10}}>
+										{this._renderItems()}
+									</List>
 								</View>
 
-								{/*<TouchableOpacity*/}
-								{/*	onPress={() => props.navigation.navigate('Chat')}*/}
-								{/*	style={styles.button}>*/}
-								{/*	<Text style={styles.addItem}>Chat</Text>*/}
-								{/*</TouchableOpacity>*/}
-								<TouchableOpacity
-									onPress={() => navigation.navigate('ScanNFC')}
-									style={styles.button}>
-									<Text style={styles.addItem}>Add Item</Text>
-								</TouchableOpacity>
-								<TouchableOpacity
-									onPress={() => navigation.navigate('ScanNFCTag')}
-									style={styles.button1}>
-									<Text style={styles.addItem}>Scan TAG</Text>
-								</TouchableOpacity>
-							</SafeAreaView>
+							</Content>
 						</Fragment>
 					</View>
 				</View>
+				<Fab
+					active={this.state.active}
+					direction="up"
+					containerStyle={{marginBottom: 20}}
+					style={{ backgroundColor: Colors.PRIMARY }}
+					position="bottomRight"
+					onPress={() => this.setState({ active: !this.state.active })}>
+					<Icon name="add" />
+					<Button style={{ backgroundColor: Colors.PRIMARY }} onPress={() => navigation.navigate('ScanNFC')}>
+						<Icon name="add" />
+					</Button>
+					<Button style={{ backgroundColor: '#3B5998' }} onPress={() => navigation.navigate('ScanNFCTag')}>
+						<Icon name="search" />
+					</Button>
+				</Fab>
 			</View>
 		)
 	}
 }
 
-function Item({title, navigation, item}) {
-	return (
-		<View style={styles.item}>
-			<ListItem
-				icon
-				onPress={() =>
-					navigation.navigate('EditItem', {
-						item,
-					})
-				}>
-				{/*<Left>*/}
-				{/*	<Button style={{backgroundColor: '#cacaca'}}>*/}
-				{/*		<Icon active name="wifi" />*/}
-				{/*	</Button>*/}
-				{/*</Left>*/}
-				<Body>
-					<Text>{title}</Text>
-				</Body>
-				<Right>
-					<Icon active name="arrow-forward" />
-				</Right>
-			</ListItem>
-		</View>
-	)
-}
+
