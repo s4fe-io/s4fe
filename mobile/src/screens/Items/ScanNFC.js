@@ -102,22 +102,13 @@ export default class ScanNFC extends Component {
 											/>
 										</View>
 										<Text style={styles.text}>Place your phone close to the S4FE sticker</Text>
-										{/*<Text*/}
-										{/*	style={{marginTop: 5}}>{`(Parsed Text: ${parsedText})`}</Text>*/}
-										{/*<Text>{`Is NFC supported ? ${supported}`}</Text>*/}
+
+									{/*	Skip scanning */}
+									<TouchableOpacity onPress={() => this.goToScreen('none')}>
+										<Text style={styles.skipText}>Skip</Text>
+									</TouchableOpacity>
+
 									</View>
-
-									{/*<TouchableOpacity*/}
-									{/*	onPress={() => navigation.pop()}*/}
-									{/*	style={styles.button}>*/}
-									{/*	<Text style={styles.cancel}>Cancel</Text>*/}
-									{/*</TouchableOpacity>*/}
-
-									{/*<TouchableOpacity*/}
-									{/*	onPress={() => this._writeToNFCTag(generateNFCKey())}*/}
-									{/*	style={styles.button}>*/}
-									{/*	<Text style={styles.cancel}>Next</Text>*/}
-									{/*</TouchableOpacity>*/}
 								</ImageBackground>
 							</View>
 						</View>
@@ -309,6 +300,12 @@ const styles = StyleSheet.create({
 		paddingLeft: 20,
 		paddingRight: 20,
 		paddingBottom: 30
+	},
+	skipText: {
+		color: '#e9e9e9',
+		marginTop: 10,
+		fontSize: 18,
+		textAlign: 'center',
 	}
 })
 

@@ -36,6 +36,7 @@ export default class AddItem extends ValidationComponent {
 			selectedCategory: '',
 			dataLoading: false,
 			userId: '',
+			serial: null
 		}
 		this.state.userId = this.props.navigation.getParam('userId')
 	}
@@ -79,6 +80,7 @@ export default class AddItem extends ValidationComponent {
 			const formData = {
 				title: this.state.title,
 				category: this.state.selectedCategory,
+				serial: this.state.serial,
 				desc: this.state.description,
 				key: NFCKey
 			}
@@ -179,6 +181,22 @@ export default class AddItem extends ValidationComponent {
 															style={styles.textInput}
 															onChangeText={value =>
 																this.handleInput('title', value)
+															}
+														/>
+													</View>
+													{/* Item Serial */}
+													<View style={styles.group}>
+														<MaterialIconsIcon
+															name="description"
+															style={styles.icon5}
+														/>
+														<TextInput
+															placeholder="Serial number"
+															placeholderTextColor="rgba(255,255,255,1)"
+															secureTextEntry={false}
+															style={styles.textInput}
+															onChangeText={value =>
+																this.handleInput('description', value)
 															}
 														/>
 													</View>
