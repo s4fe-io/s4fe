@@ -54,7 +54,7 @@ class ItemViewSet(ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
-        if self.request.data['user']:
+        if 'user' in self.request.data:
             trans = Transaction(user_from=self.get_object().user, user_to_id=request.data['user'],
                                 item_id=self.get_object().pk)
             trans.save()
