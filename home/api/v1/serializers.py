@@ -43,10 +43,16 @@ class DeviceSerializer(serializers.ModelSerializer):
 
 
 class TransactionsSerializer(serializers.ModelSerializer):
-    # user_from = serializers.CharField(read_only=True, source="user.unique_identifier")
     item = serializers.CharField(read_only=True, source="item.unique_identifier")
-    from_user = serializers.CharField(read_only=True, source="user_from.unique_identifier")
+    from_user = serializers.SerializerMethodField('get_user_from')
+    serializers.SerializerMethodField('get_id')
     to_user = serializers.CharField(read_only=True, source="user_to.unique_identifier")
+
+    def get_user_from(self, obj):
+        if obj.user_from:
+            return User.objects.get(id=obj.user_from.id).unique_identifier
+        else:
+            return ""
 
     class Meta:
         model = Transaction
