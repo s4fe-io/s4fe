@@ -67,7 +67,7 @@ class OTP(models.Model):
 
 
 class Transaction(models.Model):
-    user_from = models.ForeignKey(User, related_name="trans_user_from", on_delete=models.PROTECT)
+    user_from = models.ForeignKey(User, related_name="trans_user_from", blank=True, null=True, on_delete=models.PROTECT)
     user_to = models.ForeignKey(User, related_name="trans_user_to", on_delete=models.PROTECT)
     item = models.ForeignKey(Item, related_name="trans_item", on_delete=models.PROTECT)
     created = models.DateTimeField(auto_now_add=True, editable=False)

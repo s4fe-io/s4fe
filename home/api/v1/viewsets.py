@@ -46,8 +46,11 @@ class ItemViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        trans = Transaction(user_from=None, user_to_id=user.id, item_id=serializer.data['id'])
-        trans.save()
+        try:
+            trans = Transaction(user_from=None, user_to_id=user.id, item_id=serializer.data['id'])
+            trans.save()
+        except Exception as e:
+            print(e)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
