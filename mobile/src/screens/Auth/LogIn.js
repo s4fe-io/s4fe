@@ -93,12 +93,9 @@ export default class SignIn extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="rgba(0,0,0,0)"
-						/>
 						{/* Back button */}
 						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 							<Icon
@@ -169,13 +166,13 @@ export default class SignIn extends ValidationComponent {
 
 										</View>
 										<View style={styles.footerTexts1}>
-											<Text style={styles.createAccount1}>
-												Login using Social Platforms
-											</Text>
+											{/*<Text style={styles.createAccount1}>*/}
+											{/*	Login using Social Platforms*/}
+											{/*</Text>*/}
 											{/*	 Privacy */}
-											<TouchableOpacity onPress={() => navigation.navigate('')}>
-												<Text style={styles.terms}>Facebook | Google</Text>
-											</TouchableOpacity>
+											{/*<TouchableOpacity onPress={() => navigation.navigate('')}>*/}
+											{/*	<Text style={styles.terms}>Facebook | Google</Text>*/}
+											{/*</TouchableOpacity>*/}
 										</View>
 									</View>
 								</KeyboardAwareScrollView>

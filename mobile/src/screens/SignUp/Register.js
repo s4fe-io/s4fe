@@ -114,9 +114,9 @@ export default class Register extends ValidationComponent {
 		}
 	}
 
-	goToScreen(screen) {
+	goToScreen(screen, user) {
 		this.props.navigation.navigate(screen, {
-			userData: this.state,
+			userData: user,
 		})
 	}
 	render() {
@@ -130,10 +130,7 @@ export default class Register extends ValidationComponent {
 			<Fragment>
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="rgba(0,0,0,0)"
-						/>
+						<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 						{/* Back button */}
 						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 							<Icon

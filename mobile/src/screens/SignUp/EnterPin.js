@@ -86,7 +86,7 @@ export default class EnterPin extends ValidationComponent {
 
 		return (
 			<View style={styles.root}>
-				<StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,0)" />
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				{/* Back Arrow */}
 				<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 					<Icon

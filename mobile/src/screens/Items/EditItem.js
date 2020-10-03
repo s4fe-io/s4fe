@@ -87,7 +87,8 @@ export default class AddItem extends ValidationComponent {
 				title: this.state.title,
 				category: this.state.selectedCategory,
 				desc: this.state.description,
-				status: this.state.selectedStatus
+				status: this.state.selectedStatus,
+				serial: ''
 			}
 			console.log('forma ', formData)
 			console.log('item id ', this.state.itemId)
@@ -105,8 +106,9 @@ export default class AddItem extends ValidationComponent {
 							titleError: `Title: ${e.response.data.title[0]}`,
 							categoryError: `Category: ${e.response.data.category[0]}`,
 						}
-
 						Alert.alert('Error!', JSON.stringify(errors))
+					} else {
+						Alert.alert('Error!', 'Sorry there was an error.')
 					}
 				})
 		} else {
@@ -161,17 +163,14 @@ export default class AddItem extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="rgba(0,0,0,0)"
-						/>
 						{/* Back button */}
 						<View
 							style={{
 								backgroundColor: Colors.PRIMARY,
-								paddingTop: 40,
+								paddingTop: 10,
 								paddingLeft: 20,
 							}}>
 							<Icon
@@ -233,6 +232,8 @@ export default class AddItem extends ValidationComponent {
 															placeholder="Item description"
 															placeholderTextColor="rgba(255,255,255,1)"
 															secureTextEntry={false}
+															multiline={true}
+															numberOfLines={4}
 															value={description}
 															style={styles.textInput}
 															onChangeText={value =>
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
 	addNewItem: {
 		color: 'rgba(255,255,255,1)',
 		fontSize: 24,
-		marginTop: 36,
+		marginTop: 15,
 		textAlign: 'center',
 	},
 	group2: {
@@ -463,14 +464,15 @@ const styles = StyleSheet.create({
 		padding: 40,
 	},
 	group: {
-		height: 59,
 		backgroundColor: 'rgba(251,247,247,0.25)',
 		borderRadius: 5,
 		flexDirection: 'row',
 		marginBottom: 10,
+		paddingTop: 10,
+		paddingBottom: 10
 	},
 	selectPicker: {
-		height: 60,
+		paddingBottom: 5,
 		backgroundColor: 'rgba(251,247,247,0.25)',
 		borderRadius: 5,
 		marginBottom: 10,

@@ -48,36 +48,30 @@ export default class SignIn extends ValidationComponent {
 	}
 
 	goToScreen(screen, data) {
-		this.props.navigation.navigate(screen, {
-			userData: data,
-		})
+		this.props.navigation.navigate(screen)
 	}
 
-	// Phone verification
-	login() {
+	forgotPassword() {
 		const isValid = this.validate({
 			email: {email: true, required: true},
-			password: {required: true},
 		})
 		if (isValid) {
 			this.setState({dataLoading: true})
 			const formData = {
 				email: this.state.email,
-				password: this.state.password,
 			}
-			Axios.post(API.LOGIN, formData)
+			Axios.post(API.FORGOT_PASSWORD, formData)
 				.then(res => {
 					console.log('res', res)
 					this.setState({dataLoading: false})
-					this.storeData('tokenData', res.data.key)
-					this.storeData('userData', JSON.stringify(res.data))
-					this.goToScreen('UserProfile', res.data)
+					Alert.alert('Info', 'Please check your inbox for the password reset link')
+					this.goToScreen('LogIn')
 				})
 				.catch(err => {
 					console.log(err.response)
-					const nonFieldErrors = err.response.data.non_field_errors
-					if (nonFieldErrors) {
-						Alert.alert('Warning', nonFieldErrors[0])
+					const email = err.response.data.email.email
+					if (email) {
+						Alert.alert('Warning', email[0])
 					}
 					this.setState({dataLoading: false})
 					// Alert.alert('Warning!', 'Something went wrong!')
@@ -95,10 +89,7 @@ export default class SignIn extends ValidationComponent {
 			<Fragment>
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="rgba(0,0,0,0)"
-						/>
+						<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 						{/* Back button */}
 						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 							<Icon
@@ -146,7 +137,7 @@ export default class SignIn extends ValidationComponent {
 											<TouchableOpacity
 												style={styles.button}
 												onPress={() => {
-													this.login()
+													this.forgotPassword()
 												}}>
 												<Text style={styles.next}>Reset</Text>
 											</TouchableOpacity>

@@ -69,15 +69,17 @@ export default class AddItem extends ValidationComponent {
 		this.setState({[model]: value})
 	}
 
-	saveItem(NFCKey) {
+	async saveItem(NFCKey) {
 		const isValid = this.validate({
 			title: {required: true},
 			selectedCategory: {required: true},
 		})
-
+		const userData = JSON.parse(await AsyncStorage.getItem('userData'))
+		console.log(userData)
 		if (isValid) {
 			this.setState({dataLoading: true})
 			const formData = {
+				user: userData.id,
 				title: this.state.title,
 				category: this.state.selectedCategory,
 				serial: this.state.serial,
@@ -124,17 +126,14 @@ export default class AddItem extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="rgba(0,0,0,0)"
-						/>
 						{/* Back button */}
 						<View
 							style={{
 								backgroundColor: Colors.PRIMARY,
-								paddingTop: 40,
+								paddingTop: 10,
 								paddingLeft: 20,
 							}}>
 							<Icon
@@ -208,6 +207,8 @@ export default class AddItem extends ValidationComponent {
 														/>
 														<TextInput
 															placeholder="Item description"
+															multiline={true}
+															numberOfLines={4}
 															placeholderTextColor="rgba(255,255,255,1)"
 															secureTextEntry={false}
 															style={styles.textInput}
@@ -339,7 +340,7 @@ const styles = StyleSheet.create({
 	addNewItem: {
 		color: 'rgba(255,255,255,1)',
 		fontSize: 24,
-		marginTop: 36,
+		marginTop: 15,
 		textAlign: 'center',
 	},
 	group2: {
@@ -427,14 +428,15 @@ const styles = StyleSheet.create({
 		padding: 40,
 	},
 	group: {
-		height: 59,
 		backgroundColor: 'rgba(251,247,247,0.25)',
 		borderRadius: 5,
 		flexDirection: 'row',
 		marginBottom: 10,
+		paddingTop: 10,
+		paddingBottom: 10
 	},
 	selectPicker: {
-		height: 60,
+		paddingBottom: 5,
 		backgroundColor: 'rgba(251,247,247,0.25)',
 		borderRadius: 5,
 		marginBottom: 10,

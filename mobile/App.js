@@ -5,7 +5,7 @@ import changeNavigationBarColor, {
 } from 'react-native-navigation-bar-color'
 import { Text } from 'react-native'
 import MainNavigator from './src/navigation'
-changeNavigationBarColor('translucent', true)
+// changeNavigationBarColor('translucent', true)
 // hideNavigationBar();
 console.disableYellowBox = true;
 

@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native'
 import Colors from '../../constants/Colors'
 import {Dimensions} from 'react-native'
+import {color} from "react-native-reanimated";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -11,7 +12,7 @@ export default StyleSheet.create({
 		backgroundColor: 'rgb(255,255,255)',
 	},
 	headerX: {
-		height: 80,
+		height: 70,
 		elevation: 15,
 		shadowOffset: {
 			height: 7,
@@ -30,30 +31,12 @@ export default StyleSheet.create({
 	},
 	ellipseStack: {
 		height: height,
-		marginTop: height * 0.05,
+		marginTop: height * 0.02,
 	},
 	container: {
 		paddingLeft: 20,
 		paddingRight: 20,
-	},
-	settingsList: {
-		left: 51,
-		height: 409,
-		position: 'absolute',
-		right: 450,
-		bottom: 272,
-	},
-	accountSettings: {
-		top: 0,
-		left: 7,
-		height: 165,
-		position: 'absolute',
-		right: 4,
-	},
-	myItems: {
-		color: '#121212',
-		fontSize: 18,
-		marginTop: -3,
+		marginBottom: 10
 	},
 	subSettings: {
 		height: 118,
@@ -61,15 +44,6 @@ export default StyleSheet.create({
 	},
 	editProfile: {
 		height: 30,
-		flexDirection: 'row',
-	},
-	macBookPro: {
-		color: 'rgba(0,0,0,1)',
-		fontSize: 16,
-		marginTop: 6,
-	},
-	macBookProFiller: {
-		flex: 1,
 		flexDirection: 'row',
 	},
 	icon: {
@@ -81,15 +55,7 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		marginTop: 11,
 	},
-	rollexPressident: {
-		color: 'rgba(0,0,0,1)',
-		fontSize: 16,
-		marginTop: 6,
-	},
-	rollexPressidentFiller: {
-		flex: 1,
-		flexDirection: 'row',
-	},
+
 	icon2: {
 		color: 'rgba(31,178,204,1)',
 		fontSize: 30,
@@ -169,11 +135,11 @@ export default StyleSheet.create({
 		borderRadius: 500,
 	},
 	userName: {
-		color: '#4a4a4a',
+		color: Colors.DEFAULT,
 		fontSize: 35,
 	},
 	userEmail: {
-		color: 'rgb(69,69,69)',
+		color: Colors.DEFAULT,
 		fontSize: 16,
 	},
 	userNameColumn: {
@@ -207,5 +173,18 @@ export default StyleSheet.create({
 	item: {
 		padding: 10,
 	},
-
+	rect2: {
+		flex: 1,
+	},
+	rect2_imageStyle: {},
+	defaultText: {
+		fontSize: 20,
+		color: Colors.DEFAULT
+	},
+	note: {
+		color: Colors.BLOCK
+	},
+	fab: {
+		backgroundColor: Colors.PRIMARY
+	}
 })

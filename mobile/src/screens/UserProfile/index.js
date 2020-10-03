@@ -6,10 +6,11 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	FlatList,
-	AsyncStorage,
+	AsyncStorage, ImageBackground,
 } from 'react-native'
 
 import {
+	Container,
 	ListItem,
 	Body,
 	Right,
@@ -34,7 +35,7 @@ import {Axios} from '../../utils/axios'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
-const cx = width * 2
+const cx = width * 1.5
 const cy = height * 0.7
 const rx = width * 2.6
 const ry = height * 1.2
@@ -106,11 +107,11 @@ export default class UserProfile extends React.Component {
 								this.props.navigation.navigate('EditItem', {item})
 							}>
 								<Body>
-									<Text style={{fonsSize: 20}}>{item.title}</Text>
-									<Text note>{item.desc}</Text>
+									<Text style={styles.defaultText}>{item.title}</Text>
+									<Text note style={styles.note}>{item.desc}</Text>
 								</Body>
 								<Right>
-									<Icon name="arrow-forward" />
+									<Icon name="arrow-forward" style={{color: Colors.DEFAULT}} />
 								</Right>
 							</ListItem>
 						</View>
@@ -131,53 +132,45 @@ export default class UserProfile extends React.Component {
 			<View style={styles.root}>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<Header navigation={navigation} icon2Name="power" style={styles.headerX} />
-				<View style={styles.body}>
+				<ImageBackground
+					style={styles.rect2}
+					imageStyle={styles.rect2_imageStyle}
+					source={require('../../assets/images/Gradient_EsLX0zX.png')}>
+				<View >
 					<View style={styles.ellipseStack}>
-						<Svg viewBox="0 0 859.43 890.3" style={styles.ellipse}>
-							<Ellipse
-								strokeWidth={1}
-								fill="rgba(249,249,249,1)"
-								cx={cx}
-								cy={cy}
-								rx={rx}
-								ry={ry}
-							/>
-						</Svg>
-						<Fragment>
-							<Content>
-								<View style={styles.container}>
-									<View style={styles.userNameColumn}>
-										<Text style={styles.userName}>
-											{`${userData.first_name} ${userData.last_name}`}
-										</Text>
-										<Text style={styles.userEmail}>{userData.email}</Text>
-									</View>
-
-									{/*	 ITEMS */}
-									<List style={{padding: 10}}>
-										{this._renderItems()}
-									</List>
+						<Content>
+							<View style={styles.container}>
+								<View style={styles.userNameColumn}>
+									<Text style={styles.userName}>
+										{`${userData.first_name} ${userData.last_name}`}
+									</Text>
+									<Text style={styles.userEmail}>{userData.email}</Text>
 								</View>
 
-							</Content>
-						</Fragment>
+								{/*	 ITEMS */}
+								<List style={{padding: 10}}>
+									{this._renderItems()}
+								</List>
+							</View>
+						</Content>
 					</View>
 				</View>
 				<Fab
 					active={this.state.active}
 					direction="up"
-					containerStyle={{marginBottom: 20}}
-					style={{ backgroundColor: Colors.PRIMARY }}
+					containerStyle={{marginBottom: 10 }}
+					style={styles.fab}
 					position="bottomRight"
 					onPress={() => this.setState({ active: !this.state.active })}>
 					<Icon name="add" />
 					<Button style={{ backgroundColor: Colors.PRIMARY }} onPress={() => navigation.navigate('ScanNFC')}>
 						<Icon name="add" />
 					</Button>
-					<Button style={{ backgroundColor: '#3B5998' }} onPress={() => navigation.navigate('ScanNFCTag')}>
+					<Button style={{ backgroundColor: Colors.PRIMARY }} onPress={() => navigation.navigate('ScanNFCTag')}>
 						<Icon name="search" />
 					</Button>
 				</Fab>
+				</ImageBackground>
 			</View>
 		)
 	}

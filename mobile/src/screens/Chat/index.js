@@ -15,6 +15,7 @@ import Header from '../../components/Header'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
 import {parse} from 'react-native-svg'
+import Colors from "../../constants/Colors";
 
 export function Messages() {
 	const [messages, setMessages] = useState([])
@@ -78,7 +79,7 @@ export function Messages() {
 function Chat(props) {
 	return (
 		<View style={styles.root}>
-			<StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,0)" />
+			<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 			<Header icon2Name="asdasdasd" style={styles.headerX} />
 			<View style={styles.background}>{Messages()}</View>
 		</View>

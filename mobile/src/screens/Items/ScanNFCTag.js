@@ -72,6 +72,8 @@ export default class ScanNFC extends Component {
 				console.log('res', res)
 				const result = res.data
 				if (result.your_device) {
+					NfcManager.cancelTechnologyRequest().catch(() => 0)
+					this._scanNFCTag()
 					Alert.alert('Info', 'This is your device.')
 				} else if (result.status === 'L' || result.status === 'S') {
 					Alert.alert(
@@ -80,7 +82,15 @@ export default class ScanNFC extends Component {
 						[
 							{
 								text: 'Cancel',
-								onPress: () => console.log('Cancel Pressed'),
+								onPress: () => {
+									this.setState({
+										isTestRunning: false,
+										enabled: false,
+									})
+									NfcManager.cancelTechnologyRequest().catch(() => 0)
+									this._scanNFCTag()
+									console.log('Cancel Pressed')
+								},
 								style: 'cancel',
 							},
 							{
@@ -90,6 +100,10 @@ export default class ScanNFC extends Component {
 						],
 						{cancelable: false},
 					)
+				} else {
+					Alert.alert('Info', 'This tag is registered with another user')
+					NfcManager.cancelTechnologyRequest().catch(() => 0)
+					this._scanNFCTag()
 				}
 			},
 			err => {
@@ -98,6 +112,12 @@ export default class ScanNFC extends Component {
 				console.log('data', status)
 				if (status) {
 					Alert.alert('Warning', status)
+					this.setState({
+						isTestRunning: false,
+						enabled: false,
+					})
+					NfcManager.cancelTechnologyRequest().catch(() => 0)
+					this._scanNFCTag()
 				}
 			},
 		)
@@ -168,17 +188,14 @@ export default class ScanNFC extends Component {
 		let {supported, enabled, tag, text, parsedText, isTestRunning} = this.state
 		return (
 			<Fragment>
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor="rgba(0,0,0,0)"
-						/>
 						{/* Back button */}
 						<View
 							style={{
 								backgroundColor: Colors.PRIMARY,
-								paddingTop: 40,
+								paddingTop: 10,
 								paddingLeft: 20,
 							}}>
 							<Icon
@@ -200,11 +217,11 @@ export default class ScanNFC extends Component {
 											SCAN S4FE TRACKER
 										</Text>
 										<View style={styles.animation}>
-											{/*<LottieView*/}
-											{/*	source={require('../../assets/animations/nfc-animation.json')}*/}
-											{/*	autoPlay*/}
-											{/*	loop*/}
-											{/*/>*/}
+											<LottieView
+												source={require('../../assets/animations/nfc-animation.json')}
+												autoPlay
+												loop
+											/>
 										</View>
 										<Text style={styles.text}>
 											Place your phone close to the S4FE sticker

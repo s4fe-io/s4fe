@@ -72,11 +72,11 @@ export default class ScanNFC extends Component {
 		let {supported, enabled, tag, text, parsedText, isTestRunning} = this.state
 		return (
 			<Fragment>
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar barStyle="light-content" backgroundColor="rgba(0,0,0,0)" />
 						{/* Back button */}
-						<View style={{backgroundColor: Colors.PRIMARY, paddingTop: 40, paddingLeft: 20}}>
+						<View style={{backgroundColor: Colors.PRIMARY, paddingTop: 10, paddingLeft: 20}}>
 							<Icon
 								name="arrow-back"
 								style={{color: 'white'}}

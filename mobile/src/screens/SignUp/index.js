@@ -144,6 +144,7 @@ export default class PhoneNumber extends ValidationComponent {
 										<TextInput
 											placeholder="Enter your phone number"
 											placeholderTextColor="rgba(255,255,255,1)"
+											keyboardType="numeric"
 											secureTextEntry={false}
 											style={styles.usernameInput}
 											onChangeText={value =>
@@ -178,9 +179,9 @@ export default class PhoneNumber extends ValidationComponent {
 										onPress={() => navigation.navigate('SocialAuth')}
 										style={styles.button4}>
 										<View style={styles.createAccount2Filler} />
-										<Text style={styles.createAccount2}>
-											Or connect using social platforms
-										</Text>
+										{/*<Text style={styles.createAccount2}>*/}
+										{/*	Or connect using social platforms*/}
+										{/*</Text>*/}
 									</TouchableOpacity>
 								</View>
 							</View>

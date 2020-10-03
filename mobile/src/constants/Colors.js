@@ -1,5 +1,5 @@
 export default {
-	DEFAULT: '#DCDCDC',
+	DEFAULT: '#f5f5f5',
 	PRIMARY: '#EBA721',
 	LABEL: '#FE2472',
 	INFO: '#00BCD4',
