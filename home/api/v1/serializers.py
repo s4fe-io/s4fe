@@ -11,7 +11,7 @@ from rest_auth.serializers import PasswordResetSerializer
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.models import TokenModel
 from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction, ItemInterface
-
+import ast
 
 User = get_user_model()
 
@@ -29,9 +29,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ItemInterfaceSerializer(serializers.ModelSerializer):
+    is_valid = serializers.BooleanField(read_only=True, required=False)
+
     class Meta:
         model = ItemInterface
-        fields = '__all__'
+        fields = ('id', 'title', 'serial', 'category', 'desc', 'status', 'is_valid', 'errors')
 
 
 class MessageSerializer(serializers.ModelSerializer):

@@ -27,6 +27,11 @@ from .helpers import sendSMS
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
+import csv
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from .serializers import *
+import shutil
 
 
 logger = logging.getLogger(__name__)
@@ -111,7 +116,124 @@ class ItemInterfaceViewSet(ModelViewSet):
     filter_class = ItemInterfaceFilter
 
     def get_queryset(self):
-        return ItemInterface.objects.filter(user=self.request.user)
+        return ItemInterface.objects.filter(creator=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        """
+        :param request: Request
+        :return: Response
+        """
+        # Prepare variables
+        file = request.FILES.get('file')
+        tmp_path = os.path.join(settings.MEDIA_ROOT, 'tmp')
+        fss = FileSystemStorage(tmp_path)
+        file_name = fss.save(file.name, file)
+        file_path = fss.path(file_name)
+        file_extension = file_name.split('.')[-1]
+
+        # Check extension
+        if file_extension not in ['csv']:
+            return Response(data=['Unsupported file extension.'], status=status.HTTP_400_BAD_REQUEST)
+
+        fields = ['title', 'serial', 'category', 'desc', 'status',]
+
+        # Read data from uploaded file
+        with open(file_path, 'r') as f:
+            item_interfaces = []
+            reader = csv.reader(f)
+
+            for i, row in enumerate(reader):
+                # Get column indexes
+                if i == 0:
+                    columns = {}
+                    for f in fields:
+                        if f in row:
+                            columns[f] = row.index(f)
+                    continue
+                if not columns:
+                    raise serializers.ValidationError({'Error': 'CSV column error'})
+
+                # Prepare data
+                data = {field: row[idx] for field, idx in columns.items()}
+                data['creator'] = request.user
+                data['key'] = "none"
+
+                serializer = self.get_serializer(data=data)
+                if not serializer.is_valid():
+                    response_data = {'line': i + 1, 'errors': serializer.errors}
+                    return Response(response_data, status.HTTP_400_BAD_REQUEST)
+                item_interface = ItemInterface()
+                for k, v in data.items():
+                    setattr(item_interface, k, v)
+
+                item_serializer = ItemSerializer(data=data, context={'request': request})
+                item_interface.is_valid = item_serializer.is_valid()
+                item_interface.errors = item_serializer.errors if not item_interface.is_valid else ''
+
+                item_interfaces.append(item_interface)
+
+            ItemInterface.objects.bulk_create(item_interfaces)
+
+        # Remove uploaded file
+        shutil.rmtree(tmp_path)
+
+        return Response(status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+        data = serializer.data
+        data['key'] = "none"
+        for k in ['id', 'is_valid', 'errors']:
+            data.pop(k)
+
+        item_serializer = ItemSerializer(data=data, context={'request': self.request})
+
+        instance = serializer.instance
+        instance.is_valid = item_serializer.is_valid()
+        instance.errors = item_serializer.errors if not instance.is_valid else ''
+        instance.save()
+
+
+@api_view(['GET', ])
+def copy_data(request):
+    fields = ['title', 'serial', 'category', 'desc', 'status', ]
+
+    # Get item interfaces
+    item_interfaces = ItemInterface.objects.filter(creator=request.user, is_valid=True)
+    for item_interface in item_interfaces:
+        # Prepare data
+        data = {f: getattr(item_interface, f) for f in fields}
+        data['key'] = "none"
+        item_serializer = ItemSerializer(data=data, context={'request': request})
+        if item_serializer.is_valid():
+            # Create Item
+            item_serializer.save()
+
+            # Delete Item Interface
+            item_interface.delete()
+
+        else:
+            # Update instance
+            item_interface.is_valid = False
+            item_interface.errors = item_serializer.errors
+            item_interface.save()
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['POST', ])
