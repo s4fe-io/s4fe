@@ -35,7 +35,7 @@ class Item(models.Model):
     key = models.CharField(max_length=255, blank=False, null=False)
     serial = models.CharField(max_length=255, blank=True, null=True)
     unique_identifier = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(User, related_name="item_user", on_delete=models.PROTECT)
+    user = models.ForeignKey(User, related_name="item_user", blank=True, null=True, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, related_name="item_category", on_delete=models.PROTECT)
     desc = models.TextField(default="", blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="A")
@@ -118,3 +118,19 @@ class DeviceInfo(models.Model):
     def __str__(self):
         return str(self.pk)
 
+
+class ItemInterface(models.Model):
+    title = models.CharField(max_length=50, blank=True)
+    serial = models.CharField(max_length=50, blank=True)
+    category = models.CharField(max_length=50, blank=True)
+    desc = models.TextField(max_length=50, blank=True)
+    status = models.CharField(max_length=50, blank=True)
+    is_valid = models.BooleanField(default=False)
+    errors = models.TextField(blank=True)
+    creator = models.ForeignKey(User, related_name="item_interface_user", on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name_plural = 'Items Interface'
+
+    def __str__(self):
+        return str(self.title)

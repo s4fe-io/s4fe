@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Category, Message, OTP, DeviceInfo, Transaction
+from .models import Item, Category, Message, OTP, DeviceInfo, Transaction, ItemInterface
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -36,9 +36,16 @@ class TransactionAdmin(admin.ModelAdmin):
     search_fields = ('user_from', 'user_to', 'item', )
 
 
+class ItemInterfaceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'creator', 'category', 'status')
+    list_filter = ['creator', 'status']
+    search_fields = ('title', 'key', 'creator', 'category', 'status')
+
+
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Message, MessageAdmin)
 admin.site.register(OTP, OTPAdmin)
 admin.site.register(DeviceInfo, DeviceInfoAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(ItemInterface, ItemInterfaceAdmin)

@@ -14,11 +14,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import os
 from home.api.v1.serializers import SignupSerializer, UserSerializer, ItemSerializer, CategorySerializer,\
-    MessageSerializer, DeviceSerializer, TransactionsSerializer
+    MessageSerializer, DeviceSerializer, TransactionsSerializer, ItemInterfaceSerializer
 from users.models import User
 from django.core.mail import send_mail
-from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction
-from  .filters import ItemFilter, CategoryFilter, MessageFilter
+from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction, ItemInterface
+from  .filters import ItemFilter, CategoryFilter, MessageFilter, ItemInterfaceFilter
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 import logging
@@ -105,7 +105,16 @@ class TransactionsViewSet(ModelViewSet):
     permission_classes = [permissions.AllowAny, ]
 
 
-@api_view(['POST',])
+class ItemInterfaceViewSet(ModelViewSet):
+    queryset = ItemInterface.objects.all()
+    serializer_class = ItemInterfaceSerializer
+    filter_class = ItemInterfaceFilter
+
+    def get_queryset(self):
+        return ItemInterface.objects.filter(user=self.request.user)
+
+
+@api_view(['POST', ])
 @permission_classes([permissions.AllowAny])
 def get_otp(request):
     if 'phone_number' not in request.data or not request.data['phone_number']:

@@ -10,7 +10,7 @@ from rest_framework import serializers
 from rest_auth.serializers import PasswordResetSerializer
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.models import TokenModel
-from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction
+from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction, ItemInterface
 
 
 User = get_user_model()
@@ -25,6 +25,12 @@ class ItemSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
+        fields = '__all__'
+
+
+class ItemInterfaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemInterface
         fields = '__all__'
 
 
