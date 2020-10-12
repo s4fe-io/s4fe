@@ -286,6 +286,37 @@ def get_item_status(request):
         return Response(return_obj)
 
 
+@api_view(['POST', ])
+@permission_classes([permissions.AllowAny])
+def item_transfer(request):
+    if 'item' not in request.data or not request.data['item']:
+        return Response(data={"error": "Item id not specified!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if 'user' not in request.data or not request.data['user']:
+        return Response(data={"error": "User unique identifier not specified!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    user = User.objects.filter(unique_identifier=request.data['user']).first()
+    if not user:
+        return Response(data={"error": "Unknown user!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    else:
+        item = Item.objects.get(id=request.data['item'])
+        if not item:
+            return Response(data={"error": "Unknown item!"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if item.user == user:
+            return Response(data={"error": "Item is already property of user : " + str(user.unique_identifier)},
+                            status=status.HTTP_400_BAD_REQUEST)
+        item.user = user
+        item.save()
+        trans = Transaction(user_from=request.user, user_to_id=user.id,
+                            item_id=request.data['item'])
+        trans.save()
+        return Response(data={"Status": "OK!"},
+                        status=status.HTTP_200_OK)
+
+
 @api_view(['GET',])
 @permission_classes([permissions.AllowAny])
 def search_by_serial(request):
