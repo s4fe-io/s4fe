@@ -182,6 +182,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'name', 'unique_identifier', 'phone_number']
 
 
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'email', 'name', 'unique_identifier', 'phone_number')
+
+
 class PasswordSerializer(PasswordResetSerializer):
     """Custom serializer for rest_auth to solve reset password error"""
     password_reset_form_class = ResetPasswordForm
