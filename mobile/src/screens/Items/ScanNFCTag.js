@@ -236,6 +236,14 @@ export default class ScanNFC extends Component {
 										{/*<Text>{`Is NFC supported ? ${supported}`}</Text>*/}
 									</View>
 
+									<View style={{marginTop: 20}}>
+										<TouchableOpacity onPress={() => this.goToScreen('SearchBySerial')}>
+											<Text style={styles.text}>
+												Search by serial number
+											</Text>
+										</TouchableOpacity>
+									</View>
+
 									{/*<TouchableOpacity*/}
 									{/*	onPress={() => this.fetchItemInfo()}*/}
 									{/*	style={styles.button}>*/}
