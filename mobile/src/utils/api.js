@@ -8,4 +8,5 @@ export const API = {
 	ITEMS_STATUS: 'api/v1/item-status/',
 	CATEGORIES: 'api/v1/categories/',
 	MESSAGES: 'api/v1/messages/',
+	ITEM_TRANSFER: 'api/v1/item-transfer/',
 };

@@ -195,7 +195,7 @@ export default class AddItem extends ValidationComponent {
 															secureTextEntry={false}
 															style={styles.textInput}
 															onChangeText={value =>
-																this.handleInput('description', value)
+																this.handleInput('serial', value)
 															}
 														/>
 													</View>

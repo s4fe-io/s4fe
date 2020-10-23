@@ -58,6 +58,7 @@ export default class UserProfile extends React.Component {
 			this.getUserData()
 			this.fetchItems()
 		})
+		this.fetchItems()
 	}
 
 	componentWillUnmount() {
@@ -103,18 +104,27 @@ export default class UserProfile extends React.Component {
 
 			return (
 				<View style={styles.item}>
-					<ListItem
-						onPress={() => this.props.navigation.navigate('EditItem', {item})}>
+					<ListItem>
 						<Body>
 							<Text style={styles.defaultText}>{item.title}</Text>
 							<Text note style={styles.note}>
-								{item.status === 'A' ? 'Active' : ''}
-								{item.status === 'L' ? 'Lost' : ''}
-								{item.status === 'S' ? 'Stolen' : ''}
+								{item.status === 'A' ? 'Status: Active' : ''}
+								{item.status === 'L' ? 'Status: Lost' : ''}
+								{item.status === 'S' ? 'Status: Stolen' : ''}
 							</Text>
 						</Body>
 						<Right>
-							<Icon name="arrow-forward" style={{color: Colors.DEFAULT}} />
+							<View style={{flexDirection:'row', flexWrap:'wrap'}}>
+								<TouchableOpacity
+									style={{marginRight: 10}}
+									onPress={() => this.props.navigation.navigate('EditItem', {item})}
+								>
+									<Icon name="create" style={{color: Colors.DEFAULT, fontSize: 23}} />
+								</TouchableOpacity>
+								<TouchableOpacity onPress={() => this.props.navigation.navigate('TransferItem', {item})}>
+									<Icon name="send" style={{color: Colors.DEFAULT, fontSize: 21}} />
+								</TouchableOpacity>
+							</View>
 						</Right>
 					</ListItem>
 				</View>

@@ -38,6 +38,7 @@ export default class AddItem extends ValidationComponent {
 			selectedStatus: '',
 			dataLoading: false,
 			userId: '',
+			serial: ''
 		}
 		this.state.userId = this.props.navigation.getParam('userId')
 	}
@@ -88,10 +89,8 @@ export default class AddItem extends ValidationComponent {
 				category: this.state.selectedCategory,
 				desc: this.state.description,
 				status: this.state.selectedStatus,
-				serial: ''
+				serial: this.state.serial
 			}
-			console.log('forma ', formData)
-			console.log('item id ', this.state.itemId)
 			Axios.patch(`${API.ITEMS}${this.state.itemId}/`, formData)
 				.then(() => {
 					this.setState({dataLoading: false})
@@ -116,6 +115,27 @@ export default class AddItem extends ValidationComponent {
 		}
 	}
 
+	deleteItemConfirm () {
+		Alert.alert('Error', 'Please enter some text', [
+				{
+					text: "Cancel",
+					onPress: () => console.log("Cancel Pressed"),
+					style: "cancel"
+				},
+				{ text: "Yes", onPress: () => this.deleteItem() },
+			],
+			{ cancelable: true });
+	}
+
+	deleteItem () {
+		Axios.delete(`${API.ITEMS}${this.state.itemId}/`).then(() => {
+			this.props.navigation.navigate('UserProfile')
+		}, err => {
+			console.log('err', err.response)
+			Alert.alert('Warning', JSON.stringify(err.response.data))
+		})
+	}
+
 	componentDidMount() {
 		this.fetchCategories()
 	}
@@ -123,8 +143,9 @@ export default class AddItem extends ValidationComponent {
 	render() {
 		const {navigation} = this.props
 		const item = navigation.getParam('item')
-		let {selectedCategory, title, description, selectedStatus} = this.state
+		let {selectedCategory, title, description, selectedStatus, serial} = this.state
 
+		console.log('item', item)
 		const placeholder = {
 			label: 'Categories',
 			value: null,
@@ -150,16 +171,15 @@ export default class AddItem extends ValidationComponent {
 			},
 		]
 		if (selectedCategory === '') {
-			console.log('set state')
 			this.setState({
 				selectedCategory: item.category,
 				title: item.title,
 				description: item.desc,
 				selectedStatus: item.status,
-				itemId: item.id
+				itemId: item.id,
+				serial: item.serial
 			})
 		}
-		console.log('ovo je item', item)
 
 		return (
 			<Fragment>
@@ -222,6 +242,23 @@ export default class AddItem extends ValidationComponent {
 															}
 														/>
 													</View>
+													{/* Item Serial */}
+													<View style={styles.group}>
+														<MaterialIconsIcon
+															name="description"
+															style={styles.icon5}
+														/>
+														<TextInput
+															placeholder="Serial number"
+															value={serial}
+															placeholderTextColor="rgba(255,255,255,1)"
+															secureTextEntry={false}
+															style={styles.textInput}
+															onChangeText={value =>
+																this.handleInput('serial', value)
+															}
+														/>
+													</View>
 													{/* Item Description */}
 													<View style={styles.group}>
 														<MaterialIconsIcon
@@ -259,6 +296,12 @@ export default class AddItem extends ValidationComponent {
 															onPress={() => this.saveItem()}
 															style={styles.button}>
 															<Text style={styles.next}>SAVE</Text>
+														</TouchableOpacity>
+
+														<TouchableOpacity
+															onPress={() => this.deleteItemConfirm()}
+															style={styles.deleteButton}>
+															<Text style={styles.deleteText}>DELETE</Text>
 														</TouchableOpacity>
 													</View>
 												</View>
@@ -454,8 +497,22 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		justifyContent: 'center',
 	},
+	deleteButton: {
+		height: 59,
+		backgroundColor: 'rgba(247,247,247,0)',
+		borderColor: Colors.ERROR,
+		borderWidth: 1,
+		borderRadius: 5,
+		justifyContent: 'center',
+		marginTop: 20
+	},
 	next: {
 		color: 'white',
+		fontSize: 18,
+		alignSelf: 'center',
+	},
+	deleteText: {
+		color: Colors.ERROR,
 		fontSize: 18,
 		alignSelf: 'center',
 	},

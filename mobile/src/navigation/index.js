@@ -14,6 +14,7 @@ import UserProfileScreen from '../screens/UserProfile'
 import ScanNFCScreen from '../screens/Items/ScanNFC'
 import AddItemScreen from '../screens/Items/AddItem'
 import EditItemScreen from '../screens/Items/EditItem'
+import TransferItemScreen from '../screens/Transfer/TransferItem'
 import ChatScreen from '../screens/Chat'
 import ScanNFCTagScreen from '../screens/Items/ScanNFCTag'
 
@@ -34,6 +35,10 @@ const AppStack = createStackNavigator({
 	},
 	EditItem: {
 		screen: EditItemScreen,
+		navigationOptions: {headerShown: false},
+	},
+	TransferItem: {
+		screen: TransferItemScreen,
 		navigationOptions: {headerShown: false},
 	},
 	ScanNFCTag: {
