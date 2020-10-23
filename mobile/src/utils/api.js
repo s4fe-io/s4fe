@@ -9,4 +9,5 @@ export const API = {
 	CATEGORIES: 'api/v1/categories/',
 	MESSAGES: 'api/v1/messages/',
 	ITEM_TRANSFER: 'api/v1/item-transfer/',
+	SEARCH: 'api/v1/search/',
 };

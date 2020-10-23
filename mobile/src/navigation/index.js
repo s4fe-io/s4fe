@@ -17,6 +17,8 @@ import EditItemScreen from '../screens/Items/EditItem'
 import TransferItemScreen from '../screens/Transfer/TransferItem'
 import ChatScreen from '../screens/Chat'
 import ScanNFCTagScreen from '../screens/Items/ScanNFCTag'
+import SearchBySerialScreen from '../screens/SearchBySerial/'
+import SearchItemDetailsScreen from '../screens/SearchItemDetails/'
 
 // import SocialAuthScreen from '../screens/SocialAuth'
 
@@ -47,6 +49,14 @@ const AppStack = createStackNavigator({
 	},
 	Chat: {
 		screen: ChatScreen,
+		navigationOptions: {headerShown: false},
+	},
+	SearchBySerial: {
+		screen: SearchBySerialScreen,
+		navigationOptions: {headerShown: false},
+	},
+	SearchItemDetails: {
+		screen: SearchItemDetailsScreen,
 		navigationOptions: {headerShown: false},
 	},
 
