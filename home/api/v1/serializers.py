@@ -103,6 +103,7 @@ class TokenSerializer(serializers.ModelSerializer):
     last_name = serializers.SerializerMethodField('get_last_name')
     email = serializers.SerializerMethodField('get_email')
     phone_number = serializers.SerializerMethodField('get_phone_number')
+    unique_identifier = serializers.SerializerMethodField('get_unique_identifier')
 
     def get_id(self, obj):
         return obj.user.id
@@ -119,9 +120,12 @@ class TokenSerializer(serializers.ModelSerializer):
     def get_phone_number(self, obj):
         return obj.user.phone_number
 
+    def get_unique_identifier(self, obj):
+        return obj.user.unique_identifier
+
     class Meta:
         model = TokenModel
-        fields = ('key', 'id', 'first_name', 'last_name', 'email', 'phone_number')
+        fields = ('key', 'id', 'first_name', 'last_name', 'email', 'phone_number', 'unique_identifier')
 
 
 class SignupSerializer(serializers.ModelSerializer):
