@@ -17,7 +17,7 @@ import {Icon} from 'native-base'
 import NfcManager, {NdefParser, NfcTech} from 'react-native-nfc-manager'
 
 const hash = require('object-hash')
-const generateNFCKey  = () => {
+const generateNFCKey = () => {
 	const generatedHash = hash(Math.round(Math.random() * 10000000000))
 	console.log('generated hash', generatedHash)
 	return generatedHash
@@ -37,7 +37,6 @@ function buildTextPayload(valueToWrite) {
 	const headerBytes = [0xd1, 0x01, textBytes.length + 3, 0x54, 0x02, 0x65, 0x6e]
 	return [...headerBytes, ...textBytes]
 }
-
 
 export default class ScanNFC extends Component {
 	constructor(props) {
@@ -63,7 +62,7 @@ export default class ScanNFC extends Component {
 
 	goToScreen(nfcKey) {
 		this.props.navigation.navigate('AddItem', {
-			nfcKey
+			nfcKey,
 		})
 	}
 
@@ -76,7 +75,12 @@ export default class ScanNFC extends Component {
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						{/* Back button */}
-						<View style={{backgroundColor: Colors.PRIMARY, paddingTop: 10, paddingLeft: 20}}>
+						<View
+							style={{
+								backgroundColor: Colors.PRIMARY,
+								paddingTop: 10,
+								paddingLeft: 20,
+							}}>
 							<Icon
 								name="arrow-back"
 								style={{color: 'white'}}
@@ -92,22 +96,24 @@ export default class ScanNFC extends Component {
 									imageStyle={styles.rect2_imageStyle}
 									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
 									<View style={styles.icon10Column}>
-										<Text style={styles.scanS4FeTarcker}>SCAN S4FE TRACKER</Text>
-										<View
-											style={styles.animation}>
+										<Text style={styles.scanS4FeTarcker}>
+											SCAN S4FE TRACKER
+										</Text>
+										<View style={styles.animation}>
 											<LottieView
 												source={require('../../assets/animations/nfc-animation.json')}
 												autoPlay
 												loop
 											/>
 										</View>
-										<Text style={styles.text}>Place your phone close to the S4FE sticker</Text>
+										<Text style={styles.text}>
+											Place your phone close to the S4FE sticker
+										</Text>
 
-									{/*	Skip scanning */}
-									<TouchableOpacity onPress={() => this.goToScreen('none')}>
-										<Text style={styles.skipText}>Skip</Text>
-									</TouchableOpacity>
-
+										{/*	Skip scanning */}
+										<TouchableOpacity onPress={() => this.goToScreen('none')}>
+											<Text style={styles.skipText}>Add without NFC</Text>
+										</TouchableOpacity>
 									</View>
 								</ImageBackground>
 							</View>
@@ -279,13 +285,13 @@ const styles = StyleSheet.create({
 		borderColor: 'rgba(255,255,255,1)',
 		borderWidth: 1,
 		marginLeft: 50,
-		marginRight: 50
+		marginRight: 50,
 	},
 	cancel: {
 		color: 'rgba(255,255,255,1)',
 		fontSize: 18,
 		alignSelf: 'center',
-		marginTop: 15
+		marginTop: 15,
 	},
 	container: {flex: 1},
 	animation: {
@@ -299,13 +305,12 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		paddingLeft: 20,
 		paddingRight: 20,
-		paddingBottom: 30
+		paddingBottom: 30,
 	},
 	skipText: {
 		color: '#e9e9e9',
 		marginTop: 10,
 		fontSize: 18,
 		textAlign: 'center',
-	}
+	},
 })
-

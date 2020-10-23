@@ -6,7 +6,8 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	FlatList,
-	AsyncStorage, ImageBackground,
+	AsyncStorage,
+	ImageBackground,
 } from 'react-native'
 
 import {
@@ -21,7 +22,7 @@ import {
 	CardItem,
 	Content,
 	List,
-	Left
+	Left,
 } from 'native-base'
 
 import Header from '../../components/Header'
@@ -46,7 +47,7 @@ export default class UserProfile extends React.Component {
 		this.state = {
 			userData: {},
 			items: [],
-			active: false
+			active: false,
 		}
 		// this.state.userData = this.props.navigation.getParam('userData')
 	}
@@ -95,30 +96,30 @@ export default class UserProfile extends React.Component {
 			})
 	}
 
-	_renderItems () {
+	_renderItems() {
 		const {items} = this.state
+		return items.map(item => {
+			console.log(item)
+
 			return (
-				items.map(item => {
-					console.log(item)
-
-					return (
-						<View style={styles.item}>
-							<ListItem onPress={() =>
-								this.props.navigation.navigate('EditItem', {item})
-							}>
-								<Body>
-									<Text style={styles.defaultText}>{item.title}</Text>
-									<Text note style={styles.note}>{item.desc}</Text>
-								</Body>
-								<Right>
-									<Icon name="arrow-forward" style={{color: Colors.DEFAULT}} />
-								</Right>
-							</ListItem>
-						</View>
-					)
-				})
-
+				<View style={styles.item}>
+					<ListItem
+						onPress={() => this.props.navigation.navigate('EditItem', {item})}>
+						<Body>
+							<Text style={styles.defaultText}>{item.title}</Text>
+							<Text note style={styles.note}>
+								{item.status === 'A' ? 'Active' : ''}
+								{item.status === 'L' ? 'Lost' : ''}
+								{item.status === 'S' ? 'Stolen' : ''}
+							</Text>
+						</Body>
+						<Right>
+							<Icon name="arrow-forward" style={{color: Colors.DEFAULT}} />
+						</Right>
+					</ListItem>
+				</View>
 			)
+		})
 	}
 
 	render() {
@@ -131,49 +132,53 @@ export default class UserProfile extends React.Component {
 		return (
 			<View style={styles.root}>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
-				<Header navigation={navigation} icon2Name="power" style={styles.headerX} />
+				<Header
+					navigation={navigation}
+					icon2Name="power"
+					style={styles.headerX}
+				/>
 				<ImageBackground
 					style={styles.rect2}
 					imageStyle={styles.rect2_imageStyle}
 					source={require('../../assets/images/Gradient_EsLX0zX.png')}>
-				<View >
-					<View style={styles.ellipseStack}>
-						<Content>
-							<View style={styles.container}>
-								<View style={styles.userNameColumn}>
-									<Text style={styles.userName}>
-										{`${userData.first_name} ${userData.last_name}`}
-									</Text>
-									<Text style={styles.userEmail}>{userData.email}</Text>
-								</View>
+					<View>
+						<View style={styles.ellipseStack}>
+							<Content>
+								<View style={styles.container}>
+									<View style={styles.userNameColumn}>
+										<Text style={styles.userName}>
+											{`${userData.first_name} ${userData.last_name}`}
+										</Text>
+										<Text style={styles.userEmail}>{userData.email}</Text>
+									</View>
 
-								{/*	 ITEMS */}
-								<List style={{padding: 10}}>
-									{this._renderItems()}
-								</List>
-							</View>
-						</Content>
+									{/*	 ITEMS */}
+									<List style={{padding: 10}}>{this._renderItems()}</List>
+								</View>
+							</Content>
+						</View>
 					</View>
-				</View>
-				<Fab
-					active={this.state.active}
-					direction="up"
-					containerStyle={{marginBottom: 10 }}
-					style={styles.fab}
-					position="bottomRight"
-					onPress={() => this.setState({ active: !this.state.active })}>
-					<Icon name="add" />
-					<Button style={{ backgroundColor: Colors.PRIMARY }} onPress={() => navigation.navigate('ScanNFC')}>
+					<Fab
+						active={this.state.active}
+						direction="up"
+						containerStyle={{marginBottom: 10}}
+						style={styles.fab}
+						position="bottomRight"
+						onPress={() => this.setState({active: !this.state.active})}>
 						<Icon name="add" />
-					</Button>
-					<Button style={{ backgroundColor: Colors.PRIMARY }} onPress={() => navigation.navigate('ScanNFCTag')}>
-						<Icon name="search" />
-					</Button>
-				</Fab>
+						<Button
+							style={{backgroundColor: Colors.PRIMARY}}
+							onPress={() => navigation.navigate('ScanNFC')}>
+							<Icon name="add" />
+						</Button>
+						<Button
+							style={{backgroundColor: Colors.PRIMARY}}
+							onPress={() => navigation.navigate('ScanNFCTag')}>
+							<Icon name="search" />
+						</Button>
+					</Fab>
 				</ImageBackground>
 			</View>
 		)
 	}
 }
-
-
