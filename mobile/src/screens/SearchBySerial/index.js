@@ -33,7 +33,6 @@ export default class Index extends ValidationComponent {
 	}
 
 	componentDidMount() {
-		this.search('')
 	}
 
 	handleInput = (model, value) => {
