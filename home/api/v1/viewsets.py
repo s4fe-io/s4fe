@@ -205,7 +205,7 @@ class ItemInterfaceViewSet(ModelViewSet):
 
         instance = serializer.instance
         instance.is_valid = item_serializer.is_valid()
-        instance.errors = item_serializer.errors if not instance.is_valid else ''
+        instance.errors = json.dumps(item_serializer.errors) if not instance.is_valid else ''
         instance.save()
 
 
