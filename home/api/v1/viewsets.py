@@ -168,7 +168,7 @@ class ItemInterfaceViewSet(ModelViewSet):
 
                 item_serializer = ItemSerializer(data=data, context={'request': request})
                 item_interface.is_valid = item_serializer.is_valid()
-                item_interface.errors = item_serializer.errors if not item_interface.is_valid else ''
+                item_interface.errors = json.dumps(item_serializer.errors) if not item_interface.is_valid else ''
 
                 item_interfaces.append(item_interface)
 
