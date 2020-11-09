@@ -219,10 +219,16 @@ def copy_data(request):
         # Prepare data
         data = {f: getattr(item_interface, f) for f in fields}
         data['key'] = "none"
+        data['user'] = item_interface.creator_id
         item_serializer = ItemSerializer(data=data, context={'request': request})
         if item_serializer.is_valid():
             # Create Item
-            item_serializer.save()
+            added_item = item_serializer.save()
+            try:
+                trans = Transaction(user_from=None, user_to_id=item_interface.creator_id, item_id=added_item.id)
+                trans.save()
+            except Exception as e:
+                print(e)
 
             # Delete Item Interface
             item_interface.delete()
