@@ -338,6 +338,7 @@ def search_by_serial(request):
     else:
         return_obj = {
            "title": item[0].title,
+           "user_id": item[0].user_id,
            "status": item[0].get_status_display()
         }
         return Response(return_obj)
