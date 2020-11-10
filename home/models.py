@@ -40,6 +40,7 @@ class Item(models.Model):
     desc = models.TextField(default="", blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="A")
     created = models.DateTimeField(auto_now_add=True, editable=False)
+    deleted = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Items'

@@ -43,7 +43,7 @@ class ItemViewSet(ModelViewSet):
     filter_class = ItemFilter
 
     def get_queryset(self):
-        return Item.objects.filter(user=self.request.user)
+        return Item.objects.filter(user=self.request.user, deleted=False)
 
     def create(self, request, *args, **kwargs):
         user = self.request.user
@@ -276,7 +276,7 @@ def get_item_status(request):
         return Response(data={"error": "Key not specified!"},
                         status=status.HTTP_400_BAD_REQUEST)
     your_device = False
-    item = Item.objects.filter(key=request.data['key'])
+    item = Item.objects.filter(key=request.data['key'], deleted=False)
 
     if len(item) == 0:
         return Response(data={"status": "Key not found !!"},
@@ -307,7 +307,7 @@ def item_transfer(request):
         return Response(data={"error": "Unknown user!"},
                         status=status.HTTP_400_BAD_REQUEST)
     else:
-        item = Item.objects.get(id=request.data['item'])
+        item = Item.objects.get(id=request.data['item'], deleted=False)
         if not item:
             return Response(data={"error": "Unknown item!"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -330,7 +330,7 @@ def search_by_serial(request):
         return Response(data={"error": "Serial not specified!"},
                         status=status.HTTP_400_BAD_REQUEST)
 
-    item = Item.objects.filter(serial=request.GET['serial'])
+    item = Item.objects.filter(serial=request.GET['serial'], deleted=False)
 
     if len(item) == 0:
         return Response(data={"status": "Item not found !!"},

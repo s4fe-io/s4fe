@@ -19,7 +19,8 @@ User = get_user_model()
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ('id', 'title', 'key', 'serial', 'unique_identifier', 'category', 'desc', 'status', 'created', 'user')
+        fields = ('id', 'title', 'key', 'serial', 'unique_identifier', 'category', 'desc', 'status', 'created', 'user',
+                  'deleted')
 
 
 class CategorySerializer(serializers.ModelSerializer):
