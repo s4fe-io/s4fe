@@ -32,7 +32,8 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from .serializers import *
 import shutil
-
+from django.db.models import Count
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -81,9 +82,10 @@ class CategoryViewSet(ModelViewSet):
 class MessageViewSet(ModelViewSet):
     serializer_class = MessageSerializer
     filter_class = MessageFilter
+    queryset = Message.objects.all()
 
-    def get_queryset(self):
-        return Message.objects.filter(receiver=self.request.user)
+    # def get_queryset(self):
+    #     return Message.objects.filter(receiver=self.request.user)
 
     def create(self, request, *args, **kwargs):
         user = self.request.user
@@ -342,6 +344,40 @@ def search_by_serial(request):
            "status": item[0].get_status_display()
         }
         return Response(return_obj)
+
+
+@api_view(['GET',])
+@permission_classes([permissions.IsAuthenticated])
+def messages_by_users(request):
+    user = request.user
+
+    messages_sent = Message.objects.filter(sender=user)
+    messages_received = Message.objects.filter(receiver=user)
+
+    tmp_arr = []
+    return_arr = []
+
+    for message in messages_sent:
+        if message.receiver.username not in tmp_arr:
+            print(message.receiver.username)
+            tmp_arr.append(message.receiver.username)
+
+    for message in messages_received:
+        if message.sender.username not in tmp_arr:
+            print(message.sender.username)
+            tmp_arr.append(message.sender.username)
+
+    for a in tmp_arr:
+        unread_messages = Message.objects.filter(receiver=user, sender__username=a, is_read=False).count()
+        user_id = User.objects.filter(username=a).first()
+        return_obj = {
+           "user_id": user_id.id,
+           "user": a,
+           "unread": unread_messages
+        }
+        return_arr.append(return_obj)
+
+    return Response(return_arr)
 
 
 class SignupViewSet(ModelViewSet):
