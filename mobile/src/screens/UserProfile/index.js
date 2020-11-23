@@ -141,6 +141,16 @@ export default class UserProfile extends React.Component {
 
 		return (
 			<View style={styles.root}>
+				{Platform.OS === 'ios' &&
+				<View style={{
+					width: "100%",
+					height: 100, // For all devices, even X, XS Max
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					backgroundColor: Colors.PRIMARY
+				}}
+				/>}
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<Header
 					navigation={navigation}

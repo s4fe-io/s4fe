@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@builderx/utils": "^0.1.6",
@@ -20,6 +21,7 @@
     "lottie-react-native": "^3.4.0",
     "native-base": "^2.13.12",
     "object-hash": "^2.0.3",
+    "patch-package": "^6.2.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-camera": "^3.40.0",
@@ -29,7 +31,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-navigation-bar-color": "^2.0.1",
     "react-native-nfc-manager": "^2.1.9",
-    "react-native-permissions": "^2.2.2",
+    "react-native-permissions": "2.2.2",
     "react-native-picker-select": "^7.0.0",
     "react-native-qrcode-scanner": "^1.4.1",
     "react-native-reanimated": "^1.9.0",

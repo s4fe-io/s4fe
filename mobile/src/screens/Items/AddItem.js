@@ -126,6 +126,16 @@ export default class AddItem extends ValidationComponent {
 
 		return (
 			<Fragment>
+				{Platform.OS === 'ios' &&
+				<View style={{
+					width: "100%",
+					height: 100, // For all devices, even X, XS Max
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					backgroundColor: Colors.PRIMARY
+				}}
+				/>}
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>

@@ -104,6 +104,7 @@ export default class PhoneNumber extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						<StatusBar
@@ -134,7 +135,29 @@ export default class PhoneNumber extends ValidationComponent {
 										<RNPickerSelect
 											placeholder={placeholder}
 											placeholderTextColor="white"
-											style={pickerSelectStyles}
+											style={{
+												...pickerSelectStyles,
+												iconContainer: {
+													right: 1,
+												},
+												placeholder: {
+													color: 'white',
+													marginRight: 11,
+													marginLeft: 11,
+													marginTop: 6,
+													fontSize: 16,
+													paddingHorizontal: 10,
+													paddingVertical: 16,
+												},
+											}}
+											Icon={() => {
+												return <FontAwesomeIcon name="chevron-down" style={{
+													marginRight: 10,
+													color: 'white',
+													fontSize: 16,
+													marginTop: 20
+												}} />
+											}}
 											onValueChange={this.handleCountrySelect}
 											items={this.state.countriesList}
 										/>
@@ -195,13 +218,16 @@ export default class PhoneNumber extends ValidationComponent {
 
 const pickerSelectStyles = StyleSheet.create({
 	inputIOS: {
-		fontSize: 16,
-		paddingVertical: 12,
-		paddingHorizontal: 10,
-		color: 'rgba(255,255,255,1)',
-		flex: 1,
+		color: 'white',
 		marginRight: 11,
 		marginLeft: 11,
+		marginTop: 10,
+		fontSize: 16,
+		paddingHorizontal: 10,
+		paddingVertical: 18,
+		borderWidth: 0,
+		borderRadius: 8,
+		paddingRight: 30
 	},
 	inputAndroid: {
 		flex: 1,
