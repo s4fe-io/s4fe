@@ -199,6 +199,7 @@ export default class ScanNFC extends Component {
 								paddingLeft: 20,
 							}}>
 							<Icon
+								type="MaterialIcons"
 								name="arrow-back"
 								style={{color: 'white'}}
 								onPress={() => {

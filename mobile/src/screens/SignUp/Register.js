@@ -134,6 +134,7 @@ export default class Register extends ValidationComponent {
 						{/* Back button */}
 						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 							<Icon
+								type="MaterialIcons"
 								name="arrow-back"
 								style={{color: 'white'}}
 								onPress={() => {

@@ -147,6 +147,7 @@ export default class AddItem extends ValidationComponent {
 								paddingLeft: 20,
 							}}>
 							<Icon
+								type="MaterialIcons"
 								name="arrow-back"
 								style={{color: 'white'}}
 								onPress={() => {

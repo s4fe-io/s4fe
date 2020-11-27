@@ -90,6 +90,7 @@ export default class EnterPin extends ValidationComponent {
 				{/* Back Arrow */}
 				<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 					<Icon
+						type="MaterialIcons"
 						name="arrow-back"
 						style={{color: 'white'}}
 						onPress={() => {

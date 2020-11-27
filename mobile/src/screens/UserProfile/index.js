@@ -33,6 +33,7 @@ import {Dimensions} from 'react-native'
 import Colors from '../../constants/Colors'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
+import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -119,10 +120,11 @@ export default class UserProfile extends React.Component {
 									style={{marginRight: 10}}
 									onPress={() => this.props.navigation.navigate('EditItem', {item})}
 								>
-									<Icon name="create" style={{color: Colors.DEFAULT, fontSize: 23}} />
+
+									<Icon type="MaterialIcons" name='create' style={{color: Colors.DEFAULT, fontSize: 23}} />
 								</TouchableOpacity>
 								<TouchableOpacity onPress={() => this.props.navigation.navigate('TransferItem', {item})}>
-									<Icon name="send" style={{color: Colors.DEFAULT, fontSize: 21}} />
+									<Icon type="MaterialIcons" name="send" style={{color: Colors.DEFAULT, fontSize: 21}} />
 								</TouchableOpacity>
 							</View>
 						</Right>
@@ -185,16 +187,16 @@ export default class UserProfile extends React.Component {
 						style={styles.fab}
 						position="bottomRight"
 						onPress={() => this.setState({active: !this.state.active})}>
-						<Icon name="add" />
+						<Icon type="MaterialIcons" name="add" />
 						<Button
 							style={{backgroundColor: Colors.PRIMARY}}
 							onPress={() => navigation.navigate('ScanNFC')}>
-							<Icon name="add" />
+							<Icon type="MaterialIcons" name="add" />
 						</Button>
 						<Button
 							style={{backgroundColor: Colors.PRIMARY}}
 							onPress={() => navigation.navigate('ScanNFCTag')}>
-							<Icon name="search" />
+							<Icon type="MaterialIcons" name="search" />
 						</Button>
 					</Fab>
 				</ImageBackground>

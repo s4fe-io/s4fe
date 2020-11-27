@@ -8,7 +8,7 @@ import {
 	TouchableOpacity,
 	Text,
 	SafeAreaView,
-	Alert,
+	Alert, Platform,
 } from 'react-native'
 import {Center} from '@builderx/utils'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
@@ -144,7 +144,7 @@ export default class PhoneNumber extends ValidationComponent {
 													color: 'white',
 													marginRight: 11,
 													marginLeft: 11,
-													marginTop: 6,
+													marginTop: Platform === 'ios' ? 6 : 13,
 													fontSize: 16,
 													paddingHorizontal: 10,
 													paddingVertical: 16,
