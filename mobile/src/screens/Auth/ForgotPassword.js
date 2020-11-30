@@ -98,7 +98,7 @@ export default class SignIn extends ValidationComponent {
 					<View style={styles.root}>
 						<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 						{/* Back button */}
-						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
+						<View style={{padding: 20}}>
 							<Icon
 								type="MaterialIcons"
 								name="arrow-back"

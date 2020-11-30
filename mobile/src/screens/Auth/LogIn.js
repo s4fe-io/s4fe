@@ -104,7 +104,7 @@ export default class SignIn extends ValidationComponent {
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						{/* Back button */}
-						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
+						<View style={{padding: 20}}>
 							<Icon
 								type="MaterialIcons"
 								name="arrow-back"

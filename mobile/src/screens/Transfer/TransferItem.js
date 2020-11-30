@@ -164,7 +164,6 @@ export default class TransferItem extends ValidationComponent {
 						{/* Back button */}
 						<View
 							style={{
-								backgroundColor: Colors.PRIMARY,
 								paddingTop: 10,
 								paddingLeft: 20,
 							}}>

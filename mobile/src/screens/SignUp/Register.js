@@ -128,11 +128,22 @@ export default class Register extends ValidationComponent {
 		console.log('verificationCode, phone', verificationCode, phoneNumber)
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 						{/* Back button */}
-						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
+						<View
+							style={{
+								paddingTop: 10,
+								paddingLeft: 20,
+							}}>
 							<Icon
 								type="MaterialIcons"
 								name="arrow-back"
@@ -144,13 +155,6 @@ export default class Register extends ValidationComponent {
 						</View>
 
 						<View style={styles.backgroundStack}>
-							<View style={styles.background}>
-								<ImageBackground
-									style={styles.rect}
-									imageStyle={styles.rect_imageStyle}
-									source={require('../../assets/images/Gradient_EsLX0zX.png')}
-								/>
-							</View>
 							<View style={{alignItems: 'center'}}>
 								<Text style={styles.startUsingS5}>CREATE ACCOUNT</Text>
 							</View>
@@ -264,7 +268,7 @@ export default class Register extends ValidationComponent {
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
 		top: 0,

@@ -63,17 +63,24 @@ export default class Index extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						{/* Back button */}
 						<View
 							style={{
-								backgroundColor: Colors.PRIMARY,
 								paddingTop: 10,
 								paddingLeft: 20,
 							}}>
 							<Icon
+								type="MaterialIcons"
 								name="arrow-back"
 								style={{color: 'white'}}
 								onPress={() => {
@@ -83,49 +90,44 @@ export default class Index extends ValidationComponent {
 						</View>
 						<View style={styles.backgroundStack}>
 							<View style={styles.background}>
-								<ImageBackground
-									style={styles.rect2}
-									imageStyle={styles.rect2_imageStyle}
-									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
-									<View>
-										<Text style={styles.addNewItem}>SEARCH ITEM</Text>
+								<View>
+									<Text style={styles.addNewItem}>SEARCH ITEM</Text>
 
-										<ScrollView style={styles.scrollView}>
-											<KeyboardAwareScrollView
-												contentContainerStyle={{flexGrow: 1}}>
-												<View style={styles.form}>
-													{/* User ID */}
-													<View style={styles.group}>
-														<MaterialIconsIcon
-															name="search"
-															style={styles.icon8}
-														/>
-														<TextInput
-															placeholder="Type serial number"
-															value={searchedValue}
-															placeholderTextColor="rgba(255,255,255,1)"
-															secureTextEntry={false}
-															style={styles.textInput}
-															onChangeText={value =>
-																this.handleInput('searchedValue', value)
-															}
-														/>
-													</View>
-
-													<View style={styles.groupFiller}>
-														{ dataLoading ?
-														<ActivityIndicator color="#fff" size="large"/> :
-														<TouchableOpacity
-															onPress={() => this.search(searchedValue)}
-															style={styles.button}>
-															<Text style={styles.next}>S4FE SEARCH</Text>
-														</TouchableOpacity> }
-													</View>
+									<ScrollView style={styles.scrollView}>
+										<KeyboardAwareScrollView
+											contentContainerStyle={{flexGrow: 1}}>
+											<View style={styles.form}>
+												{/* User ID */}
+												<View style={styles.group}>
+													<MaterialIconsIcon
+														name="search"
+														style={styles.icon8}
+													/>
+													<TextInput
+														placeholder="Type serial number"
+														value={searchedValue}
+														placeholderTextColor="rgba(255,255,255,1)"
+														secureTextEntry={false}
+														style={styles.textInput}
+														onChangeText={value =>
+															this.handleInput('searchedValue', value)
+														}
+													/>
 												</View>
-											</KeyboardAwareScrollView>
-										</ScrollView>
-									</View>
-								</ImageBackground>
+
+												<View style={styles.groupFiller}>
+													{ dataLoading ?
+													<ActivityIndicator color="#fff" size="large"/> :
+													<TouchableOpacity
+														onPress={() => this.search(searchedValue)}
+														style={styles.button}>
+														<Text style={styles.next}>S4FE SEARCH</Text>
+													</TouchableOpacity> }
+												</View>
+											</View>
+										</KeyboardAwareScrollView>
+									</ScrollView>
+								</View>
 							</View>
 						</View>
 					</View>

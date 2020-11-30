@@ -48,17 +48,24 @@ export default class SearchItemDetails extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						{/* Back button */}
 						<View
 							style={{
-								backgroundColor: Colors.PRIMARY,
 								paddingTop: 10,
 								paddingLeft: 20,
 							}}>
 							<Icon
+								type="MaterialIcons"
 								name="arrow-back"
 								style={{color: 'white'}}
 								onPress={() => {
@@ -89,7 +96,7 @@ export default class SearchItemDetails extends ValidationComponent {
 														{ dataLoading ?
 														<ActivityIndicator color="#fff" size="large"/> :
 														<TouchableOpacity
-															onPress={() => this.search(searchedValue)}
+															onPress={() => console.log('contact')}
 															style={styles.button}>
 															<Text style={styles.next}>Contact the owner</Text>
 														</TouchableOpacity> }

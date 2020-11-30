@@ -84,7 +84,6 @@ export default class ScanNFC extends Component {
 						{/* Back button */}
 						<View
 							style={{
-								backgroundColor: Colors.PRIMARY,
 								paddingTop: 10,
 								paddingLeft: 20,
 							}}>
