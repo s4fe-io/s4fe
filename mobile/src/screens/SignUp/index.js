@@ -104,23 +104,19 @@ export default class PhoneNumber extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
-						<StatusBar
-							barStyle="light-content"
-							backgroundColor={Colors.PRIMARY}
-						/>
 
 						<View style={styles.backgroundStack}>
 							<Center horizontal>
-								<View style={styles.background}>
-									<ImageBackground
-										style={styles.rect}
-										imageStyle={styles.rect_imageStyle}
-										source={require('../../assets/images/Gradient_EsLX0zX.png')}
-									/>
-								</View>
 							</Center>
 							<View style={styles.startUsingS4FeColumn}>
 								<Text style={styles.startUsingS4Fe}>
@@ -144,7 +140,7 @@ export default class PhoneNumber extends ValidationComponent {
 													color: 'white',
 													marginRight: 11,
 													marginLeft: 11,
-													marginTop: Platform === 'ios' ? 6 : 13,
+													marginTop: Platform.OS === 'ios' ? 4 : 13,
 													fontSize: 16,
 													paddingHorizontal: 10,
 													paddingVertical: 16,
@@ -221,7 +217,7 @@ const pickerSelectStyles = StyleSheet.create({
 		color: 'white',
 		marginRight: 11,
 		marginLeft: 11,
-		marginTop: 10,
+		marginTop: 4,
 		fontSize: 16,
 		paddingHorizontal: 10,
 		paddingVertical: 18,

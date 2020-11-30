@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {
 	StyleSheet,
 	View,
@@ -8,7 +8,7 @@ import {
 	TouchableOpacity,
 	Text,
 	Dimensions,
-	Alert,
+	Alert, SafeAreaView, ScrollView,
 } from 'react-native'
 import {Button, Icon} from 'native-base'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -16,6 +16,9 @@ import Colors from '../../constants/Colors'
 import ValidationComponent from 'react-native-form-validator'
 import {Axios} from '../../utils/axios'
 import {API} from '../../utils/api'
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import RNPickerSelect from "react-native-picker-select";
+import MaterialIconsIcon from "react-native-vector-icons/MaterialIcons";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -85,72 +88,100 @@ export default class EnterPin extends ValidationComponent {
 		const phoneNumber = navigation.getParam('phoneNumber')
 
 		return (
-			<View style={styles.root}>
-				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
-				{/* Back Arrow */}
-				<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
-					<Icon
-						type="MaterialIcons"
-						name="arrow-back"
-						style={{color: 'white'}}
-						onPress={() => {
-							navigation.pop()
-						}}
+			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
 					/>
 				</View>
-				<View style={styles.backgroundStack}>
-					<View style={styles.background}>
-						<ImageBackground
-							style={styles.rect}
-							imageStyle={styles.rect_imageStyle}
-							source={require('../../assets/images/Gradient_EsLX0zX.png')}
-						/>
-					</View>
-					<View style={{alignItems: 'center'}}>
-						<Text style={styles.startUsingS5}>
-							Please enter the 4 digit code{'\n'}sent to your number
-						</Text>
-					</View>
-					<View style={styles.form}>
-						<View style={styles.group}>
-							<Icon name="keypad" style={styles.icon24} />
-							<TextInput
-								keyboardType="number-pad"
-								placeholder="Enter the code"
-								placeholderTextColor="rgba(255,255,255,1)"
-								secureTextEntry={false}
-								style={styles.textInput}
-								onChangeText={text => this.handleChange(text)}
+				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
+				<SafeAreaView style={styles.container}>
+					<View style={styles.root}>
+						{/* Back button */}
+						<View
+							style={{
+								backgroundColor: Colors.PRIMARY,
+								paddingTop: 10,
+								paddingLeft: 20,
+							}}>
+							<Icon
+								type="MaterialIcons"
+								name="arrow-back"
+								style={{color: 'white'}}
+								onPress={() => {
+									navigation.pop()
+								}}
 							/>
 						</View>
+						<View style={styles.backgroundStack}>
+							<View style={styles.background}>
+								<View>
+									<ScrollView style={styles.scrollView}>
+										<View style={{alignItems: 'center', marginTop: 20}}>
+											<Text style={styles.startUsingS5}>
+												Please enter the 4 digit code{'\n'}sent to your number
+											</Text>
+										</View>
+										<KeyboardAwareScrollView
+											contentContainerStyle={{flexGrow: 1}}>
+											<View style={styles.form}>
 
-						<View style={styles.groupFiller}>
-							<TouchableOpacity
-								onPress={() => this.handleNext(phoneNumber)}
-								style={styles.button}>
-								<Text style={styles.next}>NEXT</Text>
-							</TouchableOpacity>
-						</View>
-						<View style={styles.footerTexts1}>
-							<TouchableOpacity
-								onPress={() => navigation.pop()}
-								style={styles.button3}>
-								<Text style={styles.createAccount1}>
-									You haven&#39;t received a code?{'\n'}Edit your phone number
-								</Text>
-							</TouchableOpacity>
+												<View style={styles.group}>
+													<Icon name="keypad" style={styles.icon24} />
+													<TextInput
+														keyboardType="number-pad"
+														placeholder="Enter the code"
+														placeholderTextColor="rgba(255,255,255,1)"
+														secureTextEntry={false}
+														style={styles.textInput}
+														onChangeText={text => this.handleChange(text)}
+													/>
+												</View>
+
+
+												<View style={styles.groupFiller}>
+													<TouchableOpacity
+														onPress={() => this.handleNext(phoneNumber)}
+														style={styles.button}>
+														<Text style={styles.next}>NEXT</Text>
+													</TouchableOpacity>
+												</View>
+
+												<View style={styles.footerTexts1}>
+													<TouchableOpacity
+														onPress={() => navigation.pop()}
+														style={styles.button3}>
+														<Text style={styles.createAccount1}>
+															You haven&#39;t received a code?{'\n'}Edit your phone number
+														</Text>
+													</TouchableOpacity>
+												</View>
+
+											</View>
+										</KeyboardAwareScrollView>
+									</ScrollView>
+								</View>
+							</View>
 						</View>
 					</View>
-				</View>
-			</View>
+				</SafeAreaView>
+
+
+				{/* OLD */}
+
+			</Fragment>
+
 		)
 	}
 }
 
 const styles = StyleSheet.create({
+	container: {flex: 1},
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
 		top: 0,
@@ -158,17 +189,18 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		right: 0,
 		bottom: 0,
-		justifyContent: 'center',
 	},
 	rect: {
+		flex: 1
+	},
+	backgroundStack: {
 		flex: 1,
 	},
-	rect_imageStyle: {},
+	rect2: {
+		flex: 1,
+	},
 	form: {
-		top: height * 0.1,
-		height: 235,
-		marginLeft: 50,
-		marginRight: 50,
+		padding: 40,
 	},
 	group: {
 		height: 59,
@@ -204,9 +236,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	footerTexts1: {
-		height: 43,
+		marginTop: 10,
 		justifyContent: 'center',
-		marginBottom: 5,
 	},
 	button3: {
 		alignSelf: 'center',
@@ -215,6 +246,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	createAccount1: {
+		marginTop: 10,
 		color: 'rgba(255,255,255,0.5)',
 		fontSize: 16,
 	},
@@ -229,8 +261,5 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		color: 'rgba(255,255,255,1)',
 		fontSize: 30,
-	},
-	backgroundStack: {
-		flex: 1,
 	},
 })

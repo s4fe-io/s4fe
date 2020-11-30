@@ -151,6 +151,13 @@ export default class TransferItem extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
@@ -172,61 +179,56 @@ export default class TransferItem extends ValidationComponent {
 						</View>
 						<View style={styles.backgroundStack}>
 							<View style={styles.background}>
-								<ImageBackground
-									style={styles.rect2}
-									imageStyle={styles.rect2_imageStyle}
-									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
-									<View>
-										<Text style={styles.addNewItem}>TRANSFER ITEM</Text>
+								<View>
+									<Text style={styles.addNewItem}>TRANSFER ITEM</Text>
 
-										<ScrollView style={styles.scrollView}>
-											<KeyboardAwareScrollView
-												contentContainerStyle={{flexGrow: 1}}>
-												{ this._renderCamera() }
-												<View style={styles.form}>
-													{/* User ID */}
-													<View style={styles.group}>
-														<MaterialIconsIcon
-															name="person"
-															style={styles.icon8}
-														/>
-														<TextInput
-															placeholder="Unique User ID"
-															value={uniqueUserId}
-															placeholderTextColor="rgba(255,255,255,1)"
-															secureTextEntry={false}
-															style={styles.textInput}
-															onChangeText={value =>
-																this.handleInput('uniqueUserId', value)
-															}
-														/>
-													</View>
-													{/* Select item */}
-													<View style={styles.selectPicker}>
-														<RNPickerSelect
-															value={selectedItem}
-															placeholder={placeholder}
-															placeholderTextColor="white"
-															style={pickerSelectStyles}
-															onValueChange={this.handleCategoriesSelect}
-															items={this.state.items}
-														/>
-													</View>
-
-													<View style={styles.groupFiller}>
-														{ dataLoading ?
-														<ActivityIndicator color="#fff" size="large"/> :
-														<TouchableOpacity
-															onPress={() => this.transferItem()}
-															style={styles.button}>
-															<Text style={styles.next}>TRANSFER</Text>
-														</TouchableOpacity> }
-													</View>
+									<ScrollView style={styles.scrollView}>
+										<KeyboardAwareScrollView
+											contentContainerStyle={{flexGrow: 1}}>
+											{ this._renderCamera() }
+											<View style={styles.form}>
+												{/* User ID */}
+												<View style={styles.group}>
+													<MaterialIconsIcon
+														name="person"
+														style={styles.icon8}
+													/>
+													<TextInput
+														placeholder="Unique User ID"
+														value={uniqueUserId}
+														placeholderTextColor="rgba(255,255,255,1)"
+														secureTextEntry={false}
+														style={styles.textInput}
+														onChangeText={value =>
+															this.handleInput('uniqueUserId', value)
+														}
+													/>
 												</View>
-											</KeyboardAwareScrollView>
-										</ScrollView>
-									</View>
-								</ImageBackground>
+												{/* Select item */}
+												<View style={styles.selectPicker}>
+													<RNPickerSelect
+														value={selectedItem}
+														placeholder={placeholder}
+														placeholderTextColor="white"
+														style={pickerSelectStyles}
+														onValueChange={this.handleCategoriesSelect}
+														items={this.state.items}
+													/>
+												</View>
+
+												<View style={styles.groupFiller}>
+													{ dataLoading ?
+													<ActivityIndicator color="#fff" size="large"/> :
+													<TouchableOpacity
+														onPress={() => this.transferItem()}
+														style={styles.button}>
+														<Text style={styles.next}>TRANSFER</Text>
+													</TouchableOpacity> }
+												</View>
+											</View>
+										</KeyboardAwareScrollView>
+									</ScrollView>
+								</View>
 							</View>
 						</View>
 					</View>

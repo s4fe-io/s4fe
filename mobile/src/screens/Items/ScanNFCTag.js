@@ -188,16 +188,18 @@ export default class ScanNFC extends Component {
 		let {supported, enabled, tag, text, parsedText, isTestRunning} = this.state
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						{/* Back button */}
-						<View
-							style={{
-								backgroundColor: Colors.PRIMARY,
-								paddingTop: 10,
-								paddingLeft: 20,
-							}}>
+						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 							<Icon
 								type="MaterialIcons"
 								name="arrow-back"
@@ -207,12 +209,8 @@ export default class ScanNFC extends Component {
 								}}
 							/>
 						</View>
-						<View style={styles.backgroundStack}>
-							<View style={styles.background}>
-								<ImageBackground
-									style={styles.rect2}
-									imageStyle={styles.rect2_imageStyle}
-									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
+						<View>
+							<View>
 									<View style={styles.icon10Column}>
 										<Text style={styles.scanS4FeTarcker}>
 											SCAN S4FE TRACKER
@@ -256,7 +254,6 @@ export default class ScanNFC extends Component {
 									{/*	style={styles.button}>*/}
 									{/*	<Text style={styles.cancel}>Next</Text>*/}
 									{/*</TouchableOpacity>*/}
-								</ImageBackground>
 							</View>
 						</View>
 					</View>
@@ -269,9 +266,17 @@ export default class ScanNFC extends Component {
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
+		top: 0,
+		left: 0,
+		position: 'absolute',
+		right: 0,
+		bottom: 0,
+		justifyContent: 'center',
+	},
+	rect: {
 		flex: 1,
 	},
 	backgroundStack: {

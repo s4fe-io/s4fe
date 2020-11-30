@@ -93,6 +93,13 @@ export default class SignIn extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
@@ -109,13 +116,6 @@ export default class SignIn extends ValidationComponent {
 						</View>
 
 						<View style={styles.backgroundStack}>
-							<View style={styles.background}>
-								<ImageBackground
-									style={styles.rect}
-									imageStyle={styles.rect_imageStyle}
-									source={require('../../assets/images/Gradient_EsLX0zX.png')}
-								/>
-							</View>
 							<View style={{alignItems: 'center'}}>
 								<Text style={styles.startUsingS5}>SIGN IN</Text>
 							</View>
@@ -189,7 +189,7 @@ export default class SignIn extends ValidationComponent {
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
 		top: 0,

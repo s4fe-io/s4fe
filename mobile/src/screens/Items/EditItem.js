@@ -183,17 +183,13 @@ export default class AddItem extends ValidationComponent {
 
 		return (
 			<Fragment>
-				{Platform.OS === 'ios' &&
-				<View style={{
-					width: "100%",
-					height: 100, // For all devices, even X, XS Max
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					backgroundColor: Colors.PRIMARY
-				}}
-				/>}
-
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
@@ -215,112 +211,107 @@ export default class AddItem extends ValidationComponent {
 						</View>
 						<View style={styles.backgroundStack}>
 							<View style={styles.background}>
-								<ImageBackground
-									style={styles.rect2}
-									imageStyle={styles.rect2_imageStyle}
-									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
-									<View>
-										<Text style={styles.addNewItem}>EDIT ITEM</Text>
+								<View>
+									<Text style={styles.addNewItem}>EDIT ITEM</Text>
 
-										<ScrollView style={styles.scrollView}>
-											<KeyboardAwareScrollView
-												contentContainerStyle={{flexGrow: 1}}>
-												<View style={styles.form}>
-													<View style={styles.selectPicker}>
-														{/*<FeatherIcon name="check" style={styles.icon6} />*/}
-														<RNPickerSelect
-															value={selectedCategory}
-															placeholder={placeholder}
-															placeholderTextColor="white"
-															style={pickerSelectStyles}
-															onValueChange={this.handleCategoriesSelect}
-															items={this.state.categories}
-														/>
-													</View>
-													{/*Item title */}
-													<View style={styles.group}>
-														<MaterialIconsIcon
-															name="devices"
-															style={styles.icon8}
-														/>
-														<TextInput
-															placeholder="Item title"
-															placeholderTextColor="rgba(255,255,255,1)"
-															secureTextEntry={false}
-															value={title}
-															style={styles.textInput}
-															onChangeText={value =>
-																this.handleInput('title', value)
-															}
-														/>
-													</View>
-													{/* Item Serial */}
-													<View style={styles.group}>
-														<MaterialIconsIcon
-															name="description"
-															style={styles.icon5}
-														/>
-														<TextInput
-															placeholder="Serial number"
-															value={serial}
-															placeholderTextColor="rgba(255,255,255,1)"
-															secureTextEntry={false}
-															style={styles.textInput}
-															onChangeText={value =>
-																this.handleInput('serial', value)
-															}
-														/>
-													</View>
-													{/* Item Description */}
-													<View style={styles.group}>
-														<MaterialIconsIcon
-															name="description"
-															style={styles.icon5}
-														/>
-														<TextInput
-															placeholder="Item description"
-															placeholderTextColor="rgba(255,255,255,1)"
-															secureTextEntry={false}
-															multiline={true}
-															numberOfLines={4}
-															value={description}
-															style={styles.textInput}
-															onChangeText={value =>
-																this.handleInput('description', value)
-															}
-														/>
-													</View>
-													{/* Item Status */}
-													<View style={styles.selectPicker}>
-														{/*<FeatherIcon name="check" style={styles.icon6} />*/}
-														<RNPickerSelect
-															value={selectedStatus}
-															placeholder={statusPlaceholder}
-															placeholderTextColor="white"
-															style={pickerSelectStyles}
-															onValueChange={this.handleStatusSelect}
-															items={itemStatuses}
-														/>
-													</View>
-
-													<View style={styles.groupFiller}>
-														<TouchableOpacity
-															onPress={() => this.saveItem()}
-															style={styles.button}>
-															<Text style={styles.next}>SAVE</Text>
-														</TouchableOpacity>
-
-														<TouchableOpacity
-															onPress={() => this.deleteItemConfirm()}
-															style={styles.deleteButton}>
-															<Text style={styles.deleteText}>DELETE</Text>
-														</TouchableOpacity>
-													</View>
+									<ScrollView style={styles.scrollView}>
+										<KeyboardAwareScrollView
+											contentContainerStyle={{flexGrow: 1}}>
+											<View style={styles.form}>
+												<View style={styles.selectPicker}>
+													{/*<FeatherIcon name="check" style={styles.icon6} />*/}
+													<RNPickerSelect
+														value={selectedCategory}
+														placeholder={placeholder}
+														placeholderTextColor="white"
+														style={pickerSelectStyles}
+														onValueChange={this.handleCategoriesSelect}
+														items={this.state.categories}
+													/>
 												</View>
-											</KeyboardAwareScrollView>
-										</ScrollView>
-									</View>
-								</ImageBackground>
+												{/*Item title */}
+												<View style={styles.group}>
+													<MaterialIconsIcon
+														name="devices"
+														style={styles.icon8}
+													/>
+													<TextInput
+														placeholder="Item title"
+														placeholderTextColor="rgba(255,255,255,1)"
+														secureTextEntry={false}
+														value={title}
+														style={styles.textInput}
+														onChangeText={value =>
+															this.handleInput('title', value)
+														}
+													/>
+												</View>
+												{/* Item Serial */}
+												<View style={styles.group}>
+													<MaterialIconsIcon
+														name="description"
+														style={styles.icon5}
+													/>
+													<TextInput
+														placeholder="Serial number"
+														value={serial}
+														placeholderTextColor="rgba(255,255,255,1)"
+														secureTextEntry={false}
+														style={styles.textInput}
+														onChangeText={value =>
+															this.handleInput('serial', value)
+														}
+													/>
+												</View>
+												{/* Item Description */}
+												<View style={styles.group}>
+													<MaterialIconsIcon
+														name="description"
+														style={styles.icon5}
+													/>
+													<TextInput
+														placeholder="Item description"
+														placeholderTextColor="rgba(255,255,255,1)"
+														secureTextEntry={false}
+														multiline={true}
+														numberOfLines={4}
+														value={description}
+														style={styles.textInput}
+														onChangeText={value =>
+															this.handleInput('description', value)
+														}
+													/>
+												</View>
+												{/* Item Status */}
+												<View style={styles.selectPicker}>
+													{/*<FeatherIcon name="check" style={styles.icon6} />*/}
+													<RNPickerSelect
+														value={selectedStatus}
+														placeholder={statusPlaceholder}
+														placeholderTextColor="white"
+														style={pickerSelectStyles}
+														onValueChange={this.handleStatusSelect}
+														items={itemStatuses}
+													/>
+												</View>
+
+												<View style={styles.groupFiller}>
+													<TouchableOpacity
+														onPress={() => this.saveItem()}
+														style={styles.button}>
+														<Text style={styles.next}>SAVE</Text>
+													</TouchableOpacity>
+
+													<TouchableOpacity
+														onPress={() => this.deleteItemConfirm()}
+														style={styles.deleteButton}>
+														<Text style={styles.deleteText}>DELETE</Text>
+													</TouchableOpacity>
+												</View>
+											</View>
+										</KeyboardAwareScrollView>
+									</ScrollView>
+								</View>
 							</View>
 						</View>
 					</View>
@@ -358,10 +349,17 @@ const pickerSelectStyles = StyleSheet.create({
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
-		flex: 1,
+		top: 0,
+		left: 0,
+		position: 'absolute',
+		right: 0,
+		bottom: 0,
+	},
+	rect: {
+		flex: 1
 	},
 	backgroundStack: {
 		flex: 1,

@@ -3,7 +3,7 @@ import Colors from '../../constants/Colors'
 export default StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
 		top: 0,

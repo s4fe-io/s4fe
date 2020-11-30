@@ -87,12 +87,20 @@ export default class SignIn extends ValidationComponent {
 
 		return (
 			<Fragment>
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 						{/* Back button */}
 						<View style={{backgroundColor: Colors.PRIMARY, padding: 20}}>
 							<Icon
+								type="MaterialIcons"
 								name="arrow-back"
 								style={{color: 'white'}}
 								onPress={() => {
@@ -156,7 +164,7 @@ export default class SignIn extends ValidationComponent {
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
 		top: 0,

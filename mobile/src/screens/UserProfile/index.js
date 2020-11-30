@@ -146,7 +146,7 @@ export default class UserProfile extends React.Component {
 				{Platform.OS === 'ios' &&
 				<View style={{
 					width: "100%",
-					height: 100, // For all devices, even X, XS Max
+					height: Platform.OS === 'ios' ? 100 : null, // For all devices, even X, XS Max
 					position: 'absolute',
 					top: 0,
 					left: 0,

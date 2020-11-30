@@ -71,16 +71,13 @@ export default class ScanNFC extends Component {
 		let {supported, enabled, tag, text, parsedText, isTestRunning} = this.state
 		return (
 			<Fragment>
-				{Platform.OS === 'ios' &&
-				<View style={{
-					width: "100%",
-					height: 100, // For all devices, even X, XS Max
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					backgroundColor: Colors.PRIMARY
-				}}
-				/>}
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
@@ -200,10 +197,17 @@ export default class ScanNFC extends Component {
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
 	background: {
-		flex: 1,
+		top: 0,
+		left: 0,
+		position: 'absolute',
+		right: 0,
+		bottom: 0,
+	},
+	rect: {
+		flex: 1
 	},
 	backgroundStack: {
 		flex: 1,

@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		height: 40,
-		// marginTop: 30, TODO: check this on ios
+		marginTop: 30, // TODO: check this on ios
 		backgroundColor: 'rgba(235,167,33,1)',
 	},
 	group: {
