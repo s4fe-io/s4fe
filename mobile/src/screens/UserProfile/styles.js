@@ -9,8 +9,16 @@ const height = Dimensions.get('window').height;
 export default StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
 	},
+	background: {
+		top: 0,
+		left: 0,
+		position: 'absolute',
+		right: 0,
+		bottom: 0,
+	},
+
 	headerX: {
 		height: 70,
 		elevation: 15,
@@ -87,10 +95,7 @@ export default StyleSheet.create({
 		fontSize: 30,
 	},
 	rect: {
-		width: 321,
-		height: 139,
-		borderWidth: 1,
-		borderColor: 'rgba(180,180,180,1)',
+		flex: 1
 	},
 	accountSettingsStack: {
 		height: 165,

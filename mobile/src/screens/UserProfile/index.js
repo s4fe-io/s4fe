@@ -143,26 +143,20 @@ export default class UserProfile extends React.Component {
 
 		return (
 			<View style={styles.root}>
-				{Platform.OS === 'ios' &&
-				<View style={{
-					width: "100%",
-					height: Platform.OS === 'ios' ? 100 : null, // For all devices, even X, XS Max
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					backgroundColor: Colors.PRIMARY
-				}}
-				/>}
+				<View style={styles.background}>
+					<ImageBackground
+						style={styles.rect}
+						imageStyle={styles.rect_imageStyle}
+						source={require('../../assets/images/Gradient_EsLX0zX.png')}
+					/>
+				</View>
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<Header
 					navigation={navigation}
 					icon2Name="power"
 					style={styles.headerX}
 				/>
-				<ImageBackground
-					style={styles.rect2}
-					imageStyle={styles.rect2_imageStyle}
-					source={require('../../assets/images/Gradient_EsLX0zX.png')}>
+
 					<View>
 						<View style={styles.ellipseStack}>
 							<Content>
@@ -199,7 +193,6 @@ export default class UserProfile extends React.Component {
 							<Icon type="MaterialIcons" name="search" />
 						</Button>
 					</Fab>
-				</ImageBackground>
 			</View>
 		)
 	}
