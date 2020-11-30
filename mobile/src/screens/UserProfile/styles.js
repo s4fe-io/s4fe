@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native'
 import Colors from '../../constants/Colors'
-import {Dimensions} from 'react-native'
+import {Dimensions, Platform} from 'react-native'
 import {color} from "react-native-reanimated";
 
 const width = Dimensions.get('window').width;
@@ -29,6 +29,7 @@ export default StyleSheet.create({
 		shadowColor: 'rgba(0,0,0,1)',
 		shadowOpacity: 0.1,
 		shadowRadius: 5,
+		marginTop: Platform.OS === 'android' ? 0 : 30,
 	},
 	body: {
 		backgroundColor: Colors.PRIMARY,
