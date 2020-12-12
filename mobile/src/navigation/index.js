@@ -1,6 +1,6 @@
 import {createAppContainer, createSwitchNavigator} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import {createDrawerNavigator} from 'react-navigation-drawer'
 
 import AuthLoadingScreen from '../screens/Auth/AuthLoading'
 
@@ -11,6 +11,7 @@ import LogInScreen from '../screens/Auth/LogIn'
 import ForgotPasswordScreen from '../screens/Auth/ForgotPassword'
 
 import UserProfileScreen from '../screens/UserProfile'
+import EditProfileScreen from '../screens/EditProfile'
 import ScanNFCScreen from '../screens/Items/ScanNFC'
 import AddItemScreen from '../screens/Items/AddItem'
 import EditItemScreen from '../screens/Items/EditItem'
@@ -27,6 +28,11 @@ const AppStack = createStackNavigator({
 		screen: UserProfileScreen,
 		navigationOptions: {headerShown: false},
 	},
+	EditUserProfile: {
+		screen: EditProfileScreen,
+		navigationOptions: {headerShown: false},
+	},
+
 	ScanNFC: {
 		screen: ScanNFCScreen,
 		navigationOptions: {headerShown: false},
@@ -59,7 +65,6 @@ const AppStack = createStackNavigator({
 		screen: SearchItemDetailsScreen,
 		navigationOptions: {headerShown: false},
 	},
-
 })
 
 const AuthStack = createStackNavigator({

@@ -33,7 +33,7 @@ import {Dimensions} from 'react-native'
 import Colors from '../../constants/Colors'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
-import EvilIconsIcon from "react-native-vector-icons/EvilIcons";
+import EvilIconsIcon from 'react-native-vector-icons/EvilIcons'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -115,16 +115,27 @@ export default class UserProfile extends React.Component {
 							</Text>
 						</Body>
 						<Right>
-							<View style={{flexDirection:'row', flexWrap:'wrap'}}>
+							<View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
 								<TouchableOpacity
 									style={{marginRight: 10}}
-									onPress={() => this.props.navigation.navigate('EditItem', {item})}
-								>
-
-									<Icon type="MaterialIcons" name='create' style={{color: Colors.DEFAULT, fontSize: 23}} />
+									onPress={() =>
+										this.props.navigation.navigate('EditItem', {item})
+									}>
+									<Icon
+										type="MaterialIcons"
+										name="create"
+										style={{color: Colors.DEFAULT, fontSize: 23}}
+									/>
 								</TouchableOpacity>
-								<TouchableOpacity onPress={() => this.props.navigation.navigate('TransferItem', {item})}>
-									<Icon type="MaterialIcons" name="send" style={{color: Colors.DEFAULT, fontSize: 21}} />
+								<TouchableOpacity
+									onPress={() =>
+										this.props.navigation.navigate('TransferItem', {item})
+									}>
+									<Icon
+										type="MaterialIcons"
+										name="send"
+										style={{color: Colors.DEFAULT, fontSize: 21}}
+									/>
 								</TouchableOpacity>
 							</View>
 						</Right>
@@ -157,42 +168,48 @@ export default class UserProfile extends React.Component {
 					style={styles.headerX}
 				/>
 
-					<View>
-						<View style={styles.ellipseStack}>
-							<Content>
-								<View style={styles.container}>
+				<View>
+					<View style={styles.ellipseStack}>
+						<Content>
+							<View style={styles.container}>
+								<TouchableOpacity
+									onPress={() =>
+										navigation.navigate('EditUserProfile', {
+											currentUser: userData,
+										})
+									}>
 									<View style={styles.userNameColumn}>
 										<Text style={styles.userName}>
 											{`${userData.first_name} ${userData.last_name}`}
 										</Text>
 										<Text style={styles.userEmail}>{userData.email}</Text>
 									</View>
-
-									{/*	 ITEMS */}
-									<List style={{padding: 10}}>{this._renderItems()}</List>
-								</View>
-							</Content>
-						</View>
+								</TouchableOpacity>
+								{/*	 ITEMS */}
+								<List style={{padding: 10}}>{this._renderItems()}</List>
+							</View>
+						</Content>
 					</View>
-					<Fab
-						active={this.state.active}
-						direction="up"
-						containerStyle={{marginBottom: 10}}
-						style={styles.fab}
-						position="bottomRight"
-						onPress={() => this.setState({active: !this.state.active})}>
+				</View>
+				<Fab
+					active={this.state.active}
+					direction="up"
+					containerStyle={{marginBottom: 10}}
+					style={styles.fab}
+					position="bottomRight"
+					onPress={() => this.setState({active: !this.state.active})}>
+					<Icon type="MaterialIcons" name="add" />
+					<Button
+						style={{backgroundColor: Colors.PRIMARY}}
+						onPress={() => navigation.navigate('ScanNFC')}>
 						<Icon type="MaterialIcons" name="add" />
-						<Button
-							style={{backgroundColor: Colors.PRIMARY}}
-							onPress={() => navigation.navigate('ScanNFC')}>
-							<Icon type="MaterialIcons" name="add" />
-						</Button>
-						<Button
-							style={{backgroundColor: Colors.PRIMARY}}
-							onPress={() => navigation.navigate('ScanNFCTag')}>
-							<Icon type="MaterialIcons" name="search" />
-						</Button>
-					</Fab>
+					</Button>
+					<Button
+						style={{backgroundColor: Colors.PRIMARY}}
+						onPress={() => navigation.navigate('ScanNFCTag')}>
+						<Icon type="MaterialIcons" name="search" />
+					</Button>
+				</Fab>
 			</View>
 		)
 	}
