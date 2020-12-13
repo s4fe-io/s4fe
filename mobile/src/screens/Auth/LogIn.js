@@ -36,8 +36,8 @@ export default class SignIn extends ValidationComponent {
 	constructor(props) {
 		super(props)
 		this.state = {
-			email: 'dj.shone@gmail.com',
-			password: '22sep2008',
+			email: '',
+			password: '',
 			dataLoading: false,
 			userInfo: {}
 		}
