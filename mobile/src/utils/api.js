@@ -10,4 +10,5 @@ export const API = {
 	MESSAGES: 'api/v1/messages/',
 	ITEM_TRANSFER: 'api/v1/item-transfer/',
 	SEARCH: 'api/v1/search/',
+	UPDATE_USER: 'rest-auth/user/'
 };

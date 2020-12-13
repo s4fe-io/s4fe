@@ -23,15 +23,26 @@ import {Axios} from '../../utils/axios'
 import {API} from '../../utils/api'
 import ValidationComponent from 'react-native-form-validator'
 
+import {
+	LoginButton,
+	AccessToken,
+	LoginManager
+} from 'react-native-fbsdk';
+import {acc} from "react-native-reanimated";
+
+
 export default class SignIn extends ValidationComponent {
 	constructor(props) {
 		super(props)
 		this.state = {
-			email: '',
-			password: '',
+			email: 'dj.shone@gmail.com',
+			password: '22sep2008',
 			dataLoading: false,
+			userInfo: {}
 		}
 	}
+
+
 
 	// Store data
 	storeData = async (key, value) => {
@@ -45,6 +56,42 @@ export default class SignIn extends ValidationComponent {
 
 	handleChange = (name, value) => {
 		this.setState({[name]: value})
+	}
+
+	facebookLogin = (accessToken) => {
+		const formData = {
+			access_token: accessToken
+		}
+		console.log('form', formData)
+		Axios.post(API.FACEBOOK, formData).then(res => {
+			console.log('Res', res)
+			this.storeData('tokenData', res.data.key)
+			this.storeData('userData', JSON.stringify(res.data))
+			this.goToScreen('UserProfile', res.data)
+		}, err => {
+			Alert.alert('Warning', JSON.stringify(err))
+		})
+	}
+
+	handleFacebookLogin () {
+		LoginManager.logInWithPermissions(['public_profile', 'email', 'user_friends']).then(
+			(result) => {
+				if (result.isCancelled) {
+					console.log('Login cancelled')
+				} else {
+					AccessToken.getCurrentAccessToken().then(data => {
+						const accessToken = data.accessToken.toString()
+						this.facebookLogin(accessToken)
+						console.log('access token', accessToken)
+						// this.getInfoFromToken(accessToken);
+					})
+					console.log('Login success with permissions: ' + result.grantedPermissions.toString())
+				}
+			},
+			function (error) {
+				console.log('Login fail with error: ' + error)
+			}
+		)
 	}
 
 	goToScreen(screen, data) {
@@ -167,13 +214,13 @@ export default class SignIn extends ValidationComponent {
 
 										</View>
 										<View style={styles.footerTexts1}>
-											{/*<Text style={styles.createAccount1}>*/}
-											{/*	Login using Social Platforms*/}
-											{/*</Text>*/}
-											{/*	 Privacy */}
-											{/*<TouchableOpacity onPress={() => navigation.navigate('')}>*/}
-											{/*	<Text style={styles.terms}>Facebook | Google</Text>*/}
-											{/*</TouchableOpacity>*/}
+
+											<Text style={styles.createAccount1}>
+												Login using Social Platforms
+											</Text>
+											<TouchableOpacity onPress={() => this.handleFacebookLogin()}>
+												<Text style={styles.terms}>Facebook </Text>
+											</TouchableOpacity>
 										</View>
 									</View>
 								</KeyboardAwareScrollView>

@@ -12,6 +12,7 @@ import {
 	Alert,
 	ActivityIndicator,
 } from 'react-native'
+import AsyncStorage from "@react-native-community/async-storage";
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import Colors from '../../constants/Colors'
 import {Icon} from 'native-base'
@@ -25,8 +26,9 @@ export default class Index extends ValidationComponent {
 	constructor(props) {
 		super(props)
 		this.state = {
-			searchedValue: '',
-			item: null,
+			firstName: null,
+			lastName: null,
+			phoneNumber: null,
 			dataLoading: false,
 		}
 	}
@@ -37,30 +39,43 @@ export default class Index extends ValidationComponent {
 		this.setState({[model]: value})
 	}
 
-	search(serial) {
-		const params = {
-			serial: serial,
+	update(serial) {
+		const { firstName, lastName, phoneNumber } = this.state
+		const formData = {
+			first_name: firstName,
+			last_name: lastName,
+			phone_number: phoneNumber,
 		}
-		Axios.get(API.SEARCH, {params}).then(
-			res => {
-				console.log('searched', res)
-				this.setState({item: res.data})
-				this.props.navigation.navigate('SearchItemDetails', {
-					itemDetails: res.data,
-				})
+		Axios.patch(API.UPDATE_USER, formData).then(
+			async res => {
+				console.log('patched', res)
+				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+
+				this.props.navigation.navigate('UserProfile')
 			},
 			err => {
 				console.log('err', err.response)
-				Alert.alert('Warning', err.response.data.status || 'No Items')
+				const data = err.response.data
+				console.log('parsed data', data)
+				if (data.phone_number) {
+					Alert.alert('Warning!', 'Phone: ' + data.phone_number[0])
+				}
 			},
 		)
 	}
 
 	render() {
 		const {navigation} = this.props
-		const {searchedValue, dataLoading} = this.state
+		const {firstName, lastName, phoneNumber, dataLoading} = this.state
 		const currentUser = navigation.getParam('currentUser')
-		console.log('user', currentUser)
+		if (firstName === null) {
+			this.setState({
+				firstName: currentUser.first_name,
+				lastName: currentUser.last_name,
+				phoneNumber: currentUser.phone_number.replace('+', '')
+			})
+		}
+		console.log('user', firstName)
 		return (
 			<Fragment>
 				<View style={styles.background}>
@@ -105,12 +120,14 @@ export default class Index extends ValidationComponent {
 													/>
 													<TextInput
 														placeholder="First name"
-														value={currentUser.first_name}
+														value={firstName}
 														placeholderTextColor="rgba(255,255,255,1)"
 														secureTextEntry={false}
 														style={styles.textInput}
-														onChangeText={value =>
+														onChangeText={value => {
 															this.handleInput('firstName', value)
+														}
+
 														}
 													/>
 												</View>
@@ -123,7 +140,7 @@ export default class Index extends ValidationComponent {
 													/>
 													<TextInput
 														placeholder="Last name"
-														value={currentUser.last_name}
+														value={lastName}
 														placeholderTextColor="rgba(255,255,255,1)"
 														secureTextEntry={false}
 														style={styles.textInput}
@@ -141,7 +158,8 @@ export default class Index extends ValidationComponent {
 													/>
 													<TextInput
 														placeholder="Phone number"
-														value={currentUser.phone_number.replace('+', '')}
+														// value={phoneNumber.replace('+', '')}
+														value={phoneNumber}
 														placeholderTextColor="rgba(255,255,255,1)"
 														keyboardType='number-pad'
 														secureTextEntry={false}
@@ -157,7 +175,7 @@ export default class Index extends ValidationComponent {
 														<ActivityIndicator color="#fff" size="large" />
 													) : (
 														<TouchableOpacity
-															onPress={() => this.search(searchedValue)}
+															onPress={() => this.update()}
 															style={styles.button}>
 															<Text style={styles.next}>Save</Text>
 														</TouchableOpacity>

@@ -46,7 +46,10 @@ export default class UserProfile extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			userData: {},
+			userData: {
+				first_name: null,
+				last_name: null
+			},
 			items: [],
 			active: false,
 		}
@@ -69,11 +72,11 @@ export default class UserProfile extends React.Component {
 	getUserData = async () => {
 		try {
 			const value = await AsyncStorage.getItem('userData')
-			console.log('USER DATA', value)
 			if (value !== null) {
+				console.log('value', value)
+
 				// value previously stored
 				this.setState({userData: JSON.parse(value)})
-				console.log('USER DATA', this.state.userData)
 			}
 		} catch (e) {
 			// error reading value
@@ -101,7 +104,6 @@ export default class UserProfile extends React.Component {
 	_renderItems() {
 		const {items} = this.state
 		return items.map(item => {
-			console.log(item)
 
 			return (
 				<View style={styles.item}>
@@ -147,10 +149,11 @@ export default class UserProfile extends React.Component {
 
 	render() {
 		const {navigation} = this.props
-		const {items} = this.state
-		const userData = navigation.getParam('userData')
-		console.log('user ITEMS', items)
-		console.log('user userData', userData)
+		const {items, userData} = this.state
+		const loggedUserData = navigation.getParam('userData')
+		if (userData.first_name === null) {
+			this.setState({userData: loggedUserData})
+		}
 
 		return (
 			<View style={styles.root}>
