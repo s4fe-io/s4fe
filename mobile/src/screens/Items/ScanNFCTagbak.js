@@ -9,18 +9,37 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	Alert,
-	Platform
 } from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import LottieView from 'lottie-react-native'
 import Colors from '../../constants/Colors'
 import {Icon} from 'native-base'
-import NfcManager, {NdefParser, NfcTech, Ndef, NfcEvents} from 'react-native-nfc-manager'
+import NfcManager, {NdefParser, NfcTech} from 'react-native-nfc-manager'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
 
 const hash = require('object-hash')
+const generateNFCKey = () => {
+	const generatedHash = hash(Math.round(Math.random() * 10000000000))
+	console.log('generated hash', generatedHash)
+	return generatedHash
+}
+
+function strToBytes(str) {
+	let result = []
+	for (let i = 0; i < str.length; i++) {
+		result.push(str.charCodeAt(i))
+	}
+	return result
+}
+
+function buildTextPayload(valueToWrite) {
+	const textBytes = strToBytes(valueToWrite)
+	// in this example. we always use `en`
+	const headerBytes = [0xd1, 0x01, textBytes.length + 3, 0x54, 0x02, 0x65, 0x6e]
+	return [...headerBytes, ...textBytes]
+}
 
 export default class ScanNFC extends Component {
 	constructor(props) {
@@ -36,62 +55,15 @@ export default class ScanNFC extends Component {
 	}
 
 	componentDidMount() {
-		this.initializeNFC()
-		this.registerNFC()
-	}
-
-	componentWillUnmount() {
-		NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
-		NfcManager.unregisterTagEvent().catch(() => 0);
-	}
-
-	decodeNdefMessage = (tag) => {
-		try {
-			const decodedTag = Ndef.text.decodePayload(tag.ndefMessage[0].payload) || null
-			this.fetchItemInfo(decodedTag)
-		} catch (e) {
-			console.log(e);
-		}
-		return null;
-	}
-
-	initializeNFC = () => {
-		NfcManager.start();
-		NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
-			console.log('tag', tag);
-			this.decodeNdefMessage(tag)
-
-			// const nfcTag = await NfcManager.getTag()
-			// console.log('ovo je nfc tag', nfcTag)
-			NfcManager.setAlertMessageIOS('I got your tag!');
-			NfcManager.unregisterTagEvent().catch((e) => console.log('err', e));
-		});
-	}
-
-	registerNFC = async () => {
-		try {
-			console.log('register');
-			await NfcManager.registerTagEvent();
-		} catch (ex) {
-			console.warn('ex', ex);
-			NfcManager.unregisterTagEvent().catch((e) => console.log('err', e));
-		}
-	};
-
-	_cleanUp = () => {
-		NfcManager.cancelTechnologyRequest()
-			.then(() => {
-				console.log('cancel')
-			})
-			.catch(() => 0);
-	}
-
-	_clearMessages = () => {
-		this.setState({tag: null, parsedText: null})
+		NfcManager.isSupported().then(supported => {
+			this.setState({supported})
+			if (supported) {
+				this._startNfc()
+			}
+		})
 	}
 
 	fetchItemInfo(NFCKey) {
-		console.log('decoded tag iz fetch', NFCKey)
 		const formData = {
 			key: NFCKey,
 		}
@@ -101,7 +73,7 @@ export default class ScanNFC extends Component {
 				const result = res.data
 				if (result.your_device) {
 					NfcManager.cancelTechnologyRequest().catch(() => 0)
-					this.registerNFC()
+					this._scanNFCTag()
 					Alert.alert('Info', 'This is your device.')
 				} else if (result.status === 'L' || result.status === 'S') {
 					Alert.alert(
@@ -116,7 +88,7 @@ export default class ScanNFC extends Component {
 										enabled: false,
 									})
 									NfcManager.cancelTechnologyRequest().catch(() => 0)
-									this.registerNFC()
+									this._scanNFCTag()
 									console.log('Cancel Pressed')
 								},
 								style: 'cancel',
@@ -131,7 +103,7 @@ export default class ScanNFC extends Component {
 				} else {
 					Alert.alert('Info', 'This tag is registered with another user')
 					NfcManager.cancelTechnologyRequest().catch(() => 0)
-					this.registerNFC()
+					this._scanNFCTag()
 				}
 			},
 			err => {
@@ -140,16 +112,71 @@ export default class ScanNFC extends Component {
 				console.log('data', status)
 				if (status) {
 					Alert.alert('Warning', status)
-					// this.setState({
-					// 	isTestRunning: false,
-					// 	enabled: false,
-					// })
+					this.setState({
+						isTestRunning: false,
+						enabled: false,
+					})
 					NfcManager.cancelTechnologyRequest().catch(() => 0)
-					this.goToScreen('UserProfile')
-
+					this._scanNFCTag()
 				}
 			},
 		)
+	}
+
+	_scanNFCTag = () => {
+		const cleanUp = () => {
+			this.setState({isTestRunning: false})
+			NfcManager.cancelTechnologyRequest().catch(() => 0)
+			// NfcManager.unregisterTagEvent()
+		}
+
+		const parseText = tag => {
+			if (tag.ndefMessage) {
+				return NdefParser.parseText(tag.ndefMessage[0])
+			}
+			return null
+		}
+
+		this.setState({isTestRunning: true})
+		NfcManager.registerTagEvent(tag => console.log(tag))
+			.then(() => NfcManager.requestTechnology(NfcTech.Ndef))
+			.then(() => NfcManager.getTag())
+			.then(tag => {
+				console.log(tag)
+			})
+			.then(() => NfcManager.getNdefMessage())
+			.then(tag => {
+				let parsedText = parseText(tag)
+				this.fetchItemInfo(parsedText)
+				this.setState({tag, parsedText})
+			})
+			.catch(err => {
+				console.warn(err)
+				cleanUp()
+			})
+	}
+
+	_cancelTest = () => {
+		NfcManager.cancelTechnologyRequest().catch(err => console.warn(err))
+	}
+
+	_startNfc = () => {
+		NfcManager.start()
+			.then(() => NfcManager.isEnabled())
+			.then(enabled => {
+				if (enabled) {
+					this._scanNFCTag()
+				}
+				this.setState({enabled})
+			})
+			.catch(err => {
+				console.warn(err)
+				this.setState({enabled: false})
+			})
+	}
+
+	_clearMessages = () => {
+		this.setState({tag: null, parsedText: null})
 	}
 
 	goToScreen(screen) {
@@ -188,25 +215,25 @@ export default class ScanNFC extends Component {
 										<Text style={styles.scanS4FeTarcker}>
 											SCAN S4FE TRACKER
 										</Text>
-										{ Platform.OS === 'android' ?
 										<View style={styles.animation}>
-
 											<LottieView
 												source={require('../../assets/animations/nfc-animation.json')}
 												autoPlay
 												loop
 											/>
-										</View>  : null }
-										<Text style={[styles.text, {marginTop: 30}]}>
+										</View>
+										<Text style={styles.text}>
 											Place your phone close to the S4FE sticker
 										</Text>
+										{/*<Text*/}
+										{/*	style={{*/}
+										{/*		marginTop: 5,*/}
+										{/*		textAlign: 'center',*/}
+										{/*		color: 'white',*/}
+										{/*		fontWeight: 'bold',*/}
+										{/*	}}>{`(TAG DATA: ${parsedText})`}</Text>*/}
+										{/*<Text>{`Is NFC supported ? ${supported}`}</Text>*/}
 									</View>
-
-								<TouchableOpacity onPress={() => this.registerNFC()}>
-									<Text style={styles.text}>
-										Scan NFC
-									</Text>
-								</TouchableOpacity>
 
 									<View style={{marginTop: 20}}>
 										<TouchableOpacity onPress={() => this.goToScreen('SearchBySerial')}>
@@ -215,6 +242,18 @@ export default class ScanNFC extends Component {
 											</Text>
 										</TouchableOpacity>
 									</View>
+
+									{/*<TouchableOpacity*/}
+									{/*	onPress={() => this.fetchItemInfo()}*/}
+									{/*	style={styles.button}>*/}
+									{/*	<Text style={styles.cancel}>Fetch info</Text>*/}
+									{/*</TouchableOpacity>*/}
+
+									{/*<TouchableOpacity*/}
+									{/*	onPress={() => this._writeToNFCTag(generateNFCKey())}*/}
+									{/*	style={styles.button}>*/}
+									{/*	<Text style={styles.cancel}>Next</Text>*/}
+									{/*</TouchableOpacity>*/}
 							</View>
 						</View>
 					</View>
