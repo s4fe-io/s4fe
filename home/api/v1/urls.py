@@ -4,7 +4,7 @@ from django.conf.urls import url
 
 from home.api.v1.viewsets import SignupViewSet, LoginViewSet, ItemViewSet, CategoryViewSet, MessageViewSet, get_otp,\
     DeviceViewSet, get_item_status, TransactionsViewSet, search_by_serial, ItemInterfaceViewSet, copy_data,\
-    item_transfer, messages_by_users
+    item_transfer, messages_by_users, messages_within_topic
 
 router = DefaultRouter()
 router.register('signup', SignupViewSet, basename='signup')
@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'import', copy_data),
     url(r'item-transfer', item_transfer),
     url(r'messages-by-user', messages_by_users),
+    url(r'messages-within-topic', messages_within_topic),
 ]

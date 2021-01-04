@@ -372,8 +372,35 @@ def messages_by_users(request):
         user_id = User.objects.filter(username=a).first()
         return_obj = {
            "user_id": user_id.id,
-           "user": a,
+           "user": user_id.first_name + ' ' + user_id.last_name,
            "unread": unread_messages
+        }
+        return_arr.append(return_obj)
+
+    return Response(return_arr)
+
+
+
+@api_view(['GET',])
+@permission_classes([permissions.IsAuthenticated])
+def messages_within_topic(request):
+    if 'user_id' not in request.GET:
+        return Response(data={"error": "User not specified!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    user = request.user
+
+    messages = Message.objects.filter(Q(sender=user, receiver_id=request.GET['user_id']) |
+                                           Q(sender_id=request.GET['user_id'], receiver=user)).order_by('-created')
+
+    return_arr = []
+
+    for message in messages:
+        return_obj = {
+           "user_id": message.sender.id,
+           "user": message.sender.first_name + ' ' + message.sender.last_name,
+           "date_time": message.created,
+           "message": message.content
         }
         return_arr.append(return_obj)
 
