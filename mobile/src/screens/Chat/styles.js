@@ -67,8 +67,8 @@ export default StyleSheet.create({
 	},
 
 	icon2: {
-		color: 'rgba(31,178,204,1)',
-		fontSize: 30,
+		color: 'rgba(250,250,250,1)',
+		fontSize: 25,
 	},
 	editProfileColumn: {
 		marginLeft: 10,
@@ -193,5 +193,5 @@ export default StyleSheet.create({
 	},
 	fab: {
 		backgroundColor: Colors.PRIMARY
-	}
+	},
 })

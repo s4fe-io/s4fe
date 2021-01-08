@@ -123,7 +123,7 @@ export default class ScanNFC extends Component {
 							},
 							{
 								text: 'Contact',
-								onPress: () => this.goToScreen('Chat'),
+								onPress: () => this.goToScreen('ContactOwner', result),
 							},
 						],
 						{cancelable: false},
@@ -152,8 +152,9 @@ export default class ScanNFC extends Component {
 		)
 	}
 
-	goToScreen(screen) {
-		this.props.navigation.navigate(screen)
+	goToScreen(screen, payload) {
+		console.log('payload', payload)
+		this.props.navigation.navigate(screen, {payload})
 	}
 
 	render() {
@@ -189,14 +190,14 @@ export default class ScanNFC extends Component {
 											SCAN S4FE TRACKER
 										</Text>
 										{ Platform.OS === 'android' ?
-										<View style={styles.animation}>
+											<View style={styles.animation}>
 
-											<LottieView
-												source={require('../../assets/animations/nfc-animation.json')}
-												autoPlay
-												loop
-											/>
-										</View>  : null }
+												<LottieView
+													source={require('../../assets/animations/nfc-animation.json')}
+													autoPlay
+													loop
+												/>
+											</View>  : null }
 										<Text style={[styles.text, {marginTop: 30}]}>
 											Place your phone close to the S4FE sticker
 										</Text>

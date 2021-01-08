@@ -1,99 +1,69 @@
 import React, {Component, useState, useCallback, useEffect} from 'react'
-import {GiftedChat} from 'react-native-gifted-chat'
 import {
 	StyleSheet,
 	View,
 	StatusBar,
 	ImageBackground,
-	Text,
-	TextInput,
-	TouchableOpacity,
+	Platform, Dimensions, AsyncStorage,
 } from 'react-native'
-import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
-import FeatherIcon from 'react-native-vector-icons/Feather'
-import Header from '../../components/Header'
-import {API} from '../../utils/api'
-import {Axios} from '../../utils/axios'
-import {parse} from 'react-native-svg'
+import ChatHeader from '../../components/ChatHeader'
 import Colors from "../../constants/Colors";
+import Chat from '../../components/Chat'
 
-export function Messages() {
-	const [messages, setMessages] = useState([])
-
-	useEffect(() => {
-		Axios.get(API.MESSAGES).then(res => {
-			const result = res.data
-			const parsedMessages = result.map(message => {
-				return {
-					_id: message.id,
-					text: message.content,
-					name: 'John Doe',
-				}
-			})
-			// Set messages
-			setMessages(parsedMessages)
-		})
-		// setMessages([
-		// 	{
-		// 		_id: 1,
-		// 		text: 'Hello developer',
-		// 		createdAt: new Date(),
-		// 		user: {
-		// 			_id: 2,
-		// 			name: 'React Native',
-		// 			avatar: 'https://placeimg.com/140/140/any',
-		// 		},
-		// 	},
-		// ])
-	}, [])
-
-	const onSend = useCallback((messages = []) => {
-		console.log('messages', messages)
-		const formData = {
-			content: messages[0].text,
-			receiver: 10
-		}
-		Axios.post(API.MESSAGES, formData).then(res => {
-			console.log('response iz send message', res)
-			// setMessages(previousMessages =>
-			// 	GiftedChat.append(previousMessages, messages),
-			// )
-		})
-		setMessages(previousMessages =>
-			GiftedChat.append(previousMessages, messages),
-		)
-
-	}, [])
-
-	return (
-		<GiftedChat
-			messages={messages}
-			onSend={messages => onSend(messages)}
-			user={{
-				_id: 1,
-			}}
-		/>
-	)
+const parseCurrentUser = async () => {
+	return JSON.parse(await AsyncStorage.getItem('userData'))
 }
 
-function Chat(props) {
+function ChatRender (props) {
+	const navigation = props.navigation
+	const params = props.navigation.getParam('item')
+	const currentUser = parseCurrentUser()
+
 	return (
 		<View style={styles.root}>
+			<View style={styles.background}>
+				<ImageBackground
+					style={styles.rect}
+					imageStyle={styles.rect_imageStyle}
+					source={require('../../assets/images/Gradient_EsLX0zX.png')}
+				/>
+			</View>
 			<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
-			<Header icon2Name="asdasdasd" style={styles.headerX} />
-			<View style={styles.background}>{Messages()}</View>
+			<ChatHeader
+				navigation={navigation}
+				icon2Name="power"
+				style={styles.headerX}
+				user={params}
+			/>
+
+			<View style={styles.container}>
+				<Chat user={params} currentUser={currentUser} />
+			</View>
 		</View>
 	)
 }
 
+const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
 	root: {
 		flex: 1,
-		backgroundColor: 'rgb(255,255,255)',
+		backgroundColor: 'transparent',
+	},
+	container: {
+		flex: 1,
+		paddingLeft: 10,
+		paddingRight: 10,
+		marginBottom: height * 0.03,
 	},
 	background: {
-		flex: 1,
-		bottom: 60,
+		top: 0,
+		left: 0,
+		position: 'absolute',
+		right: 0,
+		bottom: 0,
+	},
+	rect: {
+		flex: 1
 	},
 	rect2: {
 		flex: 1,
@@ -212,7 +182,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 	headerX: {
-		height: 80,
+		height: 70,
 		elevation: 15,
 		shadowOffset: {
 			height: 7,
@@ -221,7 +191,8 @@ const styles = StyleSheet.create({
 		shadowColor: 'rgba(0,0,0,1)',
 		shadowOpacity: 0.1,
 		shadowRadius: 5,
+		marginTop: Platform.OS === 'android' ? 0 : 30,
 	},
 })
 
-export default Chat
+export default ChatRender

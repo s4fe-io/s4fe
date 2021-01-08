@@ -8,6 +8,8 @@ export const API = {
 	ITEMS_STATUS: 'api/v1/item-status/',
 	CATEGORIES: 'api/v1/categories/',
 	MESSAGES: 'api/v1/messages/',
+	MESSAGES_WITHIN_TOPIC: 'api/v1/messages-within-topic/',
+	MESSAGES_BY_USER: 'api/v1/messages-by-user/',
 	ITEM_TRANSFER: 'api/v1/item-transfer/',
 	SEARCH: 'api/v1/search/',
 	UPDATE_USER: 'rest-auth/user/'

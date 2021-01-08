@@ -53,7 +53,6 @@ export default class UserProfile extends React.Component {
 			items: [],
 			active: false,
 		}
-		// this.state.userData = this.props.navigation.getParam('userData')
 	}
 
 	componentDidMount() {
@@ -83,10 +82,8 @@ export default class UserProfile extends React.Component {
 		}
 	}
 
-	goToScreen() {
-		this.props.navigation.navigate('AddItem', {
-			userId: this.state.userData.id,
-		})
+	goToScreen(screen, payload) {
+		this.props.navigation.navigate(screen, payload)
 	}
 	fetchItems() {
 		this.setState({dataLoading: true})
@@ -101,10 +98,7 @@ export default class UserProfile extends React.Component {
 			})
 	}
 
-	_renderItems() {
-		const {items} = this.state
-		return items.map(item => {
-
+	_renderItems = ({item}) => {
 			return (
 				<View style={styles.item}>
 					<ListItem>
@@ -121,7 +115,7 @@ export default class UserProfile extends React.Component {
 								<TouchableOpacity
 									style={{marginRight: 10}}
 									onPress={() =>
-										this.props.navigation.navigate('EditItem', {item})
+										this.goToScreen('EditItem', {item})
 									}>
 									<Icon
 										type="MaterialIcons"
@@ -131,7 +125,7 @@ export default class UserProfile extends React.Component {
 								</TouchableOpacity>
 								<TouchableOpacity
 									onPress={() =>
-										this.props.navigation.navigate('TransferItem', {item})
+										this.goToScreen('TransferItem', {item})
 									}>
 									<Icon
 										type="MaterialIcons"
@@ -144,7 +138,6 @@ export default class UserProfile extends React.Component {
 					</ListItem>
 				</View>
 			)
-		})
 	}
 
 	render() {
@@ -171,28 +164,30 @@ export default class UserProfile extends React.Component {
 					style={styles.headerX}
 				/>
 
-				<View>
-					<View style={styles.ellipseStack}>
-						<Content>
-							<View style={styles.container}>
-								<TouchableOpacity
-									onPress={() =>
-										navigation.navigate('EditUserProfile', {
-											currentUser: userData,
-										})
-									}>
-									<View style={styles.userNameColumn}>
-										<Text style={styles.userName}>
-											{`${userData.first_name} ${userData.last_name}`}
-										</Text>
-										<Text style={styles.userEmail}>{userData.email}</Text>
-									</View>
-								</TouchableOpacity>
-								{/*	 ITEMS */}
-								<List style={{padding: 10}}>{this._renderItems()}</List>
-							</View>
-						</Content>
-					</View>
+				<View style={styles.container} >
+					{/*	 ITEMS */}
+					<FlatList
+						showsVerticalScrollIndicator={false}
+						ListHeaderComponent={(
+							<TouchableOpacity
+								onPress={() =>
+									navigation.navigate('EditUserProfile', {
+										currentUser: userData,
+									})
+								}>
+								<View style={styles.userNameColumn}>
+									<Text style={styles.userName}>
+										{`${userData.first_name} ${userData.last_name}`}
+									</Text>
+									<Text style={styles.userEmail}>{userData.email}</Text>
+								</View>
+							</TouchableOpacity>
+						)}
+						data={items}
+						renderItem={this._renderItems}
+						keyExtractor={item => item.id}
+					/>
+					{/*<List style={{padding: 10}}>{this._renderItems()}</List>*/}
 				</View>
 				<Fab
 					active={this.state.active}

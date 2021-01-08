@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {StyleSheet, View, Image, TouchableOpacity} from 'react-native'
+import {StyleSheet, View, Image, TouchableOpacity, Text} from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -11,34 +11,31 @@ async function logOut(props) {
 }
 
 function HeaderX(props) {
+	console.log('props hjeader', props)
 	return (
 		<View style={[styles.container, props.style]}>
 			<View style={styles.group}>
 				<View style={styles.iconRow}>
 					<View style={styles.containerx}>
-						<Image
-							source={require('../assets/images/S4FE_Logo_White.png')}
-							resizeMode="contain"
-							style={styles.logo}
-						/>
+						<TouchableOpacity
+							onPress={() => props.navigation.pop()}
+							style={styles.button}>
+							<FeatherIcon
+								name={'chevron-left'}
+								style={styles.icon2}
+							/>
+						</TouchableOpacity>
 					</View>
 				</View>
-				<View style={styles.iconRowFiller} />
-				<TouchableOpacity
-					onPress={() => props.navigation.navigate('Topics')}
-					style={styles.button}>
-					<FeatherIcon
-						name={'message-square'}
-						style={styles.icon2}
-					/>
-				</TouchableOpacity>
+				<View style={styles.containerx}>
+					{props.user ?
+						<Text style={styles.title}>
+							{props.user.user}
+						</Text> : null }
+				</View>
 				<TouchableOpacity
 					onPress={() => logOut(props)}
 					style={styles.button}>
-					<FeatherIcon
-						name={props.icon2Name || 'settings'}
-						style={styles.icon2}
-					/>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -60,6 +57,7 @@ const styles = StyleSheet.create({
 	group: {
 		height: 45,
 		flexDirection: 'row',
+		justifyContent: 'space-between',
 		marginTop: 10,
 	},
 	icon: {
@@ -75,14 +73,9 @@ const styles = StyleSheet.create({
 
 	},
 	iconRow: {
-		height: 100,
-		flexDirection: 'row',
 		marginLeft: 10,
-		marginTop: -25,
 	},
 	iconRowFiller: {
-		flex: 1,
-		flexDirection: 'row',
 	},
 	button: {
 		width: 25,
@@ -94,6 +87,12 @@ const styles = StyleSheet.create({
 		color: 'rgba(250,250,250,1)',
 		fontSize: 25,
 	},
+	title: {
+		color: 'white',
+		fontSize: 20,
+		textAlign: 'center',
+		marginTop: 15
+	}
 })
 
 export default HeaderX

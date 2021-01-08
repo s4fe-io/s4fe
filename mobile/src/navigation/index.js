@@ -1,7 +1,8 @@
+import React from 'react'
 import {createAppContainer, createSwitchNavigator} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 import {createDrawerNavigator} from 'react-navigation-drawer'
-
+import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
 import AuthLoadingScreen from '../screens/Auth/AuthLoading'
 
 import PhoneNumberScreen from '../screens/SignUp'
@@ -17,11 +18,35 @@ import AddItemScreen from '../screens/Items/AddItem'
 import EditItemScreen from '../screens/Items/EditItem'
 import TransferItemScreen from '../screens/Transfer/TransferItem'
 import ChatScreen from '../screens/Chat'
+import TopicsScreen from '../screens/Chat/Topics'
 import ScanNFCTagScreen from '../screens/Items/ScanNFCTag'
+import ContactOwnerScreen from '../screens/Items/ContactOwner'
 import SearchBySerialScreen from '../screens/SearchBySerial/'
 import SearchItemDetailsScreen from '../screens/SearchItemDetails/'
 
 // import SocialAuthScreen from '../screens/SocialAuth'
+const TabBarComponent = (props) => <BottomTabBar {...props} />;
+
+const tabBarOptions = {
+	activeTintColor: '#e91e63',
+		labelStyle: {
+		fontSize: 12,
+	},
+	style: {
+		backgroundColor: 'blue',
+	},
+}
+
+const BottomTabs = createBottomTabNavigator(
+	{
+		Home: UserProfileScreen,
+		Chat: ChatScreen
+	},
+	{
+	tabBarComponent: (props) => (
+		<TabBarComponent {...props} style={{ borderTopColor: '#605F60' }} />
+	),
+})
 
 const AppStack = createStackNavigator({
 	UserProfile: {
@@ -51,6 +76,14 @@ const AppStack = createStackNavigator({
 	},
 	ScanNFCTag: {
 		screen: ScanNFCTagScreen,
+		navigationOptions: {headerShown: false},
+	},
+	ContactOwner: {
+		screen: ContactOwnerScreen,
+		navigationOptions: {headerShown: false},
+	},
+	Topics: {
+		screen: TopicsScreen,
 		navigationOptions: {headerShown: false},
 	},
 	Chat: {
