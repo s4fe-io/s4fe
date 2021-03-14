@@ -23,6 +23,7 @@ import ScanNFCTagScreen from '../screens/Items/ScanNFCTag'
 import ContactOwnerScreen from '../screens/Items/ContactOwner'
 import SearchBySerialScreen from '../screens/SearchBySerial/'
 import SearchItemDetailsScreen from '../screens/SearchItemDetails/'
+import QRCodeScreen from '../screens/QRCode/'
 
 // import SocialAuthScreen from '../screens/SocialAuth'
 const TabBarComponent = (props) => <BottomTabBar {...props} />;
@@ -98,9 +99,17 @@ const AppStack = createStackNavigator({
 		screen: SearchItemDetailsScreen,
 		navigationOptions: {headerShown: false},
 	},
+	QRCode: {
+		screen: QRCodeScreen,
+		navigationOptions: {headerShown: false},
+	},
 })
 
 const AuthStack = createStackNavigator({
+	LogIn: {
+		screen: LogInScreen,
+		navigationOptions: {headerShown: false},
+	},
 	PhoneNumber: {
 		screen: PhoneNumberScreen,
 		navigationOptions: {headerShown: false},
@@ -111,10 +120,6 @@ const AuthStack = createStackNavigator({
 	},
 	Register: {
 		screen: RegisterScreen,
-		navigationOptions: {headerShown: false},
-	},
-	LogIn: {
-		screen: LogInScreen,
 		navigationOptions: {headerShown: false},
 	},
 	ForgotPassword: {

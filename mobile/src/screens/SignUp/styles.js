@@ -17,11 +17,7 @@ export default StyleSheet.create({
 	},
 	rect_imageStyle: {},
 	form: {
-		top: 261,
-		left: 41,
-		height: 235,
-		position: 'absolute',
-		right: 41,
+	 margin: 40,
 	},
 	username1: {
 		height: 60,
@@ -65,6 +61,7 @@ export default StyleSheet.create({
 		flex: 1,
 	},
 	button: {
+		marginTop: 20,
 		height: 59,
 		backgroundColor: 'rgba(255,255,255,1)',
 		borderRadius: 5,
@@ -133,19 +130,17 @@ export default StyleSheet.create({
 		flex: 1,
 	},
 	footerTexts1: {
-		left: 0,
-		height: 14,
-		bottom: 20,
+		alignItems: 'center',
+		marginBottom: 5,
 	},
 	button4Filler: {
 		flex: 1,
 	},
 	button4: {
-		height: 14,
 		alignSelf: 'center',
 	},
 	createAccount2Filler: {
-		flex: 1,
+		flex: 1
 	},
 	createAccount2: {
 		color: 'rgba(255,255,255,0.5)',
@@ -158,4 +153,24 @@ export default StyleSheet.create({
 		flex: 1,
 	},
 	container: {flex: 1},
+	row: {
+		flexDirection: 'row',
+		justifyContent: 'center'
+	},
+	createAccount1: {
+		marginBottom: 5,
+		color: 'rgba(255,255,255,0.5)',
+		fontSize: 16,
+	},
+	socialWrapper: {
+		flexDirection: 'row',
+		marginTop: 10
+	},
+	socialIcons: {
+		marginTop: 5,
+		marginLeft: 5,
+		fontSize: 16,
+		color: 'white',
+		marginBottom: 20,
+	},
 })

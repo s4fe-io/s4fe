@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
+import {Icon} from 'native-base'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -24,6 +25,15 @@ function HeaderX(props) {
 					</View>
 				</View>
 				<View style={styles.iconRowFiller} />
+				<TouchableOpacity
+					onPress={() => props.navigation.navigate('QRCode', {currentUser: props.currentUser})}
+					style={styles.button}>
+					<Icon
+						type={'FontAwesome'}
+						name={'qrcode'}
+						style={styles.icon2}
+					/>
+				</TouchableOpacity>
 				<TouchableOpacity
 					onPress={() => props.navigation.navigate('Topics')}
 					style={styles.button}>

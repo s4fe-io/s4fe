@@ -18,16 +18,9 @@ import {
 	Icon,
 	Fab,
 	Button,
-	Card,
-	CardItem,
-	Content,
-	List,
-	Left,
 } from 'native-base'
 
 import Header from '../../components/Header'
-import Svg, {Ellipse} from 'react-native-svg'
-import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import styles from './styles'
 import {Dimensions} from 'react-native'
 import Colors from '../../constants/Colors'
@@ -162,6 +155,7 @@ export default class UserProfile extends React.Component {
 					navigation={navigation}
 					icon2Name="power"
 					style={styles.headerX}
+					currentUser={userData}
 				/>
 
 				<View style={styles.container} >

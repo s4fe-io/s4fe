@@ -11,6 +11,7 @@ import {
 	ScrollView,
 	Alert,
 	AsyncStorage,
+	Dimensions
 } from 'react-native'
 import {Center} from '@builderx/utils'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -31,13 +32,14 @@ import {
 // import statusCodes along with GoogleSignin
 import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
 
+const { height, width } = Dimensions.get('window');
 
 export default class SignIn extends ValidationComponent {
 	constructor(props) {
 		super(props)
 		this.state = {
-			email: 'dj.shone@gmail.com',
-			password: '22sep2008',
+			email: '',
+			password: '',
 			dataLoading: false,
 			userInfo: {}
 		}
@@ -105,7 +107,7 @@ export default class SignIn extends ValidationComponent {
 	}
 
 	handleFacebookLogin () {
-		LoginManager.logInWithPermissions(['public_profile', 'email', 'user_friends']).then(
+		LoginManager.logInWithPermissions(['public_profile', 'email']).then(
 			(result) => {
 				if (result.isCancelled) {
 					console.log('Login cancelled')
@@ -182,15 +184,8 @@ export default class SignIn extends ValidationComponent {
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
 						{/* Back button */}
-						<View style={{padding: 20}}>
-							<Icon
-								type="MaterialIcons"
-								name="arrow-back"
-								style={{color: 'white'}}
-								onPress={() => {
-									navigation.pop()
-								}}
-							/>
+						<View style={{marginTop: height * 0.08}}>
+
 						</View>
 
 						<View style={styles.backgroundStack}>
@@ -238,19 +233,38 @@ export default class SignIn extends ValidationComponent {
 										</View>
 										<View style={{marginTop: 2, marginBottom: 30}}>
 											<TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-											<Text style={styles.createAccount1}>
+											<Text style={styles.forgotPassword}>
 												Forgot password
 											</Text>
 											</TouchableOpacity>
 
 										</View>
 										<View style={styles.footerTexts1}>
-
 											<Text style={styles.createAccount1}>
 												Login using Social Platforms
 											</Text>
-											<TouchableOpacity onPress={() => this.handleFacebookLogin()}>
-												<Text style={styles.terms}>Facebook </Text>
+											<TouchableOpacity
+												style={styles.socialWrapper}
+												onPress={() => this.handleFacebookLogin()}>
+												<Icon type={'FontAwesome5'} name={'facebook'} style={{color: 'white'}} />
+												<Text style={styles.socialIcons}>Facebook </Text>
+											</TouchableOpacity>
+
+											{/*<TouchableOpacity onPress={() => this.googleSignIn()}>*/}
+											{/*	<Text style={styles.terms}>Googlee </Text>*/}
+											{/*</TouchableOpacity>*/}
+										</View>
+
+										<View style={styles.footerTexts1}>
+
+
+											<TouchableOpacity
+												style={styles.rowIcon}
+												onPress={() => navigation.navigate('PhoneNumber')}>
+												<Text style={styles.createAccount1}>
+													Don't have an account? {' '}
+												</Text>
+												<Text style={styles.terms}>Sign Up </Text>
 											</TouchableOpacity>
 
 											{/*<TouchableOpacity onPress={() => this.googleSignIn()}>*/}
@@ -325,7 +339,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	footerTexts1: {
-		justifyContent: 'center',
+		alignItems: 'center',
 		marginBottom: 5,
 	},
 	button3: {
@@ -337,6 +351,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	createAccount1: {
+		marginBottom: 5,
 		color: 'rgba(255,255,255,0.5)',
 		fontSize: 16,
 	},
@@ -366,8 +381,29 @@ const styles = StyleSheet.create({
 	},
 	container: {flex: 1},
 	terms: {
+		fontSize: 16,
+		color: 'white',
+		marginBottom: 20,
+	},
+	rowIcon: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		marginTop: 10
+	},
+	socialWrapper: {
+		flexDirection: 'row',
+		marginTop: 10
+	},
+	forgotPassword: {
 		color: 'rgba(255,255,255,0.5)',
-		marginTop: 20,
+		fontSize: 16,
+		textAlign: 'right'
+	},
+	socialIcons: {
+		marginTop: 5,
+		marginLeft: 5,
+		fontSize: 16,
+		color: 'white',
 		marginBottom: 20,
 	},
 })

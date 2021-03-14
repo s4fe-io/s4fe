@@ -16,7 +16,7 @@ import {Center} from '@builderx/utils'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import Colors from '../../constants/Colors'
-import {Icon} from 'native-base'
+import {Icon, Container, Content} from 'native-base'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import EvilIconsIcon from 'react-native-vector-icons/EvilIcons'
 import {Axios} from '../../utils/axios'
@@ -86,7 +86,7 @@ export default class SignIn extends ValidationComponent {
 		const {email, password} = this.state
 
 		return (
-			<Fragment>
+			<Container>
 				<View style={styles.background}>
 					<ImageBackground
 						style={styles.rect}
@@ -124,8 +124,8 @@ export default class SignIn extends ValidationComponent {
 									reset your password.
 								</Text>
 							</View>
-							<ScrollView style={styles.scrollView}>
-								<KeyboardAwareScrollView contentContainerStyle={{flexGrow: 1}}>
+							<Content style={styles.scrollView}>
+								<View contentContainerStyle={{flexGrow: 1}}>
 									<View style={styles.form}>
 										<View style={styles.group}>
 											<EvilIconsIcon name="envelope" style={styles.icon} />
@@ -151,12 +151,12 @@ export default class SignIn extends ValidationComponent {
 											</TouchableOpacity>
 										</View>
 									</View>
-								</KeyboardAwareScrollView>
-							</ScrollView>
+								</View>
+							</Content>
 						</View>
 					</View>
 				</SafeAreaView>
-			</Fragment>
+			</Container>
 		)
 	}
 }

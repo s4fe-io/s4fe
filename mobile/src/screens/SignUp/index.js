@@ -18,7 +18,13 @@ import ValidationComponent from 'react-native-form-validator'
 import RNPickerSelect from 'react-native-picker-select'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
+import {Icon} from "native-base";
+import AsyncStorage from '@react-native-community/async-storage'
 
+import {
+	AccessToken,
+	LoginManager
+} from 'react-native-fbsdk';
 const countryTelData = require('country-telephone-data')
 
 export default class PhoneNumber extends ValidationComponent {
@@ -57,6 +63,47 @@ export default class PhoneNumber extends ValidationComponent {
 		this.setState({
 			selectedCountryCode: value,
 		})
+	}
+	goToScreen(screen, data) {
+		this.props.navigation.navigate(screen, {
+			userData: data,
+		})
+	}
+
+	facebookLogin = (accessToken) => {
+		const formData = {
+			access_token: accessToken
+		}
+		console.log('form', formData)
+		Axios.post(API.FACEBOOK, formData).then(res => {
+			console.log('Res', res)
+			AsyncStorage.setItem('tokenData', res.data.key)
+		  AsyncStorage.setItem('userData', JSON.stringify(res.data))
+			this.goToScreen('UserProfile', res.data)
+		}, err => {
+			Alert.alert('Warning', JSON.stringify(err))
+		})
+	}
+
+	handleFacebookLogin () {
+		LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+			(result) => {
+				if (result.isCancelled) {
+					console.log('Login cancelled')
+				} else {
+					AccessToken.getCurrentAccessToken().then(data => {
+						const accessToken = data.accessToken.toString()
+						this.facebookLogin(accessToken)
+						console.log('access token', accessToken)
+						// this.getInfoFromToken(accessToken);
+					})
+					console.log('Login success with permissions: ' + result.grantedPermissions.toString())
+				}
+			},
+			function (error) {
+				console.log('Login fail with error: ' + error)
+			}
+		)
 	}
 
 	// Phone verification
@@ -114,6 +161,16 @@ export default class PhoneNumber extends ValidationComponent {
 				<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 				<SafeAreaView style={styles.container}>
 					<View style={styles.root}>
+						<View style={{padding: 20}}>
+							<Icon
+								type="MaterialIcons"
+								name="arrow-back"
+								style={{color: 'white'}}
+								onPress={() => {
+									navigation.pop()
+								}}
+							/>
+						</View>
 
 						<View style={styles.backgroundStack}>
 							<Center horizontal>
@@ -172,24 +229,42 @@ export default class PhoneNumber extends ValidationComponent {
 										/>
 									</View>
 								</View>
-								<View style={styles.username1ColumnFiller} />
+
 								<TouchableOpacity
 									disabled={this.dataLoading}
 									onPress={() => this.verifyPhone(countryCode, phoneNumber)}
 									style={styles.button}>
 									<Text style={styles.text2}>START</Text>
 								</TouchableOpacity>
+							</View>
 
-								<View style={{flex: 1, marginTop: 10}}>
-									<TouchableOpacity
-										onPress={() => navigation.navigate('LogIn')}
-										style={styles.button4}>
-										<View style={styles.createAccount2Filler} />
-										<Text style={styles.createAccount2}>
-											Already have an account? Sign In
-										</Text>
-									</TouchableOpacity>
-								</View>
+							<View style={styles.footerTexts1}>
+								<Text style={styles.createAccount1}>
+									Sign Up using Social Platforms
+								</Text>
+								<TouchableOpacity
+									style={styles.socialWrapper}
+									onPress={() => this.handleFacebookLogin()}>
+									<Icon type={'FontAwesome5'} name={'facebook'} style={{color: 'white'}} />
+									<Text style={styles.socialIcons}>Facebook </Text>
+								</TouchableOpacity>
+
+								{/*<TouchableOpacity onPress={() => this.googleSignIn()}>*/}
+								{/*	<Text style={styles.terms}>Googlee </Text>*/}
+								{/*</TouchableOpacity>*/}
+							</View>
+
+							<View style={{marginTop: 10}}>
+								<TouchableOpacity
+									onPress={() => navigation.navigate('LogIn')}
+									style={[styles.button4, styles.row]}>
+									<Text style={styles.createAccount2}>
+										Already have an account? {' '}
+									</Text>
+									<Text style={{color: 'white'}}>
+										Sign In
+									</Text>
+								</TouchableOpacity>
 							</View>
 
 							<View style={styles.footerTexts}>

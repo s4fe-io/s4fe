@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@builderx/utils": "^0.1.6",
+    "@react-native-clipboard/clipboard": "^1.7.0",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/google-signin": "^5.0.0",
     "@react-native-community/masked-view": "^0.1.10",
@@ -37,6 +38,7 @@
     "react-native-permissions": "2.2.2",
     "react-native-picker-select": "^7.0.0",
     "react-native-qrcode-scanner": "^1.4.1",
+    "react-native-qrcode-svg": "^6.1.1",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.7",
     "react-native-screens": "^2.9.0",
