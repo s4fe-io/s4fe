@@ -32,14 +32,15 @@ import {
 // import statusCodes along with GoogleSignin
 import { GoogleSignin, statusCodes } from '@react-native-community/google-signin';
 
+
 const { height, width } = Dimensions.get('window');
 
 export default class SignIn extends ValidationComponent {
 	constructor(props) {
 		super(props)
 		this.state = {
-			email: '',
-			password: '',
+			email: 'dj.shone@gmail.com',
+			password: '22sep2008',
 			dataLoading: false,
 			userInfo: {}
 		}
@@ -51,18 +52,27 @@ export default class SignIn extends ValidationComponent {
 		GoogleSignin.configure({
 			webClientId:"689677381423-ke11h57ftbk2sr4endda3e45m6j2h6gb.apps.googleusercontent.com",
 			offlineAccess: true
-			// androidClientId: 'AIzaSyAsc4kLStXXa9V6nz9T4cNXmkdOCHB7KWk', // client ID of type WEB for your server (needed to verify user ID and offline access)
 		});
-		console.log(';googoeog')
 		try {
-			console.log('trsssy')
 			const x = await GoogleSignin.hasPlayServices();
-
-			// const userInfo = await GoogleSignin.signIn()
-			const { idToken } = await GoogleSignin.signIn();
+			const {idToken}  = await GoogleSignin.signIn();
 			console.log('idToken', idToken)
 
-			// this.setState({ userInfo });
+			// const formData = {
+			// 	access_token: idToken
+			// }
+
+			const formData = new FormData()
+			formData.append('access_token', idToken)
+
+			Axios.post(API.GOOGLE, formData).then(res => {
+				console.log('Res', res)
+				this.storeData('tokenData', res.data.key)
+				this.storeData('userData', JSON.stringify(res.data))
+				this.goToScreen('UserProfile', res.data)
+			}, err => {
+				Alert.alert('Warning', JSON.stringify(err))
+			})
 		} catch (error) {
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
 				// user cancelled the login flow
@@ -239,25 +249,28 @@ export default class SignIn extends ValidationComponent {
 											</TouchableOpacity>
 
 										</View>
-										<View style={styles.footerTexts1}>
+										<View style={[styles.footerTexts1]}>
 											<Text style={styles.createAccount1}>
 												Login using Social Platforms
 											</Text>
-											<TouchableOpacity
-												style={styles.socialWrapper}
-												onPress={() => this.handleFacebookLogin()}>
-												<Icon type={'FontAwesome5'} name={'facebook'} style={{color: 'white'}} />
-												<Text style={styles.socialIcons}>Facebook </Text>
-											</TouchableOpacity>
+											<View style={{flexDirection: 'row'}}>
+												<TouchableOpacity
+													style={[styles.socialWrapper, {marginRight: 10}]}
+													onPress={() => this.handleFacebookLogin()}>
+													<Icon type={'FontAwesome5'} name={'facebook'} style={{color: 'white'}} />
+													<Text style={styles.socialIcons}>Facebook </Text>
+												</TouchableOpacity>
 
-											{/*<TouchableOpacity onPress={() => this.googleSignIn()}>*/}
-											{/*	<Text style={styles.terms}>Googlee </Text>*/}
-											{/*</TouchableOpacity>*/}
+												<TouchableOpacity
+													style={styles.socialWrapper}
+													onPress={() => this.googleSignIn()}>
+													<Icon type={'FontAwesome5'} name={'google'} style={{color: 'white'}} />
+													<Text style={styles.socialIcons}>Google </Text>
+												</TouchableOpacity>
+											</View>
 										</View>
 
 										<View style={styles.footerTexts1}>
-
-
 											<TouchableOpacity
 												style={styles.rowIcon}
 												onPress={() => navigation.navigate('PhoneNumber')}>
@@ -266,10 +279,6 @@ export default class SignIn extends ValidationComponent {
 												</Text>
 												<Text style={styles.terms}>Sign Up </Text>
 											</TouchableOpacity>
-
-											{/*<TouchableOpacity onPress={() => this.googleSignIn()}>*/}
-											{/*	<Text style={styles.terms}>Googlee </Text>*/}
-											{/*</TouchableOpacity>*/}
 										</View>
 									</View>
 								</KeyboardAwareScrollView>

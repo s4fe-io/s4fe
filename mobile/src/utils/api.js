@@ -4,6 +4,7 @@ export const API = {
 	LOGIN: 'rest-auth/login/',
 	FORGOT_PASSWORD: 'rest-auth/password/reset/',
 	FACEBOOK: 'rest-auth/facebook/',
+	GOOGLE: 'rest-auth/google/',
 	ITEMS: 'api/v1/items/',
 	ITEMS_STATUS: 'api/v1/item-status/',
 	CATEGORIES: 'api/v1/categories/',

@@ -25,6 +25,7 @@ import {
 	AccessToken,
 	LoginManager
 } from 'react-native-fbsdk';
+import {GoogleSignin, statusCodes} from "@react-native-community/google-signin";
 const countryTelData = require('country-telephone-data')
 
 export default class PhoneNumber extends ValidationComponent {
@@ -105,6 +106,43 @@ export default class PhoneNumber extends ValidationComponent {
 			}
 		)
 	}
+
+	googleSignIn = async () => {
+		GoogleSignin.configure({
+			webClientId:"689677381423-ke11h57ftbk2sr4endda3e45m6j2h6gb.apps.googleusercontent.com",
+			offlineAccess: true
+		});
+		try {
+			const x = await GoogleSignin.hasPlayServices();
+			const {idToken}  = await GoogleSignin.signIn();
+			console.log('idToken', idToken)
+
+			const formData = {
+				access_token: idToken
+			}
+
+			Axios.post(API.GOOGLE, formData).then(res => {
+				console.log('Res', res)
+				this.storeData('tokenData', res.data.key)
+				this.storeData('userData', JSON.stringify(res.data))
+				this.goToScreen('UserProfile', res.data)
+			}, err => {
+				console.log('err', err.response)
+				Alert.alert('Warning', JSON.stringify(err))
+			})
+		} catch (error) {
+			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+				// user cancelled the login flow
+			} else if (error.code === statusCodes.IN_PROGRESS) {
+				// operation (e.g. sign in) is in progress already
+			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				// play services not available or outdated
+			} else {
+				// some other error happened
+				console.log(error)
+			}
+		}
+	};
 
 	// Phone verification
 	verifyPhone(countryCode, phoneNumber) {
@@ -242,16 +280,21 @@ export default class PhoneNumber extends ValidationComponent {
 								<Text style={styles.createAccount1}>
 									Sign Up using Social Platforms
 								</Text>
-								<TouchableOpacity
-									style={styles.socialWrapper}
-									onPress={() => this.handleFacebookLogin()}>
-									<Icon type={'FontAwesome5'} name={'facebook'} style={{color: 'white'}} />
-									<Text style={styles.socialIcons}>Facebook </Text>
-								</TouchableOpacity>
+								<View style={{flexDirection: 'row'}}>
+									<TouchableOpacity
+										style={[styles.socialWrapper, {marginRight: 10}]}
+										onPress={() => this.handleFacebookLogin()}>
+										<Icon type={'FontAwesome5'} name={'facebook'} style={{color: 'white'}} />
+										<Text style={styles.socialIcons}>Facebook </Text>
+									</TouchableOpacity>
 
-								{/*<TouchableOpacity onPress={() => this.googleSignIn()}>*/}
-								{/*	<Text style={styles.terms}>Googlee </Text>*/}
-								{/*</TouchableOpacity>*/}
+									<TouchableOpacity
+										style={styles.socialWrapper}
+										onPress={() => this.googleSignIn()}>
+										<Icon type={'FontAwesome5'} name={'google'} style={{color: 'white'}} />
+										<Text style={styles.socialIcons}>Google </Text>
+									</TouchableOpacity>
+								</View>
 							</View>
 
 							<View style={{marginTop: 10}}>
