@@ -7,11 +7,12 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 	pod 'Firebase/Messaging'
 
 
+permissions_path = '../node_modules/react-native-permissions/ios'
+pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+
 target 's4fe' do
   # Pods for s4fe
-  permissions_path = '../node_modules/react-native-permissions/ios'
 
- 	pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"

@@ -9,9 +9,8 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
 	async config => {
 		const token = await AsyncStorage.getItem('tokenData')
-		console.log('token iz intercepta', token)
 		if (token) {
-			console.log('token iz if iz intercept', token)
+			// console.log('token iz if iz intercept', token)
 			config.headers.Authorization = 'Token ' + token
 		}
 		return config

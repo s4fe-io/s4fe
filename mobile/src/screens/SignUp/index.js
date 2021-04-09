@@ -131,6 +131,7 @@ export default class PhoneNumber extends ValidationComponent {
 				Alert.alert('Warning', JSON.stringify(err))
 			})
 		} catch (error) {
+			console.log('error iz catch prvi', error)
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
 				// user cancelled the login flow
 			} else if (error.code === statusCodes.IN_PROGRESS) {
@@ -139,7 +140,8 @@ export default class PhoneNumber extends ValidationComponent {
 				// play services not available or outdated
 			} else {
 				// some other error happened
-				console.log(error)
+				// Alert.alert('Warning', JSON.stringify(error))
+				console.log('error iz cathc', error)
 			}
 		}
 	};
