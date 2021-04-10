@@ -65,6 +65,15 @@ export default class PhoneNumber extends ValidationComponent {
 			selectedCountryCode: value,
 		})
 	}
+	// Store data
+	storeData = async (key, value) => {
+		try {
+			await AsyncStorage.setItem(key, value)
+		} catch (e) {
+			// saving error
+			console.log(e)
+		}
+	}
 	goToScreen(screen, data) {
 		this.props.navigation.navigate(screen, {
 			userData: data,
@@ -114,11 +123,12 @@ export default class PhoneNumber extends ValidationComponent {
 		});
 		try {
 			const x = await GoogleSignin.hasPlayServices();
-			const {idToken}  = await GoogleSignin.signIn();
-			console.log('idToken', idToken)
+			await GoogleSignin.signIn();
+			const {accessToken}  = await GoogleSignin.getTokens();
+			console.log('test', accessToken)
 
 			const formData = {
-				access_token: idToken
+				access_token: accessToken
 			}
 
 			Axios.post(API.GOOGLE, formData).then(res => {
