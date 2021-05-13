@@ -7,6 +7,7 @@ from users.models import User
 import sys
 from django.dispatch import receiver
 from home.notifications import send_push_message
+from home.api.v1.notifications import push_notification
 import uuid
 
 
@@ -99,10 +100,7 @@ class Message(models.Model):
 @receiver(models.signals.post_save, sender=Message)
 def message_notify(sender, instance, *args, **kwargs):
     title = "{} send you a message".format(instance.sender.first_name)
-    devices = DeviceInfo.objects.filter(user=instance.receiver, is_active=True)
-    for device in devices:
-        if device.push_token:
-            send_push_message(device.push_token, title)
+    push_notification(title, instance.receiver, instance.content)
 
 
 class DeviceInfo(models.Model):

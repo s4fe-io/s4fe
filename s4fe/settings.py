@@ -214,17 +214,17 @@ FCM_DJANGO_SETTINGS = {
 
 SENDERNUMBER = {'number': '+444444444444'}
 
-PUSH_NOTIFICATIONS_SETTINGS = {
-        "FCM_API_KEY": env.str("FCM_API_KEY", ""),
-        "GCM_API_KEY": env.str("GCM_API_KEY", ""),
-        "UPDATE_ON_DUPLICATE_REG_ID": True,
-        "APNS_CERTIFICATE": env.str("APNS_CERTIFICATE", ""),
-        "APNS_TOPIC": env.str("APNS_TOPIC", ""),
-        "WNS_PACKAGE_SECURITY_ID": "[your package security id, e.g: 'ms-app://e-3-4-6234...']",
-        "WNS_SECRET_KEY": "[your app secret key, e.g.: 'KDiejnLKDUWodsjmewuSZkk']",
-        "WP_PRIVATE_KEY": "/path/to/your/private.pem",
-        "WP_CLAIMS": {'sub': "mailto: development@example.com"}
-}
+# PUSH_NOTIFICATIONS_SETTINGS = {
+#         "FCM_API_KEY": env.str("FCM_API_KEY", ""),
+#         "GCM_API_KEY": env.str("GCM_API_KEY", ""),
+#         "UPDATE_ON_DUPLICATE_REG_ID": True,
+#         "APNS_CERTIFICATE": env.str("APNS_CERTIFICATE", ""),
+#         "APNS_TOPIC": env.str("APNS_TOPIC", ""),
+#         "WNS_PACKAGE_SECURITY_ID": "[your package security id, e.g: 'ms-app://e-3-4-6234...']",
+#         "WNS_SECRET_KEY": "[your app secret key, e.g.: 'KDiejnLKDUWodsjmewuSZkk']",
+#         "WP_PRIVATE_KEY": "/path/to/your/private.pem",
+#         "WP_CLAIMS": {'sub': "mailto: development@example.com"}
+# }
 
 # Jet admin theme
 JET_SIDE_MENU_COMPACT = True
