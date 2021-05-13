@@ -1,10 +1,10 @@
 from fcm_django.models import FCMDevice
 
 
-def push_notification(title, user, message):
+def push_notification(title, user, sender, message):
     try:
         devices = FCMDevice.objects.filter(user=user)
-        devices.send_message(title=title, body=message)
+        devices.send_message(title=title, body=message, data={"user_id", sender.id})
         return True
 
     except Exception:

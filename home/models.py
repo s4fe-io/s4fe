@@ -100,7 +100,7 @@ class Message(models.Model):
 @receiver(models.signals.post_save, sender=Message)
 def message_notify(sender, instance, *args, **kwargs):
     title = "{} sent you a message".format(instance.sender.first_name)
-    push_notification(title, instance.receiver, instance.content)
+    push_notification(title, instance.receiver, instance.sender, instance.content)
 
 
 class DeviceInfo(models.Model):
