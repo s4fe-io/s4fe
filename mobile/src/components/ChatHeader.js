@@ -11,7 +11,6 @@ async function logOut(props) {
 }
 
 function HeaderX(props) {
-	console.log('props hjeader', props)
 	return (
 		<View style={[styles.container, props.style]}>
 			<View style={styles.group}>

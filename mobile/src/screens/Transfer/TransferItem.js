@@ -15,7 +15,7 @@ import {
 } from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
 import Colors from '../../constants/Colors'
-import {Icon} from 'native-base'
+import {Icon, Toast} from 'native-base'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import ValidationComponent from 'react-native-form-validator'
 import {API} from '../../utils/api'
@@ -41,6 +41,9 @@ export default class TransferItem extends ValidationComponent {
 
 	componentDidMount() {
 		this.fetchItems()
+		const params = this.props.navigation.getParam('item')
+		console.log('params', params)
+		this.setState({selectedItem: params.id})
 	}
 
 	fetchItems() {
@@ -93,6 +96,11 @@ export default class TransferItem extends ValidationComponent {
 						uniqueUserId: '',
 						selectedItem: ''
 					})
+					Toast.show({
+						text: 'Item Transferred',
+						type: 'success'
+					})
+					this.props.navigation.navigate('UserProfile')
 				})
 				.catch(e => {
 					this.setState({dataLoading: false})

@@ -3,8 +3,8 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 #permissions_path = '../node_modules/react-native-permissions/ios'
 
  # Pods for ReactPushNotifications - Add these lines
-	pod 'Firebase/Core'
-	pod 'Firebase/Messaging'
+	# pod 'Firebase/Core'
+	 # pod 'Firebase/Messaging'
 
 
 permissions_path = '../node_modules/react-native-permissions/ios'

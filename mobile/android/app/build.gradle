@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply plugin: 'com.google.gms.google-services'
 import com.android.build.OutputFile
 
 /**
@@ -132,7 +133,7 @@ android {
         applicationId "com.s4fe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
+        versionCode 4
         versionName "2.0"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
@@ -160,7 +161,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -198,6 +199,7 @@ dependencies {
 
 		implementation 'com.android.support:multidex:1.0.3'
 
+		implementation "com.google.firebase:firebase-messaging:21.1.0"
 		implementation 'com.google.firebase:firebase-analytics:17.3.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
@@ -230,4 +232,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply plugin: 'com.google.gms.google-services'
+

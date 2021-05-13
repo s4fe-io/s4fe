@@ -17,7 +17,7 @@ import {
 	Right,
 	Icon,
 	Fab,
-	Button,
+	Button, Toast,
 } from 'native-base'
 
 import Header from '../../components/Header'
@@ -27,6 +27,7 @@ import Colors from '../../constants/Colors'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
 import EvilIconsIcon from 'react-native-vector-icons/EvilIcons'
+import PushNotification from "react-native-push-notification";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -45,10 +46,12 @@ export default class UserProfile extends React.Component {
 			},
 			items: [],
 			active: false,
+			reason: ''
 		}
 	}
 
 	componentDidMount() {
+		this.initializePushNotifications()
 		this.focusListener = this.props.navigation.addListener('didFocus', () => {
 			console.log('user profile focused')
 			this.getUserData()
@@ -56,6 +59,113 @@ export default class UserProfile extends React.Component {
 		})
 		this.fetchItems()
 	}
+
+	onClose(id, reason) {
+		console.log('reason', reason)
+		console.log('id', id)
+		if (reason === 'user') {
+			this.props.navigation.navigate('Chat', {
+				item: {
+					user_id: id
+				}
+			})
+		}
+		this.setState({ reason })
+
+	}
+
+
+	initializePushNotifications ()  {
+		const {navigation} = this.props
+		// Must be outside of any component LifeCycle (such as `componentDidMount`).
+
+		const addFcm = async (registration_id, type) => {
+			console.log('add fcm')
+			try {
+				const res = await Axios.post('api/v1/devices/', {registration_id, type});
+				console.log('res', res)
+				if (res.data.error) {
+					return false;
+				} else {
+					return res;
+				}
+			} catch (e) {
+				console.log(e);
+				console.log(e.response);
+			}
+		};
+		PushNotification.configure({
+			// (optional) Called when Token is generated (iOS and Android)
+			onRegister: function (token) {
+				console.log("TOKEN:", token);
+				addFcm(token.token, token.os);
+			},
+
+
+			// (required) Called when a remote is received or opened, or local notification is opened
+			onNotification: (notification) => {
+				console.log("NOTIFICATION:", notification);
+
+				if (notification.foreground) {
+					Toast.show({
+						text: notification.title,
+						position: 'Top',
+						buttonText: 'Read',
+						// buttonTextStyle: { color: "#0b9bbf" },
+						// buttonStyle: { backgroundColor: "#c39520" },
+						duration: 3000,
+						onClose: this.onClose.bind(this, 223)
+					})
+				} else {
+					console.log('ide na chat')
+					navigation.navigate('Chat', {
+						item: {
+							user_id: 223
+						}
+					})
+				}
+
+				// process the notification
+
+				// (required) Called when a remote is received or opened, or local notification is opened
+				// notification.finish(PushNotificationIOS.FetchResult.NoData);
+			},
+
+			// (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+			onAction: function (notification) {
+				console.log("ACTION:", notification.action);
+				console.log("NOTIFICATION:", notification);
+
+				// process the action
+			},
+
+			// (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+			onRegistrationError: function(err) {
+				console.error(err.message, err);
+			},
+
+			// IOS ONLY (optional): default: all - Permissions to register.
+			permissions: {
+				alert: true,
+				badge: true,
+				sound: true,
+			},
+
+			// Should the initial notification be popped automatically
+			// default: true
+			popInitialNotification: true,
+
+			/**
+			 * (optional) default: true
+			 * - Specified if permissions (ios) and token (android and ios) will requested or not,
+			 * - if not, you must call PushNotificationsHandler.requestPermissions() later
+			 * - if you are not using remote notification or do not have Firebase installed, use this:
+			 *     requestPermissions: Platform.OS === 'ios'
+			 */
+			requestPermissions: true,
+		});
+	}
+
 
 	componentWillUnmount() {
 		this.focusListener.remove()
