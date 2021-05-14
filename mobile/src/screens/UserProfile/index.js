@@ -6,7 +6,6 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	FlatList,
-	AsyncStorage,
 	ImageBackground,
 } from 'react-native'
 
@@ -30,6 +29,7 @@ import axios from 'axios'
 import EvilIconsIcon from 'react-native-vector-icons/EvilIcons'
 import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import AsyncStorage from '@react-native-community/async-storage'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -59,6 +59,7 @@ export default class UserProfile extends React.Component {
 			this.getUserData()
 			this.fetchItems()
 		})
+		this.getUserData()
 		this.fetchItems()
 	}
 
@@ -278,10 +279,10 @@ export default class UserProfile extends React.Component {
 	render() {
 		const {navigation} = this.props
 		const {items, userData} = this.state
-		const loggedUserData = navigation.getParam('userData')
-		if (userData.first_name === null) {
-			this.setState({userData: loggedUserData})
-		}
+		// const loggedUserData = navigation.getParam('userData')
+		// if (userData.first_name === null) {
+		// 	this.setState({userData: loggedUserData})
+		// }
 
 		return (
 			<View style={styles.root}>

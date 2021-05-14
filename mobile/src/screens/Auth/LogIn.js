@@ -10,7 +10,6 @@ import {
 	SafeAreaView,
 	ScrollView,
 	Alert,
-	AsyncStorage,
 	Dimensions
 } from 'react-native'
 import {Center} from '@builderx/utils'
@@ -23,7 +22,7 @@ import EvilIconsIcon from 'react-native-vector-icons/EvilIcons'
 import {Axios} from '../../utils/axios'
 import {API} from '../../utils/api'
 import ValidationComponent from 'react-native-form-validator'
-
+import AsyncStorage from '@react-native-community/async-storage'
 import {
 	LoginButton,
 	AccessToken,
@@ -65,10 +64,12 @@ export default class SignIn extends ValidationComponent {
 			const formData = new FormData()
 			formData.append('access_token', accessToken)
 
-			Axios.post(API.GOOGLE, formData).then(res => {
+			Axios.post(API.GOOGLE, formData).then(async res => {
 				console.log('Res', res)
-				this.storeData('tokenData', res.data.key)
-				this.storeData('userData', JSON.stringify(res.data))
+				await AsyncStorage.setItem('tokenData', res.data.key)
+				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+				// this.storeData('tokenData', res.data.key)
+				// this.storeData('userData', JSON.stringify(res.data))
 				this.goToScreen('UserProfile', res.data)
 			}, err => {
 				Alert.alert('Warning', JSON.stringify(err))
@@ -89,6 +90,8 @@ export default class SignIn extends ValidationComponent {
 
 	// Store data
 	storeData = async (key, value) => {
+		console.log('key snima se', key)
+		console.log('value snima se', value)
 		try {
 			await AsyncStorage.setItem(key, value)
 		} catch (e) {
@@ -106,10 +109,12 @@ export default class SignIn extends ValidationComponent {
 			access_token: accessToken
 		}
 		console.log('form', formData)
-		Axios.post(API.FACEBOOK, formData).then(res => {
+		Axios.post(API.FACEBOOK, formData).then(async res => {
 			console.log('Res', res)
-			this.storeData('tokenData', res.data.key)
-			this.storeData('userData', JSON.stringify(res.data))
+			await AsyncStorage.setItem('tokenData', res.data.key)
+			await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+			// this.storeData('tokenData', res.data.key)
+			// this.storeData('userData', JSON.stringify(res.data))
 			this.goToScreen('UserProfile', res.data)
 		}, err => {
 			Alert.alert('Warning', JSON.stringify(err))
@@ -156,11 +161,17 @@ export default class SignIn extends ValidationComponent {
 				password: this.state.password,
 			}
 			Axios.post(API.LOGIN, formData)
-				.then(res => {
+				.then(async res => {
 					console.log('res', res)
 					this.setState({dataLoading: false})
-					this.storeData('tokenData', res.data.key)
-					this.storeData('userData', JSON.stringify(res.data))
+					await AsyncStorage.setItem('tokenData', res.data.key)
+					await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+					// this.storeData('tokenData', res.data.key)
+					// this.storeData('userData', JSON.stringify(res.data))
+					setTimeout(async () => {
+						const tokenLS = await AsyncStorage.getItem('tokenData')
+						console.log('tokenls', tokenLS)
+					})
 					this.goToScreen('UserProfile', res.data)
 				})
 				.catch(err => {
