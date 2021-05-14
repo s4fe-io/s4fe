@@ -57,7 +57,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Allow S4FE to use your camera to scan QR codes.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
