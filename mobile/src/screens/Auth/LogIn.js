@@ -38,7 +38,7 @@ const { height, width } = Dimensions.get('window');
 export default class SignIn extends ValidationComponent {
 	constructor(props) {
 		super(props)
-		this.state = {
+		this.state = {git log -- android/java_pid14920.hprof
 			email: '',
 			password: '',
 			dataLoading: false,
