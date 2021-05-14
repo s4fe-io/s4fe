@@ -54,16 +54,16 @@ export default class SignIn extends ValidationComponent {
 			offlineAccess: true
 		});
 		try {
-			const x = await GoogleSignin.hasPlayServices();
-			const {idToken}  = await GoogleSignin.signIn();
-			console.log('idToken', idToken)
+			await GoogleSignin.hasPlayServices();
+			await GoogleSignin.signIn();
+			const {accessToken}  = await GoogleSignin.getTokens();
 
 			// const formData = {
 			// 	access_token: idToken
 			// }
 
 			const formData = new FormData()
-			formData.append('access_token', idToken)
+			formData.append('access_token', accessToken)
 
 			Axios.post(API.GOOGLE, formData).then(res => {
 				console.log('Res', res)
@@ -243,9 +243,9 @@ export default class SignIn extends ValidationComponent {
 										</View>
 										<View style={{marginTop: 2, marginBottom: 30}}>
 											<TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-											<Text style={styles.forgotPassword}>
-												Forgot password
-											</Text>
+												<Text style={styles.forgotPassword}>
+													Forgot password
+												</Text>
 											</TouchableOpacity>
 
 										</View>
