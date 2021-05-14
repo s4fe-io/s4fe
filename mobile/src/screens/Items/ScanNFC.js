@@ -96,7 +96,9 @@ export default class ScanNFC extends Component {
 			this._cleanUp();
 			console.log('ex', ex);
 			if (ex !== 'cancelled') {
-				Alert.alert('Warning!', 'The tag is not empty! Please use the new (empty) S4FE tag.')
+				if (ex !== 'NFCError:200') {
+					Alert.alert('Warning!', 'The tag is not empty! Please use the new (empty) S4FE tag.')
+				}
 			}
 		}
 	}

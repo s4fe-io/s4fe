@@ -26,8 +26,10 @@ import {Dimensions} from 'react-native'
 import Colors from '../../constants/Colors'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
+import axios from 'axios'
 import EvilIconsIcon from 'react-native-vector-icons/EvilIcons'
 import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -60,6 +62,39 @@ export default class UserProfile extends React.Component {
 		this.fetchItems()
 	}
 
+	// Convert iOS fcm to google Reg token
+	convertAPNToken (token) {
+		console.log('convert', token)
+		const config = {
+			headers: {
+				Authorization: 'key=AAAAoJP5ry8:APA91bFGLFmvwfCuh0rAFaBJxG92505cx1_lMCoDFcHtlPDbkKtZzNpVs8F9JP-p4y9rYxyg6PIWP7PedXwG05lvpR7HUnkHNwe0QDXXQ7dw-7R7acMimLRlTl_NhXPiiHfW7NL-Ygd7'
+			}
+		};
+		const formData = {
+			application: "com.s4fe.S4FE",
+			sandbox: true,
+			apns_tokens: [token.token]
+		}
+		return axios.post('https://iid.googleapis.com/iid/v1:batchImport', formData, config)
+	}
+
+	// Send Registration ID to API
+	async addFcm (registration_id, type) {
+		console.log('add fcm')
+		try {
+			const res = await Axios.post('api/v1/devices/', {registration_id, type});
+			console.log('res', res)
+			if (res.data.error) {
+				return false;
+			} else {
+				return res;
+			}
+		} catch (e) {
+			console.log(e);
+			console.log(e.response);
+		}
+	};
+
 	onClose(id, reason) {
 		console.log('reason', reason)
 		console.log('id', id)
@@ -74,53 +109,50 @@ export default class UserProfile extends React.Component {
 
 	}
 
-
-	initializePushNotifications ()  {
+	initializePushNotifications () {
 		const {navigation} = this.props
 		// Must be outside of any component LifeCycle (such as `componentDidMount`).
 
-		const addFcm = async (registration_id, type) => {
-			console.log('add fcm')
-			try {
-				const res = await Axios.post('api/v1/devices/', {registration_id, type});
-				console.log('res', res)
-				if (res.data.error) {
-					return false;
-				} else {
-					return res;
-				}
-			} catch (e) {
-				console.log(e);
-				console.log(e.response);
-			}
-		};
 		PushNotification.configure({
 			// (optional) Called when Token is generated (iOS and Android)
-			onRegister: function (token) {
-				console.log("TOKEN:", token);
-				addFcm(token.token, token.os);
+			onRegister: async (token) => {
+				let registrationToken = token.token
+				if (Platform.OS === 'ios') {
+					const {data} = await this.convertAPNToken(token)
+					 registrationToken = data.results[0].registration_token
+					console.log('registrationToken', registrationToken)
+				}
+				this.addFcm(registrationToken, token.os);
 			},
-
 
 			// (required) Called when a remote is received or opened, or local notification is opened
 			onNotification: (notification) => {
 				console.log("NOTIFICATION:", notification);
 
 				if (notification.foreground) {
-					Toast.show({
-						text: notification.title,
-						position: 'Top',
-						buttonText: 'Read',
-						// buttonTextStyle: { color: "#0b9bbf" },
-						// buttonStyle: { backgroundColor: "#c39520" },
-						duration: 3000,
-						onClose: this.onClose.bind(this, 223)
-					})
+					console.log('foregrnd je')
+					if (Platform.OS === 'android') {
+						Toast.show({
+							text: notification.title,
+							position: 'Top',
+							buttonText: 'Read',
+							// buttonTextStyle: { color: "#0b9bbf" },
+							// buttonStyle: { backgroundColor: "#c39520" },
+							duration: 3000,
+							onClose: this.onClose.bind(this, notification.data.test)
+						})
+					} else {
+						navigation.navigate('Chat', {
+							item: {
+								user_id: notification.data.test
+							}
+						})
+					}
 				} else {
 					console.log('ide na chat')
 					navigation.navigate('Chat', {
 						item: {
-							user_id: 223
+							user_id: notification.data.test
 						}
 					})
 				}
@@ -128,7 +160,7 @@ export default class UserProfile extends React.Component {
 				// process the notification
 
 				// (required) Called when a remote is received or opened, or local notification is opened
-				// notification.finish(PushNotificationIOS.FetchResult.NoData);
+				notification.finish(PushNotificationIOS.FetchResult.NoData);
 			},
 
 			// (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
