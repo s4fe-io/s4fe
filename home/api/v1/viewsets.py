@@ -329,8 +329,6 @@ def item_transfer(request):
             devices = FCMDevice.objects.filter(user=user)
             a = devices.send_message(title=title, body=item.title, data={"item_id": item.id})
             print(a)
-            return True
-
         except Exception as e:
             print(e)
 
