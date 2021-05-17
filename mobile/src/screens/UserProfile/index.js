@@ -154,11 +154,13 @@ export default class UserProfile extends React.Component {
 						onClose: this.onClose.bind(this, notification.data.test)
 					})
 				} else {
-					navigation.navigate('Chat', {
-						item: {
-							user_id: notification.data.test
-						}
-					})
+					if (notification.data.test) {
+						navigation.navigate('Chat', {
+							item: {
+								user_id: notification.data.test
+							}
+						})
+					}
 				}
 
 				// process the notification
