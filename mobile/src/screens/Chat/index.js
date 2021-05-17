@@ -17,7 +17,7 @@ const parseCurrentUser = async () => {
 function ChatRender (props) {
 	const navigation = props.navigation
 	const params = props.navigation.getParam('item')
-	console.log('evo itema')
+	console.log('evo itema', params)
 	const currentUser = parseCurrentUser()
 
 	return (
@@ -32,6 +32,7 @@ function ChatRender (props) {
 			<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 			<ChatHeader
 				navigation={navigation}
+				goHome={params.goHome}
 				icon2Name="power"
 				style={styles.headerX}
 				user={params}

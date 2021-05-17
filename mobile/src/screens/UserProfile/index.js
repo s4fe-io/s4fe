@@ -7,6 +7,7 @@ import {
 	SafeAreaView,
 	FlatList,
 	ImageBackground,
+	RefreshControl
 } from 'react-native'
 
 import {
@@ -42,6 +43,7 @@ export default class UserProfile extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			refreshing: false,
 			userData: {
 				first_name: null,
 				last_name: null
@@ -55,7 +57,6 @@ export default class UserProfile extends React.Component {
 	componentDidMount() {
 		this.initializePushNotifications()
 		this.focusListener = this.props.navigation.addListener('didFocus', () => {
-			console.log('user profile focused')
 			this.getUserData()
 			this.fetchItems()
 		})
@@ -65,7 +66,6 @@ export default class UserProfile extends React.Component {
 
 	// Convert iOS fcm to google Reg token
 	convertAPNToken (token) {
-		console.log('convert', token)
 		const config = {
 			headers: {
 				Authorization: 'key=AAAAoJP5ry8:APA91bFGLFmvwfCuh0rAFaBJxG92505cx1_lMCoDFcHtlPDbkKtZzNpVs8F9JP-p4y9rYxyg6PIWP7PedXwG05lvpR7HUnkHNwe0QDXXQ7dw-7R7acMimLRlTl_NhXPiiHfW7NL-Ygd7'
@@ -81,10 +81,8 @@ export default class UserProfile extends React.Component {
 
 	// Send Registration ID to API
 	async addFcm (registration_id, type) {
-		console.log('add fcm')
 		try {
 			const res = await Axios.post('api/v1/devices/', {registration_id, type});
-			console.log('res', res)
 			if (res.data.error) {
 				return false;
 			} else {
@@ -97,8 +95,6 @@ export default class UserProfile extends React.Component {
 	};
 
 	onClose(id, reason) {
-		console.log('reason', reason)
-		console.log('id', id)
 		if (reason === 'user') {
 			this.props.navigation.navigate('Chat', {
 				item: {
@@ -121,7 +117,6 @@ export default class UserProfile extends React.Component {
 				if (Platform.OS === 'ios') {
 					const {data} = await this.convertAPNToken(token)
 					 registrationToken = data.results[0].registration_token
-					console.log('registrationToken', registrationToken)
 				}
 				this.addFcm(registrationToken, token.os);
 			},
@@ -132,25 +127,33 @@ export default class UserProfile extends React.Component {
 
 				if (notification.foreground) {
 					console.log('foregrnd je')
-					if (Platform.OS === 'android') {
-						Toast.show({
-							text: notification.title,
-							position: 'Top',
-							buttonText: 'Read',
-							// buttonTextStyle: { color: "#0b9bbf" },
-							// buttonStyle: { backgroundColor: "#c39520" },
-							duration: 3000,
-							onClose: this.onClose.bind(this, notification.data.test)
-						})
-					} else {
-						navigation.navigate('Chat', {
-							item: {
-								user_id: notification.data.test
-							}
-						})
+					if (notification.data.item_id) {
+						console.log('item transaferera asdjasjdasjdjasjdasjdjasdjasjdjasdjasjdasjdjasdj')
+						this.fetchItems()
+						this.props.navigation.navigate('UserProfile')
 					}
+					Toast.show({
+						text: notification.title,
+						position: 'bottom',
+						buttonText: !notification.data.item_id && 'Read',
+						buttonTextStyle: {
+							color: '#404040',
+							fontWeight: '700'
+						},
+						textStyle: {
+							color: '#404040',
+						},
+						style: {
+							backgroundColor: '#e7e7e7',
+							opacity: 0.8,
+							borderRadius: Platform.OS === 'ios' ? 30 : 0,
+						},
+						// buttonTextStyle: { color: "#0b9bbf" },
+						// buttonStyle: { backgroundColor: "#c39520" },
+						duration: 3000,
+						onClose: this.onClose.bind(this, notification.data.test)
+					})
 				} else {
-					console.log('ide na chat')
 					navigation.navigate('Chat', {
 						item: {
 							user_id: notification.data.test
@@ -159,6 +162,7 @@ export default class UserProfile extends React.Component {
 				}
 
 				// process the notification
+
 
 				// (required) Called when a remote is received or opened, or local notification is opened
 				notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -225,13 +229,22 @@ export default class UserProfile extends React.Component {
 		this.setState({dataLoading: true})
 		Axios.get(API.ITEMS)
 			.then(res => {
-				console.log('items fetched', res.data)
+				console.log('items fetched')
 				this.setState({items: res.data, dataLoading: false})
 			})
 			.catch(e => {
 				console.log(e)
 				this.setState({dataLoading: false})
 			})
+	}
+
+	refresh () {
+		return (
+			<RefreshControl
+				colors={["#9Bd35A", "#689F38"]}
+				refreshing={this.props.dataLoading}
+				onRefresh={this.fetchItems.bind(this)} />
+		)
 	}
 
 	_renderItems = ({item}) => {
@@ -276,6 +289,10 @@ export default class UserProfile extends React.Component {
 			)
 	}
 
+	onRefresh () {
+		this.fetchItems()
+	}
+
 	render() {
 		const {navigation} = this.props
 		const {items, userData} = this.state
@@ -286,6 +303,7 @@ export default class UserProfile extends React.Component {
 
 		return (
 			<View style={styles.root}>
+
 				<View style={styles.background}>
 					<ImageBackground
 						style={styles.rect}
@@ -302,8 +320,15 @@ export default class UserProfile extends React.Component {
 				/>
 
 				<View style={styles.container} >
+
 					{/*	 ITEMS */}
 					<FlatList
+						refreshControl={<RefreshControl
+							colors={["#EBA721", "#ffffff"]}
+							refreshing={this.state.dataLoading}
+							onRefresh={() => {
+								this.onRefresh()
+							}} />}
 						showsVerticalScrollIndicator={false}
 						ListHeaderComponent={(
 							<TouchableOpacity
@@ -318,12 +343,14 @@ export default class UserProfile extends React.Component {
 									</Text>
 									<Text style={styles.userEmail}>{userData.email}</Text>
 								</View>
+								<View style={styles.borderBottom} />
 							</TouchableOpacity>
 						)}
 						data={items}
 						renderItem={this._renderItems}
 						keyExtractor={item => item.id}
-					/>
+					 />
+
 					{/*<List style={{padding: 10}}>{this._renderItems()}</List>*/}
 				</View>
 				<Fab

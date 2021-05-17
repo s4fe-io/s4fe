@@ -86,6 +86,7 @@ export default StyleSheet.create({
 		marginTop: 15,
 		textAlign: 'center',
 	},
+
 	group2: {
 		marginTop: 17,
 	},

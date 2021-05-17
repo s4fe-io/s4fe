@@ -150,9 +150,15 @@ export default StyleSheet.create({
 		fontSize: 16,
 	},
 	userNameColumn: {
-		marginLeft: 40,
+		marginLeft: 22,
 		marginTop: 15,
-		marginBottom: 10
+		marginBottom: 10,
+	},
+	borderBottom: {
+		marginBottom: 5,
+		borderBottomWidth: 1,
+		borderBottomColor: '#eaeaea',
+		opacity: 0.4
 	},
 	avatarRow: {
 		flexDirection: 'row',

@@ -14,6 +14,7 @@ import {
 	ActivityIndicator
 } from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Colors from '../../constants/Colors'
 import {Icon, Toast} from 'native-base'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
@@ -33,7 +34,9 @@ export default class TransferItem extends ValidationComponent {
 			uniqueUserId: '',
 			items: [],
 			selectedItem: '',
-			dataLoading: false
+			dataLoading: false,
+			showCamera: true,
+			loading: false
 		}
 		this.qrCodeRead = this.qrCodeRead.bind(this)
 		this.state.userId = this.props.navigation.getParam('userId')
@@ -98,7 +101,15 @@ export default class TransferItem extends ValidationComponent {
 					})
 					Toast.show({
 						text: 'Item Transferred',
-						type: 'success'
+						position: 'bottom',
+						textStyle: {
+							color: '#404040',
+						},
+						style: {
+							backgroundColor: '#e7e7e7',
+							opacity: 0.8,
+							borderRadius: Platform.OS === 'ios' ? 30 : 0,
+						},
 					})
 					this.props.navigation.navigate('UserProfile')
 				})
@@ -118,10 +129,11 @@ export default class TransferItem extends ValidationComponent {
 
 	qrCodeRead ({data}) {
 		console.log('qr code ', data)
-		this.setState({uniqueUserId: data})
+		this.setState({loading: true, uniqueUserId: data})
 		setTimeout(() => {
 			this.scanner.reactivate()
-		}, 2000)
+			this.setState({showCamera: false})
+		}, 1000)
 	}
 
 	_renderCamera () {
@@ -155,7 +167,7 @@ export default class TransferItem extends ValidationComponent {
 			value: null,
 			color: '#cacaca',
 		}
-		const { uniqueUserId, dataLoading, selectedItem } = this.state
+		const { uniqueUserId, dataLoading, selectedItem, showCamera, loading } = this.state
 
 		return (
 			<Fragment>
@@ -192,7 +204,25 @@ export default class TransferItem extends ValidationComponent {
 									<ScrollView style={styles.scrollView}>
 										<KeyboardAwareScrollView
 											contentContainerStyle={{flexGrow: 1}}>
-											{ this._renderCamera() }
+											{ !showCamera &&
+											<TouchableOpacity
+												onPress={() => {
+													this.setState({ showCamera: true})
+												}}
+												style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}
+											>
+												<Icon
+													type="FontAwesome5"
+													name="camera"
+													style={{color: 'white', marginRight: 5}}
+													onPress={() => {
+														navigation.pop()
+													}}
+												/>
+												<Text style={styles.scanQR}>Scan QR</Text>
+											</TouchableOpacity>
+											}
+											{ showCamera && this._renderCamera() }
 											<View style={styles.form}>
 												{/* User ID */}
 												<View style={styles.group}>

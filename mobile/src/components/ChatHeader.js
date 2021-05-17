@@ -16,6 +16,15 @@ function HeaderX(props) {
 			<View style={styles.group}>
 				<View style={styles.iconRow}>
 					<View style={styles.containerx}>
+						{props.goHome ?
+						<TouchableOpacity
+							onPress={() => props.navigation.navigate('UserProfile')}
+							style={styles.button}>
+							<FeatherIcon
+								name={'chevron-left'}
+								style={styles.icon2}
+							/>
+						</TouchableOpacity> :
 						<TouchableOpacity
 							onPress={() => props.navigation.pop()}
 							style={styles.button}>
@@ -23,7 +32,7 @@ function HeaderX(props) {
 								name={'chevron-left'}
 								style={styles.icon2}
 							/>
-						</TouchableOpacity>
+						</TouchableOpacity> }
 					</View>
 				</View>
 				<View style={styles.containerx}>

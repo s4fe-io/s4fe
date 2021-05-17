@@ -104,6 +104,8 @@ export default class ScanNFC extends Component {
 	}
 
 	goToScreen(nfcKey) {
+		console.log('got oscreeen' +
+			'')
 		this.props.navigation.navigate('AddItem', {
 			nfcKey,
 		})
