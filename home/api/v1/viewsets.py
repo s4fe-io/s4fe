@@ -34,6 +34,8 @@ from .serializers import *
 import shutil
 from django.db.models import Count
 from django.db.models import Q
+from home.api.v1.notifications import push_notification
+from fcm_django.models import FCMDevice
 
 logger = logging.getLogger(__name__)
 
@@ -321,6 +323,17 @@ def item_transfer(request):
         trans = Transaction(user_from=request.user, user_to_id=user.id,
                             item_id=request.data['item'])
         trans.save()
+        title = "New item received"
+
+        try:
+            devices = FCMDevice.objects.filter(user=user)
+            a = devices.send_message(title=title, body=item.title, data={"item_id": item.id})
+            print(a)
+            return True
+
+        except Exception as e:
+            print(e)
+
         return Response(data={"Status": "OK!"},
                         status=status.HTTP_200_OK)
 

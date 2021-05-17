@@ -5,7 +5,7 @@ from .models import Item, Category, Message, OTP, DeviceInfo, Transaction, ItemI
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('title', 'key', 'user', 'category', 'status', 'serial', 'deleted')
     list_filter = ['user', 'status', 'deleted']
-    search_fields = ('title', 'key', 'user', 'category', 'status')
+    search_fields = ('title', 'key', 'status')
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -33,7 +33,7 @@ class DeviceInfoAdmin(admin.ModelAdmin):
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('user_from', 'user_to', 'item', 'created')
     list_filter = ['user_from', 'user_to', 'item']
-    search_fields = ('user_from', 'user_to', 'item', )
+    search_fields = ()
 
 
 class ItemInterfaceAdmin(admin.ModelAdmin):
