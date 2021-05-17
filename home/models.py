@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from home.notifications import send_push_message
 from home.api.v1.notifications import push_notification
 import uuid
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -41,11 +42,12 @@ class Item(models.Model):
     desc = models.TextField(default="", blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="A")
     created = models.DateTimeField(auto_now_add=True, editable=False)
+    updated = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Items'
-        ordering = ('-created',)
+        ordering = ('-updated',)
 
     def __str__(self):
         return self.title

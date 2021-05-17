@@ -3,7 +3,7 @@ from .models import Item, Category, Message, OTP, DeviceInfo, Transaction, ItemI
 
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('title', 'key', 'user', 'category', 'status', 'serial', 'deleted')
+    list_display = ('title', 'key', 'user', 'category', 'status', 'serial', 'created', 'updated', 'deleted')
     list_filter = ['user', 'status', 'deleted']
     search_fields = ('title', 'key', 'status')
 
