@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 async function logOut(props) {
 	console.log('logout')
 	await AsyncStorage.removeItem('tokenData')
+	await AsyncStorage.removeItem('userData')
 	props.navigation.navigate('LogIn')
 }
 

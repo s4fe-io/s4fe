@@ -116,7 +116,7 @@ export default class AddItem extends ValidationComponent {
 	}
 
 	deleteItemConfirm () {
-		Alert.alert('Error', 'Please enter some text', [
+		Alert.alert('Error', 'Are you sure that you want to delete this item?', [
 				{
 					text: "Cancel",
 					onPress: () => console.log("Cancel Pressed"),

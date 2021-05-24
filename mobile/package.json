@@ -35,7 +35,7 @@
     "react-native-gifted-chat": "^0.16.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-navigation-bar-color": "^2.0.1",
-    "react-native-nfc-manager": "^2.1.9",
+    "react-native-nfc-manager": "^3.5.0",
     "react-native-permissions": "2.2.2",
     "react-native-picker-select": "^7.0.0",
     "react-native-push-notification": "^7.2.3",
@@ -50,7 +50,8 @@
     "react-navigation": "^4.0.10",
     "react-navigation-drawer": "^2.5.1",
     "react-navigation-stack": "^2.8.2",
-    "react-navigation-tabs": "^2.10.1"
+    "react-navigation-tabs": "^2.10.1",
+    "revent-lib": "0.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

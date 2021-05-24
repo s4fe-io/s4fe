@@ -17,6 +17,8 @@ import Colors from '../../constants/Colors'
 import {Icon} from 'native-base'
 import NfcManager, {Ndef, NdefParser, NfcTech} from 'react-native-nfc-manager'
 
+import NfcProxy from "../../utils/NFCProxy";
+
 const hash = require('object-hash')
 const generateNFCKey = () => {
 	const generatedHash = hash(Math.round(Math.random() * 10000000000))
@@ -59,8 +61,8 @@ export default class ScanNFC extends Component {
 	}
 
 	componentDidMount() {
-		NfcManager.start();
-		this.writeNFC()
+		// NfcManager.start();
+		// this.writeNFC()
 		// NfcManager.isSupported().then(supported => {
 		// 	this.setState({supported})
 		// 	if (supported) {
@@ -111,6 +113,23 @@ export default class ScanNFC extends Component {
 		})
 	}
 
+	async writeNdef () {
+		console.log('write ndef')
+		const NFCKey = generateNFCKey()
+		// inputRef.current && inputRef.current.blur();
+		//
+		// if (!value) {
+		// 	return;
+		// }
+
+		const scanTagResult = await NfcProxy.writeNdef({type: 'TEXT', value: NFCKey});
+		console.log('scan tag result', scanTagResult)
+		if (scanTagResult) {
+			this.goToScreen(NFCKey)
+		}
+		console.log('Error, tag might be read only')
+	};
+
 
 
 	render() {
@@ -151,7 +170,7 @@ export default class ScanNFC extends Component {
 									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
 									<View style={styles.icon10Column}>
 										<Text style={styles.scanS4FeTarcker}>
-											SCAN S4FE TRACKER
+											ADD NEW ITEM
 										</Text>
 										{ Platform.OS === 'android' ?
 											<View style={styles.animation}>
@@ -164,19 +183,44 @@ export default class ScanNFC extends Component {
 											</View>  : null }
 
 										<Text style={[styles.text, {marginTop: 30}]}>
-											Place your phone close to the S4FE sticker
+											Add your item with S4FE NFC Tag or without?
 										</Text>
 
-										<TouchableOpacity onPress={() => this.writeNFC()}>
+										<TouchableOpacity
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'center',
+												borderWidth: 1,
+												borderColor: 'white',
+												margin: 20,
+												borderRadius: 5
+											}}
+											onPress={() => this.writeNdef()}>
+											<MaterialIconsIcon name={'nfc'} style={{color: 'white', fontSize: 25, marginTop: 20, marginRight: -17}} />
 											<Text style={styles.text}>
-												Scan NFC
+												With S4FE Tag
 											</Text>
 										</TouchableOpacity>
 
 										{/*	Skip scanning */}
-										<TouchableOpacity onPress={() => this.goToScreen('none')}>
-											<Text style={styles.skipText}>Add without NFC</Text>
+										<TouchableOpacity
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'center',
+												borderWidth: 1,
+												borderColor: 'white',
+												margin: 20,
+												borderRadius: 5
+											}}
+											onPress={() => this.goToScreen('none')}>
+											<MaterialIconsIcon name={'description'} style={{color: 'white', fontSize: 25, marginTop: 20, marginRight: -17}} />
+											<Text style={styles.text}>
+												Without S4FE Tag
+											</Text>
 										</TouchableOpacity>
+										{/*<TouchableOpacity onPress={() => this.goToScreen('none')}>*/}
+										{/*	<Text style={styles.skipText}>Add without NFC</Text>*/}
+										{/*</TouchableOpacity>*/}
 									</View>
 								</ImageBackground>
 							</View>
@@ -371,11 +415,9 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		color: 'white',
+		padding: 20,
 		fontSize: 20,
 		textAlign: 'center',
-		paddingLeft: 20,
-		paddingRight: 20,
-		paddingBottom: 30,
 	},
 	skipText: {
 		color: '#e9e9e9',
