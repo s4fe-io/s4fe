@@ -69,8 +69,10 @@ export default class SignIn extends ValidationComponent {
 				.catch(err => {
 					console.log(err.response)
 					const email = err.response.data.email.email
-					if (email) {
+					if (email.lenght > 0) {
 						Alert.alert('Warning', email[0])
+					} else {
+						Alert.alert('Warning', 'Something went wrong, please try again.')
 					}
 					this.setState({dataLoading: false})
 					// Alert.alert('Warning!', 'Something went wrong!')

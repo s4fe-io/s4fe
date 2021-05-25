@@ -62,7 +62,9 @@ export default class ScanNFC extends Component {
 
 			// const nfcTag = await NfcManager.getTag()
 			// console.log('ovo je nfc tag', nfcTag)
-			NfcManager.setAlertMessageIOS('I got your tag!');
+			if (Platform.OS === 'ios') {
+				NfcManager.setAlertMessageIOS('I got your tag!');
+			}
 			NfcManager.unregisterTagEvent().catch((e) => console.log('err', e));
 		});
 	}
@@ -96,6 +98,7 @@ export default class ScanNFC extends Component {
 		Axios.post(API.ITEMS_STATUS, formData).then(
 			res => {
 				const result = res.data
+				console.log('device res', result)
 				if (result.your_device) {
 					NfcManager.cancelTechnologyRequest().catch(() => 0)
 					this.registerNFC()

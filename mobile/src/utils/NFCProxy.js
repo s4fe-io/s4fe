@@ -57,7 +57,8 @@ const handleException = (ex) => {
 			// NfcManager.invalidateSessionWithErrorIOS(`${ex}`);
 			NfcManager.invalidateSessionWithErrorIOS(`Please use empty S4FE tag!`);
 		} else {
-			Alert.alert('NFC Error', `${ex}`);
+			// Alert.alert('NFC Error', `${ex}`);
+			Alert.alert('NFC Error', 'Please use empty S4FE tag!');
 		}
 	}
 };
@@ -156,7 +157,7 @@ class NfcProxy {
 			if (bytes) {
 				await NfcManager.ndefHandler.writeNdefMessage(bytes);
 				// Make tags read only
-				// await NfcManager.ndefHandler.makeReadOnly();
+				await NfcManager.ndefHandler.makeReadOnly();
 
 				if (Platform.OS === 'ios') {
 					await NfcManager.setAlertMessageIOS('Unique ID is written to the Tag');

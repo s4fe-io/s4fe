@@ -26,21 +26,6 @@ const generateNFCKey = () => {
 	return generatedHash
 }
 
-function strToBytes(str) {
-	let result = []
-	for (let i = 0; i < str.length; i++) {
-		result.push(str.charCodeAt(i))
-	}
-	return result
-}
-
-// function buildTextPayload(valueToWrite) {
-// 	const textBytes = strToBytes(valueToWrite)
-// 	// in this example. we always use `en`
-// 	const headerBytes = [0xd1, 0x01, textBytes.length + 3, 0x54, 0x02, 0x65, 0x6e]
-// 	return [...headerBytes, ...textBytes]
-// }
-
 function buildTextPayload(valueToWrite) {
 	return Ndef.encodeMessage([
 		Ndef.textRecord(valueToWrite),
@@ -57,21 +42,18 @@ export default class ScanNFC extends Component {
 			text: 'hi, nfc!',
 			parsedText: null,
 			tag: null,
+			showNFCAnimation: false
 		}
 	}
 
 	componentDidMount() {
-		// NfcManager.start();
-		// this.writeNFC()
-		// NfcManager.isSupported().then(supported => {
-		// 	this.setState({supported})
-		// 	if (supported) {
-		// 		this._startNfc()
-		// 	}
-		// })
+		this.focusListener = this.props.navigation.addListener('didFocus', () => {
+			this.setState({showNFCAnimation: false})
+		})
 	}
 
 	componentWillUnmount() {
+		this.focusListener.remove()
 		this._cleanUp();
 	}
 
@@ -79,47 +61,50 @@ export default class ScanNFC extends Component {
 		NfcManager.cancelTechnologyRequest().catch(() => 0);
 	}
 
-	writeNFC = async () => {
-		try {
-			const NFCKey = generateNFCKey()
-			let resp = await NfcManager.requestTechnology(NfcTech.Ndef, {
-				alertMessage: 'Place your phone close to the S4FE sticker.'
-			});
-			console.log(resp);
-			let ndef = await NfcManager.getNdefMessage();
-			console.log(ndef);
-			let bytes = buildTextPayload(NFCKey);
-			await NfcManager.writeNdefMessage(bytes);
-			console.log('successfully write ndef');
-			await NfcManager.setAlertMessageIOS('Unique ID is written to the Tag');
-			this._cleanUp();
-			this.goToScreen(NFCKey)
-		} catch (ex) {
-			this._cleanUp();
-			console.log('ex', ex);
-			if (ex !== 'cancelled') {
-				if (ex !== 'NFCError:200') {
-					Alert.alert('Warning!', 'The tag is not empty! Please use the new (empty) S4FE tag.')
-				}
-			}
-		}
-	}
+	// writeNFC = async () => {
+	// 	try {
+	// 		const NFCKey = generateNFCKey()
+	// 		let resp = await NfcManager.requestTechnology(NfcTech.Ndef, {
+	// 			alertMessage: 'Place your phone close to the S4FE sticker.'
+	// 		});
+	// 		console.log(resp);
+	// 		let ndef = await NfcManager.getNdefMessage();
+	// 		console.log(ndef);
+	// 		let bytes = buildTextPayload(NFCKey);
+	// 		await NfcManager.writeNdefMessage(bytes);
+	// 		console.log('successfully write ndef');
+	// 		await NfcManager.setAlertMessageIOS('Unique ID is written to the Tag');
+	// 		this._cleanUp();
+	// 		this.goToScreen(NFCKey)
+	// 	} catch (ex) {
+	// 		this._cleanUp();
+	// 		console.log('ex', ex);
+	// 		if (ex !== 'cancelled') {
+	// 			if (ex !== 'NFCError:200') {
+	// 				Alert.alert('Warning!', 'The tag is not empty! Please use the new (empty) S4FE tag.')
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	goToScreen(nfcKey) {
-		console.log('got oscreeen' +
-			'')
 		this.props.navigation.navigate('AddItem', {
 			nfcKey,
 		})
 	}
 
 	async writeNdef () {
-		console.log('write ndef')
+		if (Platform.OS === 'android') {
+			this.setState({showNFCAnimation: true})
+		}
 		const NFCKey = generateNFCKey()
 
 		const scanTagResult = await NfcProxy.writeNdef({type: 'TEXT', value: NFCKey});
 		console.log('scan tag result', scanTagResult)
 		if (scanTagResult) {
+			if (Platform.OS === 'android') {
+				this.setState({showNFCAnimation: false})
+			}
 			this.goToScreen(NFCKey)
 		}
 	};
@@ -128,7 +113,6 @@ export default class ScanNFC extends Component {
 
 	render() {
 		const {navigation} = this.props
-		let {supported, enabled, tag, text, parsedText, isTestRunning} = this.state
 		return (
 			<Fragment>
 				<View style={styles.background}>
@@ -164,9 +148,9 @@ export default class ScanNFC extends Component {
 									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
 									<View style={styles.icon10Column}>
 										<Text style={styles.scanS4FeTarcker}>
-											ADD NEW ITEM
+											ADD NEW ITEM {this.state.showNFCAnimation}
 										</Text>
-										{ Platform.OS === 'android' ?
+										{ Platform.OS === 'android' && this.state.showNFCAnimation ?
 											<View style={styles.animation}>
 
 												<LottieView
