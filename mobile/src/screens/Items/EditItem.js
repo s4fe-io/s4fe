@@ -145,7 +145,6 @@ export default class AddItem extends ValidationComponent {
 		const item = navigation.getParam('item')
 		let {selectedCategory, title, description, selectedStatus, serial} = this.state
 
-		console.log('item', item)
 		const placeholder = {
 			label: 'Categories',
 			value: null,

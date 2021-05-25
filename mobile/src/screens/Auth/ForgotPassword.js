@@ -62,7 +62,6 @@ export default class SignIn extends ValidationComponent {
 			}
 			Axios.post(API.FORGOT_PASSWORD, formData)
 				.then(res => {
-					console.log('res', res)
 					this.setState({dataLoading: false})
 					Alert.alert('Info', 'Please check your inbox for the password reset link')
 					this.goToScreen('LogIn')

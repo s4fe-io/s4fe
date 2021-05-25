@@ -17,7 +17,6 @@ const parseCurrentUser = async () => {
 function ChatRender (props) {
 	const navigation = props.navigation
 	const params = props.navigation.getParam('item')
-	console.log('evo itema', params)
 	const currentUser = parseCurrentUser()
 
 	return (

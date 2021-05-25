@@ -44,7 +44,6 @@ export default class Index extends Component {
 	render() {
 		const {navigation} = this.props
 		const currentUser = navigation.getParam('currentUser')
-		console.log('cr', currentUser)
 
 		return (
 			<Fragment>

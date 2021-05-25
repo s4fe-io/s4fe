@@ -84,9 +84,7 @@ export default class PhoneNumber extends ValidationComponent {
 		const formData = {
 			access_token: accessToken
 		}
-		console.log('form', formData)
 		Axios.post(API.FACEBOOK, formData).then(res => {
-			console.log('Res', res)
 			AsyncStorage.setItem('tokenData', res.data.key)
 		  AsyncStorage.setItem('userData', JSON.stringify(res.data))
 			this.goToScreen('UserProfile', res.data)

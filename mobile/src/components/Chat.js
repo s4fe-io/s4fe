@@ -17,7 +17,6 @@ function Chat(props) {
 
 		parseCurrentUser()
 		return () => {
-			console.log('unmount')
 			BackgroundTimer.stopBackgroundTimer()
 		}
 	}, [])
@@ -57,7 +56,6 @@ function Chat(props) {
 
 	const onSend = useCallback((messages = []) => {
 		sendMessage(messages).then(res => {
-			console.log('message sent', res)
 			setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
 		}, err => {
 			console.log(err.response)

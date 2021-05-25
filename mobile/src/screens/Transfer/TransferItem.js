@@ -45,7 +45,6 @@ export default class TransferItem extends ValidationComponent {
 	componentDidMount() {
 		this.fetchItems()
 		const params = this.props.navigation.getParam('item')
-		console.log('params', params)
 		this.setState({selectedItem: params.id})
 	}
 
@@ -53,7 +52,6 @@ export default class TransferItem extends ValidationComponent {
 		this.setState({dataLoading: true})
 		Axios.get(API.ITEMS)
 			.then(res => {
-				console.log('items fetched', res.data)
 				const result = []
 				res.data.forEach(item => {
 					result.push({
@@ -90,7 +88,6 @@ export default class TransferItem extends ValidationComponent {
 				item: this.state.selectedItem,
 				user: this.state.uniqueUserId
 			}
-			console.log('forma ', formData)
 			Axios.post(API.ITEM_TRANSFER, formData)
 				.then((res) => {
 					console.log(res)
@@ -128,7 +125,6 @@ export default class TransferItem extends ValidationComponent {
 	}
 
 	qrCodeRead ({data}) {
-		console.log('qr code ', data)
 		this.setState({loading: true, uniqueUserId: data})
 		setTimeout(() => {
 			this.scanner.reactivate()

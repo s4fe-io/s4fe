@@ -65,7 +65,6 @@ export default class SignIn extends ValidationComponent {
 			formData.append('access_token', accessToken)
 
 			Axios.post(API.GOOGLE, formData).then(async res => {
-				console.log('Res', res)
 				await AsyncStorage.setItem('tokenData', res.data.key)
 				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 				// this.storeData('tokenData', res.data.key)
@@ -90,8 +89,6 @@ export default class SignIn extends ValidationComponent {
 
 	// Store data
 	storeData = async (key, value) => {
-		console.log('key snima se', key)
-		console.log('value snima se', value)
 		try {
 			await AsyncStorage.setItem(key, value)
 		} catch (e) {
@@ -108,9 +105,7 @@ export default class SignIn extends ValidationComponent {
 		const formData = {
 			access_token: accessToken
 		}
-		console.log('form', formData)
 		Axios.post(API.FACEBOOK, formData).then(async res => {
-			console.log('Res', res)
 			await AsyncStorage.setItem('tokenData', res.data.key)
 			await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 			// this.storeData('tokenData', res.data.key)
@@ -125,15 +120,12 @@ export default class SignIn extends ValidationComponent {
 		LoginManager.logInWithPermissions(['public_profile', 'email']).then(
 			(result) => {
 				if (result.isCancelled) {
-					console.log('Login cancelled')
 				} else {
 					AccessToken.getCurrentAccessToken().then(data => {
 						const accessToken = data.accessToken.toString()
 						this.facebookLogin(accessToken)
-						console.log('access token', accessToken)
 						// this.getInfoFromToken(accessToken);
 					})
-					console.log('Login success with permissions: ' + result.grantedPermissions.toString())
 				}
 			},
 			function (error) {
@@ -162,7 +154,6 @@ export default class SignIn extends ValidationComponent {
 			}
 			Axios.post(API.LOGIN, formData)
 				.then(async res => {
-					console.log('res', res)
 					this.setState({dataLoading: false})
 					await AsyncStorage.setItem('tokenData', res.data.key)
 					await AsyncStorage.setItem('userData', JSON.stringify(res.data))
@@ -170,12 +161,10 @@ export default class SignIn extends ValidationComponent {
 					// this.storeData('userData', JSON.stringify(res.data))
 					setTimeout(async () => {
 						const tokenLS = await AsyncStorage.getItem('tokenData')
-						console.log('tokenls', tokenLS)
 					})
 					this.goToScreen('UserProfile', res.data)
 				})
 				.catch(err => {
-					console.log(err.response)
 					const nonFieldErrors = err.response.data.non_field_errors
 					if (nonFieldErrors) {
 						Alert.alert('Warning', nonFieldErrors[0])

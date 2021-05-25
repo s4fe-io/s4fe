@@ -123,12 +123,9 @@ export default class UserProfile extends React.Component {
 
 			// (required) Called when a remote is received or opened, or local notification is opened
 			onNotification: (notification) => {
-				console.log("NOTIFICATION:", notification);
 
 				if (notification.foreground) {
-					console.log('foregrnd je')
 					if (notification.data.item_id) {
-						console.log('item transaferera asdjasjdasjdjasjdasjdjasdjasjdjasdjasjdasjdjasdj')
 						this.fetchItems()
 						this.props.navigation.navigate('UserProfile')
 					}
@@ -214,7 +211,6 @@ export default class UserProfile extends React.Component {
 		try {
 			const value = await AsyncStorage.getItem('userData')
 			if (value !== null) {
-				console.log('value', value)
 
 				// value previously stored
 				this.setState({userData: JSON.parse(value)})
@@ -231,7 +227,6 @@ export default class UserProfile extends React.Component {
 		this.setState({dataLoading: true})
 		Axios.get(API.ITEMS)
 			.then(res => {
-				console.log('items fetched')
 				this.setState({items: res.data, dataLoading: false})
 			})
 			.catch(e => {

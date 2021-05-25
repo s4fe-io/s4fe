@@ -19,7 +19,6 @@ import NfcManager, {NdefParser, NfcTech} from 'react-native-nfc-manager'
 const hash = require('object-hash')
 const generateNFCKey = () => {
 	const generatedHash = hash(Math.round(Math.random() * 10000000000))
-	console.log('generated hash', generatedHash)
 	return generatedHash
 }
 
@@ -159,7 +158,6 @@ export default class ScanNFC extends Component {
 			})
 			.then(() => NfcManager.writeNdefMessage(buildTextPayload(NFCKey)))
 			.then(() => {
-				console.log('Tag se upisao, ovo je hash: ', NFCKey)
 				this.goToScreen(NFCKey)
 				cleanUp()
 			})

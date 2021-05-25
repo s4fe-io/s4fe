@@ -41,7 +41,6 @@ export default class Topics extends React.Component {
 
 	componentDidMount() {
 		this.focusListener = this.props.navigation.addListener('didFocus', () => {
-			console.log('user profile focused')
 			this.fetchTopics()
 		})
 		this.fetchTopics()
@@ -59,7 +58,6 @@ export default class Topics extends React.Component {
 		this.setState({dataLoading: true})
 		Axios.get(API.MESSAGES_BY_USER)
 			.then(res => {
-				console.log('topics fetched', res.data)
 				this.setState({topics: res.data, dataLoading: false})
 			})
 			.catch(e => {

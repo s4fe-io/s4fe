@@ -116,18 +116,12 @@ export default class ScanNFC extends Component {
 	async writeNdef () {
 		console.log('write ndef')
 		const NFCKey = generateNFCKey()
-		// inputRef.current && inputRef.current.blur();
-		//
-		// if (!value) {
-		// 	return;
-		// }
 
 		const scanTagResult = await NfcProxy.writeNdef({type: 'TEXT', value: NFCKey});
 		console.log('scan tag result', scanTagResult)
 		if (scanTagResult) {
 			this.goToScreen(NFCKey)
 		}
-		console.log('Error, tag might be read only')
 	};
 
 

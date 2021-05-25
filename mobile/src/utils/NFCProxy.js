@@ -155,7 +155,8 @@ class NfcProxy {
 
 			if (bytes) {
 				await NfcManager.ndefHandler.writeNdefMessage(bytes);
-				await NfcManager.ndefHandler.makeReadOnly();
+				// Make tags read only
+				// await NfcManager.ndefHandler.makeReadOnly();
 
 				if (Platform.OS === 'ios') {
 					await NfcManager.setAlertMessageIOS('Unique ID is written to the Tag');

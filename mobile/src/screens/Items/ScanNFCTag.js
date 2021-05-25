@@ -58,7 +58,6 @@ export default class ScanNFC extends Component {
 	initializeNFC = () => {
 		NfcManager.start();
 		NfcManager.setEventListener(NfcEvents.DiscoverTag, (tag) => {
-			console.log('tag', tag);
 			this.decodeNdefMessage(tag)
 
 			// const nfcTag = await NfcManager.getTag()
@@ -91,13 +90,11 @@ export default class ScanNFC extends Component {
 	}
 
 	fetchItemInfo(NFCKey) {
-		console.log('decoded tag iz fetch', NFCKey)
 		const formData = {
 			key: NFCKey,
 		}
 		Axios.post(API.ITEMS_STATUS, formData).then(
 			res => {
-				console.log('res', res)
 				const result = res.data
 				if (result.your_device) {
 					NfcManager.cancelTechnologyRequest().catch(() => 0)
@@ -117,7 +114,6 @@ export default class ScanNFC extends Component {
 									})
 									NfcManager.cancelTechnologyRequest().catch(() => 0)
 									this.registerNFC()
-									console.log('Cancel Pressed')
 								},
 								style: 'cancel',
 							},
@@ -135,9 +131,7 @@ export default class ScanNFC extends Component {
 				}
 			},
 			err => {
-				console.log('err', err.response)
 				const status = err.response.data.status
-				console.log('data', status)
 				if (status) {
 					Alert.alert('Warning', status)
 					// this.setState({
@@ -153,7 +147,6 @@ export default class ScanNFC extends Component {
 	}
 
 	goToScreen(screen, payload) {
-		console.log('payload', payload)
 		this.props.navigation.navigate(screen, {payload})
 	}
 
