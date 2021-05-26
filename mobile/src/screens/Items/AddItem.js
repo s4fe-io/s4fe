@@ -9,7 +9,6 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	ScrollView,
-	AsyncStorage,
 	Alert,
 } from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
@@ -74,12 +73,9 @@ export default class AddItem extends ValidationComponent {
 			title: {required: true},
 			selectedCategory: {required: true},
 		})
-		const userData = JSON.parse(await AsyncStorage.getItem('userData'))
-		console.log(userData)
 		if (isValid) {
 			this.setState({dataLoading: true})
 			const formData = {
-				// user: userData.id,
 				title: this.state.title,
 				category: this.state.selectedCategory,
 				serial: this.state.serial,

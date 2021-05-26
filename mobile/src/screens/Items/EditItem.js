@@ -9,7 +9,6 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	ScrollView,
-	AsyncStorage,
 	Alert,
 } from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'

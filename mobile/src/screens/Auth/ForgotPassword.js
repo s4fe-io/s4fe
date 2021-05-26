@@ -10,7 +10,6 @@ import {
 	SafeAreaView,
 	ScrollView,
 	Alert,
-	AsyncStorage,
 } from 'react-native'
 import {Center} from '@builderx/utils'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -30,16 +29,6 @@ export default class SignIn extends ValidationComponent {
 			email: '',
 			password: '',
 			dataLoading: false,
-		}
-	}
-
-	// Store data
-	storeData = async (key, value) => {
-		try {
-			await AsyncStorage.setItem(key, value)
-		} catch (e) {
-			// saving error
-			console.log(e)
 		}
 	}
 

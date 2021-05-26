@@ -65,10 +65,9 @@ export default class SignIn extends ValidationComponent {
 			formData.append('access_token', accessToken)
 
 			Axios.post(API.GOOGLE, formData).then(async res => {
+				console.log('login response', res)
 				await AsyncStorage.setItem('tokenData', res.data.key)
 				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
-				// this.storeData('tokenData', res.data.key)
-				// this.storeData('userData', JSON.stringify(res.data))
 				this.goToScreen('UserProfile', res.data)
 			}, err => {
 				Alert.alert('Warning', JSON.stringify(err))

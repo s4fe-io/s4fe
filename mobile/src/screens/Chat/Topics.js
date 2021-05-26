@@ -81,9 +81,9 @@ export default class Topics extends React.Component {
 					<Body>
 					</Body>
 					<Right>
-						{item.unread !== 0 &&
-							<View style={{backgroundColor: '#27ae60', padding: 8, borderRadius: 100}} />
-						}
+						{/*{item.unread !== 0 &&*/}
+						{/*	<View style={{backgroundColor: '#27ae60', padding: 8, borderRadius: 100}} />*/}
+						{/*}*/}
 
 					</Right>
 				</ListItem>

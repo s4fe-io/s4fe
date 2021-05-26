@@ -9,7 +9,6 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	ScrollView,
-	AsyncStorage,
 	Alert,
 	ActivityIndicator
 } from 'react-native'

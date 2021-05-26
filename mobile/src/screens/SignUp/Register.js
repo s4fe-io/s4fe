@@ -11,7 +11,6 @@ import {
 	ScrollView,
 	SafeAreaView,
 	Alert,
-	AsyncStorage,
 } from 'react-native'
 import {Button, Icon} from 'native-base'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -22,6 +21,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import ValidationComponent from 'react-native-form-validator'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
+import AsyncStorage from "@react-native-community/async-storage";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -73,10 +73,10 @@ export default class Register extends ValidationComponent {
 
 			console.log('formData', formData)
 			Axios.post(`${API.REGISTRATION}`, formData)
-				.then(res => {
+				.then(async res => {
 					console.log('res user added', res)
-					this.storeData('tokenData', res.data.key)
-					this.storeData('userData', JSON.stringify(res.data))
+					await AsyncStorage.setItem('tokenData', res.data.key)
+					await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 					this.goToScreen('UserProfile', res.data)
 				})
 				.catch(err => {

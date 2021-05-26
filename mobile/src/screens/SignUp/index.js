@@ -115,6 +115,7 @@ export default class PhoneNumber extends ValidationComponent {
 	}
 
 	googleSignIn = async () => {
+		console.log('LS', await AsyncStorage.getItem('userData'))
 		GoogleSignin.configure({
 			webClientId:"689677381423-ke11h57ftbk2sr4endda3e45m6j2h6gb.apps.googleusercontent.com",
 			offlineAccess: true
@@ -129,10 +130,10 @@ export default class PhoneNumber extends ValidationComponent {
 				access_token: accessToken
 			}
 
-			Axios.post(API.GOOGLE, formData).then(res => {
-				console.log('Res', res)
-				this.storeData('tokenData', res.data.key)
-				this.storeData('userData', JSON.stringify(res.data))
+			Axios.post(API.GOOGLE, formData).then(async res => {
+				console.log('Ressponse iz google signup', res)
+				await AsyncStorage.setItem('tokenData', res.data.key)
+				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 				this.goToScreen('UserProfile', res.data)
 			}, err => {
 				console.log('err', err.response)

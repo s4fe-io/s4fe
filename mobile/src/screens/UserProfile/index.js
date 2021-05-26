@@ -161,8 +161,6 @@ export default class UserProfile extends React.Component {
 				}
 
 				// process the notification
-
-
 				// (required) Called when a remote is received or opened, or local notification is opened
 				notification.finish(PushNotificationIOS.FetchResult.NoData);
 			},
@@ -171,7 +169,6 @@ export default class UserProfile extends React.Component {
 			onAction: function (notification) {
 				console.log("ACTION:", notification.action);
 				console.log("NOTIFICATION:", notification);
-
 				// process the action
 			},
 
@@ -210,6 +207,7 @@ export default class UserProfile extends React.Component {
 	getUserData = async () => {
 		try {
 			const value = await AsyncStorage.getItem('userData')
+			console.log('value iz LS', value)
 			if (value !== null) {
 
 				// value previously stored

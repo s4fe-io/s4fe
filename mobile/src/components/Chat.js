@@ -3,7 +3,6 @@ import { Alert } from 'react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import {Axios} from '../utils/axios'
 import BackgroundTimer from 'react-native-background-timer'
-import AsyncStorage from "@react-native-community/async-storage";
 import {API} from "../utils/api";
 
 function Chat(props) {
@@ -71,8 +70,8 @@ function Chat(props) {
 			messages={messages}
 			onSend={messages => onSend(messages)}
 			user={{
-				_id: currentUser.id,
-				name: currentUser.first_name,
+				_id: currentUser && currentUser.id,
+				name: currentUser && currentUser.first_name,
 				// avatar: currentUser.user_picture
 			}}
 		/>

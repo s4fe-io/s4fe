@@ -4,7 +4,7 @@ import {
 	View,
 	StatusBar,
 	ImageBackground,
-	Platform, Dimensions, AsyncStorage,
+	Platform, Dimensions,
 } from 'react-native'
 import ChatHeader from '../../components/ChatHeader'
 import Colors from "../../constants/Colors";
