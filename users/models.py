@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
+from django.dispatch import receiver
 import uuid
 
 
@@ -12,6 +13,10 @@ class User(AbstractUser):
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
 
-    def save(self, *args, **kwargs):
-        self.unique_identifier = str(uuid.uuid4())
-        super(User, self).save(*args, **kwargs)
+
+@receiver(models.signals.post_save, sender=User)
+def update_user(sender, instance, created, *args, **kwargs):
+    if created:
+        instance.unique_identifier = str(uuid.uuid4())
+        instance.save()
+

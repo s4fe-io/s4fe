@@ -206,25 +206,13 @@ EMAIL_HOST_USER = env.str("SENDGRID_USERNAME", "")
 EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "noreply@s4fe.io"
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", "noreply@s4fe.io")
 
 FCM_DJANGO_SETTINGS = {
-    "FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "AAAAoJP5ry8:APA91bFGLFmvwfCuh0rAFaBJxG92505cx1_lMCoDFcHtlPDbkKtZzNpVs8F9JP-p4y9rYxyg6PIWP7PedXwG05lvpR7HUnkHNwe0QDXXQ7dw-7R7acMimLRlTl_NhXPiiHfW7NL-Ygd7")
+    "FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "")
 }
 
 SENDERNUMBER = {'number': '+444444444444'}
-
-# PUSH_NOTIFICATIONS_SETTINGS = {
-#         "FCM_API_KEY": env.str("FCM_API_KEY", ""),
-#         "GCM_API_KEY": env.str("GCM_API_KEY", ""),
-#         "UPDATE_ON_DUPLICATE_REG_ID": True,
-#         "APNS_CERTIFICATE": env.str("APNS_CERTIFICATE", ""),
-#         "APNS_TOPIC": env.str("APNS_TOPIC", ""),
-#         "WNS_PACKAGE_SECURITY_ID": "[your package security id, e.g: 'ms-app://e-3-4-6234...']",
-#         "WNS_SECRET_KEY": "[your app secret key, e.g.: 'KDiejnLKDUWodsjmewuSZkk']",
-#         "WP_PRIVATE_KEY": "/path/to/your/private.pem",
-#         "WP_CLAIMS": {'sub': "mailto: development@example.com"}
-# }
 
 # Jet admin theme
 JET_SIDE_MENU_COMPACT = True
