@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {AsyncStorage} from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Axios = axios.create({
 	baseURL: 'https://s4fe.herokuapp.com/',
@@ -9,9 +9,9 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
 	async config => {
 		const token = await AsyncStorage.getItem('tokenData')
-		console.log('token iz intercepta', token)
+		console.log('TOKEN IZ AXIOS', token)
 		if (token) {
-			console.log('token iz if iz intercept', token)
+			// console.log('token iz if iz intercept', token)
 			config.headers.Authorization = 'Token ' + token
 		}
 		return config

@@ -6,8 +6,9 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import AsyncStorage from '@react-native-community/async-storage';
 
 async function logOut(props) {
-	console.log('logout')
 	await AsyncStorage.removeItem('tokenData')
+	await AsyncStorage.removeItem('userData')
+	// await AsyncStorage.clear()
 	props.navigation.navigate('LogIn')
 }
 

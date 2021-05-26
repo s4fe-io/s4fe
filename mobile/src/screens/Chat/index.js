@@ -4,7 +4,7 @@ import {
 	View,
 	StatusBar,
 	ImageBackground,
-	Platform, Dimensions, AsyncStorage,
+	Platform, Dimensions,
 } from 'react-native'
 import ChatHeader from '../../components/ChatHeader'
 import Colors from "../../constants/Colors";
@@ -31,6 +31,7 @@ function ChatRender (props) {
 			<StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY} />
 			<ChatHeader
 				navigation={navigation}
+				goHome={params.goHome}
 				icon2Name="power"
 				style={styles.headerX}
 				user={params}

@@ -33,14 +33,11 @@ export default class PhoneNumber extends ValidationComponent {
 		const { message } = this.state
 		const { navigation } = this.props
 		const user = navigation.getParam('payload')
-		console.log('user za contact', user)
-		console.log('send')
 		const formData = {
 			content: message,
 			receiver: user.user
 		}
 		return Axios.post(API.MESSAGES, formData).then(res => {
-			console.log('res', res)
 			navigation.navigate('UserProfile')
 			Alert.alert('Thank you.', 'Message is sent to the item owner.')
 		}, err => {

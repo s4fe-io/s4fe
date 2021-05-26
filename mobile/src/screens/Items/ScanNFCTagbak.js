@@ -22,7 +22,6 @@ import {Axios} from '../../utils/axios'
 const hash = require('object-hash')
 const generateNFCKey = () => {
 	const generatedHash = hash(Math.round(Math.random() * 10000000000))
-	console.log('generated hash', generatedHash)
 	return generatedHash
 }
 
@@ -69,7 +68,6 @@ export default class ScanNFC extends Component {
 		}
 		Axios.post(API.ITEMS_STATUS, formData).then(
 			res => {
-				console.log('res', res)
 				const result = res.data
 				if (result.your_device) {
 					NfcManager.cancelTechnologyRequest().catch(() => 0)
@@ -89,7 +87,6 @@ export default class ScanNFC extends Component {
 									})
 									NfcManager.cancelTechnologyRequest().catch(() => 0)
 									this._scanNFCTag()
-									console.log('Cancel Pressed')
 								},
 								style: 'cancel',
 							},
@@ -107,9 +104,7 @@ export default class ScanNFC extends Component {
 				}
 			},
 			err => {
-				console.log('err', err.response)
 				const status = err.response.data.status
-				console.log('data', status)
 				if (status) {
 					Alert.alert('Warning', status)
 					this.setState({

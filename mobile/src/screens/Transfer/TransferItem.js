@@ -9,13 +9,13 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	ScrollView,
-	AsyncStorage,
 	Alert,
 	ActivityIndicator
 } from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Colors from '../../constants/Colors'
-import {Icon} from 'native-base'
+import {Icon, Toast} from 'native-base'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import ValidationComponent from 'react-native-form-validator'
 import {API} from '../../utils/api'
@@ -33,7 +33,9 @@ export default class TransferItem extends ValidationComponent {
 			uniqueUserId: '',
 			items: [],
 			selectedItem: '',
-			dataLoading: false
+			dataLoading: false,
+			showCamera: true,
+			loading: false
 		}
 		this.qrCodeRead = this.qrCodeRead.bind(this)
 		this.state.userId = this.props.navigation.getParam('userId')
@@ -41,13 +43,14 @@ export default class TransferItem extends ValidationComponent {
 
 	componentDidMount() {
 		this.fetchItems()
+		const params = this.props.navigation.getParam('item')
+		this.setState({selectedItem: params.id})
 	}
 
 	fetchItems() {
 		this.setState({dataLoading: true})
 		Axios.get(API.ITEMS)
 			.then(res => {
-				console.log('items fetched', res.data)
 				const result = []
 				res.data.forEach(item => {
 					result.push({
@@ -84,7 +87,6 @@ export default class TransferItem extends ValidationComponent {
 				item: this.state.selectedItem,
 				user: this.state.uniqueUserId
 			}
-			console.log('forma ', formData)
 			Axios.post(API.ITEM_TRANSFER, formData)
 				.then((res) => {
 					console.log(res)
@@ -93,6 +95,19 @@ export default class TransferItem extends ValidationComponent {
 						uniqueUserId: '',
 						selectedItem: ''
 					})
+					Toast.show({
+						text: 'Item Transferred',
+						position: 'bottom',
+						textStyle: {
+							color: '#404040',
+						},
+						style: {
+							backgroundColor: '#e7e7e7',
+							opacity: 0.8,
+							borderRadius: Platform.OS === 'ios' ? 30 : 0,
+						},
+					})
+					this.props.navigation.navigate('UserProfile')
 				})
 				.catch(e => {
 					this.setState({dataLoading: false})
@@ -109,11 +124,11 @@ export default class TransferItem extends ValidationComponent {
 	}
 
 	qrCodeRead ({data}) {
-		console.log('qr code ', data)
-		this.setState({uniqueUserId: data})
+		this.setState({loading: true, uniqueUserId: data})
 		setTimeout(() => {
 			this.scanner.reactivate()
-		}, 2000)
+			this.setState({showCamera: false})
+		}, 1000)
 	}
 
 	_renderCamera () {
@@ -147,7 +162,7 @@ export default class TransferItem extends ValidationComponent {
 			value: null,
 			color: '#cacaca',
 		}
-		const { uniqueUserId, dataLoading, selectedItem } = this.state
+		const { uniqueUserId, dataLoading, selectedItem, showCamera, loading } = this.state
 
 		return (
 			<Fragment>
@@ -184,7 +199,25 @@ export default class TransferItem extends ValidationComponent {
 									<ScrollView style={styles.scrollView}>
 										<KeyboardAwareScrollView
 											contentContainerStyle={{flexGrow: 1}}>
-											{ this._renderCamera() }
+											{ !showCamera &&
+											<TouchableOpacity
+												onPress={() => {
+													this.setState({ showCamera: true})
+												}}
+												style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}
+											>
+												<Icon
+													type="FontAwesome5"
+													name="camera"
+													style={{color: 'white', marginRight: 5}}
+													onPress={() => {
+														navigation.pop()
+													}}
+												/>
+												<Text style={styles.scanQR}>Scan QR</Text>
+											</TouchableOpacity>
+											}
+											{ showCamera && this._renderCamera() }
 											<View style={styles.form}>
 												{/* User ID */}
 												<View style={styles.group}>

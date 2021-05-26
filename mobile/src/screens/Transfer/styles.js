@@ -218,5 +218,11 @@ export default StyleSheet.create({
 		borderWidth: 2,
 		padding: 100,
 		opacity: 1
-	}
+	},
+	scanQR: {
+		color: 'rgba(255,255,255,1)',
+		fontSize: 18,
+		marginTop: 2,
+		textAlign: 'center',
+	},
 })

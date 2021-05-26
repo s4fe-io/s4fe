@@ -3,15 +3,16 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 #permissions_path = '../node_modules/react-native-permissions/ios'
 
  # Pods for ReactPushNotifications - Add these lines
-	pod 'Firebase/Core'
-	pod 'Firebase/Messaging'
+	# pod 'Firebase/Core'
+	 # pod 'Firebase/Messaging'
 
+
+permissions_path = '../node_modules/react-native-permissions/ios'
+pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
 
 target 's4fe' do
   # Pods for s4fe
-  permissions_path = '../node_modules/react-native-permissions/ios'
 
- 	pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -72,4 +73,26 @@ target 's4fe-tvOS' do
     inherit! :search_paths
     # Pods for testing
   end
+end
+
+
+post_install do |installer|
+    ## Fix for XCode 12.5
+    find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
+    "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
+    find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+    "RCTBridgeModuleNameForClass(strongModule))", "RCTBridgeModuleNameForClass(Class(strongModule)))")
+  end
+
+def find_and_replace(dir, findstr, replacestr)
+  Dir[dir].each do |name|
+      text = File.read(name)
+      replace = text.gsub(findstr,replacestr)
+      if text != replace
+          puts "Fix: " + name
+          File.open(name, "w") { |file| file.puts replace }
+          STDOUT.flush
+      end
+  end
+  Dir[dir + '*/'].each(&method(:find_and_replace))
 end

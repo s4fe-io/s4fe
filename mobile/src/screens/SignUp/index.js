@@ -65,6 +65,15 @@ export default class PhoneNumber extends ValidationComponent {
 			selectedCountryCode: value,
 		})
 	}
+	// Store data
+	storeData = async (key, value) => {
+		try {
+			await AsyncStorage.setItem(key, value)
+		} catch (e) {
+			// saving error
+			console.log(e)
+		}
+	}
 	goToScreen(screen, data) {
 		this.props.navigation.navigate(screen, {
 			userData: data,
@@ -75,9 +84,7 @@ export default class PhoneNumber extends ValidationComponent {
 		const formData = {
 			access_token: accessToken
 		}
-		console.log('form', formData)
 		Axios.post(API.FACEBOOK, formData).then(res => {
-			console.log('Res', res)
 			AsyncStorage.setItem('tokenData', res.data.key)
 		  AsyncStorage.setItem('userData', JSON.stringify(res.data))
 			this.goToScreen('UserProfile', res.data)
@@ -108,29 +115,32 @@ export default class PhoneNumber extends ValidationComponent {
 	}
 
 	googleSignIn = async () => {
+		console.log('LS', await AsyncStorage.getItem('userData'))
 		GoogleSignin.configure({
 			webClientId:"689677381423-ke11h57ftbk2sr4endda3e45m6j2h6gb.apps.googleusercontent.com",
 			offlineAccess: true
 		});
 		try {
 			const x = await GoogleSignin.hasPlayServices();
-			const {idToken}  = await GoogleSignin.signIn();
-			console.log('idToken', idToken)
+			await GoogleSignin.signIn();
+			const {accessToken}  = await GoogleSignin.getTokens();
+			console.log('test', accessToken)
 
 			const formData = {
-				access_token: idToken
+				access_token: accessToken
 			}
 
-			Axios.post(API.GOOGLE, formData).then(res => {
-				console.log('Res', res)
-				this.storeData('tokenData', res.data.key)
-				this.storeData('userData', JSON.stringify(res.data))
+			Axios.post(API.GOOGLE, formData).then(async res => {
+				console.log('Ressponse iz google signup', res)
+				await AsyncStorage.setItem('tokenData', res.data.key)
+				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 				this.goToScreen('UserProfile', res.data)
 			}, err => {
 				console.log('err', err.response)
 				Alert.alert('Warning', JSON.stringify(err))
 			})
 		} catch (error) {
+			console.log('error iz catch prvi', error)
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
 				// user cancelled the login flow
 			} else if (error.code === statusCodes.IN_PROGRESS) {
@@ -139,7 +149,8 @@ export default class PhoneNumber extends ValidationComponent {
 				// play services not available or outdated
 			} else {
 				// some other error happened
-				console.log(error)
+				// Alert.alert('Warning', JSON.stringify(error))
+				console.log('error iz cathc', error)
 			}
 		}
 	};

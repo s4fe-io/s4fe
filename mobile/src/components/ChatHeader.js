@@ -5,18 +5,25 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 import AsyncStorage from '@react-native-community/async-storage';
 
 async function logOut(props) {
-	console.log('logout')
 	await AsyncStorage.removeItem('tokenData')
 	props.navigation.navigate('LogIn')
 }
 
 function HeaderX(props) {
-	console.log('props hjeader', props)
 	return (
 		<View style={[styles.container, props.style]}>
 			<View style={styles.group}>
 				<View style={styles.iconRow}>
 					<View style={styles.containerx}>
+						{props.goHome ?
+						<TouchableOpacity
+							onPress={() => props.navigation.navigate('UserProfile')}
+							style={styles.button}>
+							<FeatherIcon
+								name={'chevron-left'}
+								style={styles.icon2}
+							/>
+						</TouchableOpacity> :
 						<TouchableOpacity
 							onPress={() => props.navigation.pop()}
 							style={styles.button}>
@@ -24,7 +31,7 @@ function HeaderX(props) {
 								name={'chevron-left'}
 								style={styles.icon2}
 							/>
-						</TouchableOpacity>
+						</TouchableOpacity> }
 					</View>
 				</View>
 				<View style={styles.containerx}>

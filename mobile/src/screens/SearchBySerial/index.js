@@ -45,7 +45,6 @@ export default class Index extends ValidationComponent {
 		}
 		Axios.get(API.SEARCH, {params})
 			.then(res => {
-				console.log('searched', res)
 				this.setState({item: res.data})
 				this.props.navigation.navigate('SearchItemDetails', {
 					itemDetails: res.data
@@ -94,7 +93,7 @@ export default class Index extends ValidationComponent {
 									<Text style={styles.addNewItem}>SEARCH ITEM</Text>
 
 									<ScrollView style={styles.scrollView}>
-										<KeyboardAwareScrollView
+										<View
 											contentContainerStyle={{flexGrow: 1}}>
 											<View style={styles.form}>
 												{/* User ID */}
@@ -125,7 +124,7 @@ export default class Index extends ValidationComponent {
 													</TouchableOpacity> }
 												</View>
 											</View>
-										</KeyboardAwareScrollView>
+										</View>
 									</ScrollView>
 								</View>
 							</View>

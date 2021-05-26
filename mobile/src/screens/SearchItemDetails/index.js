@@ -96,7 +96,13 @@ export default class SearchItemDetails extends ValidationComponent {
 														{ dataLoading ?
 														<ActivityIndicator color="#fff" size="large"/> :
 														<TouchableOpacity
-															onPress={() => console.log('contact')}
+															onPress={() =>
+																navigation.navigate('Chat', {
+																	item: {
+																		user_id: itemDetails.user_id,
+																		goHome: true,
+																	}
+																})}
 															style={styles.button}>
 															<Text style={styles.next}>Contact the owner</Text>
 														</TouchableOpacity> }

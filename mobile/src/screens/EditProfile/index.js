@@ -48,7 +48,6 @@ export default class Index extends ValidationComponent {
 		}
 		Axios.patch(API.UPDATE_USER, formData).then(
 			async res => {
-				console.log('patched', res)
 				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 
 				this.props.navigation.navigate('UserProfile')
@@ -56,7 +55,6 @@ export default class Index extends ValidationComponent {
 			err => {
 				console.log('err', err.response)
 				const data = err.response.data
-				console.log('parsed data', data)
 				if (data.phone_number) {
 					Alert.alert('Warning!', 'Phone: ' + data.phone_number[0])
 				}
@@ -75,7 +73,6 @@ export default class Index extends ValidationComponent {
 				phoneNumber: currentUser.phone_number.replace('+', '')
 			})
 		}
-		console.log('user', firstName)
 		return (
 			<Fragment>
 				<View style={styles.background}>

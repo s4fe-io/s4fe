@@ -10,7 +10,6 @@ import {
 	SafeAreaView,
 	ScrollView,
 	Alert,
-	AsyncStorage,
 	Dimensions
 } from 'react-native'
 import {Center} from '@builderx/utils'
@@ -23,7 +22,7 @@ import EvilIconsIcon from 'react-native-vector-icons/EvilIcons'
 import {Axios} from '../../utils/axios'
 import {API} from '../../utils/api'
 import ValidationComponent from 'react-native-form-validator'
-
+import AsyncStorage from '@react-native-community/async-storage'
 import {
 	LoginButton,
 	AccessToken,
@@ -39,8 +38,8 @@ export default class SignIn extends ValidationComponent {
 	constructor(props) {
 		super(props)
 		this.state = {
-			email: 'dj.shone@gmail.com',
-			password: '22sep2008',
+			email: '',
+			password: '',
 			dataLoading: false,
 			userInfo: {}
 		}
@@ -54,21 +53,21 @@ export default class SignIn extends ValidationComponent {
 			offlineAccess: true
 		});
 		try {
-			const x = await GoogleSignin.hasPlayServices();
-			const {idToken}  = await GoogleSignin.signIn();
-			console.log('idToken', idToken)
+			await GoogleSignin.hasPlayServices();
+			await GoogleSignin.signIn();
+			const {accessToken}  = await GoogleSignin.getTokens();
 
 			// const formData = {
 			// 	access_token: idToken
 			// }
 
 			const formData = new FormData()
-			formData.append('access_token', idToken)
+			formData.append('access_token', accessToken)
 
-			Axios.post(API.GOOGLE, formData).then(res => {
-				console.log('Res', res)
-				this.storeData('tokenData', res.data.key)
-				this.storeData('userData', JSON.stringify(res.data))
+			Axios.post(API.GOOGLE, formData).then(async res => {
+				console.log('login response', res)
+				await AsyncStorage.setItem('tokenData', res.data.key)
+				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 				this.goToScreen('UserProfile', res.data)
 			}, err => {
 				Alert.alert('Warning', JSON.stringify(err))
@@ -105,11 +104,11 @@ export default class SignIn extends ValidationComponent {
 		const formData = {
 			access_token: accessToken
 		}
-		console.log('form', formData)
-		Axios.post(API.FACEBOOK, formData).then(res => {
-			console.log('Res', res)
-			this.storeData('tokenData', res.data.key)
-			this.storeData('userData', JSON.stringify(res.data))
+		Axios.post(API.FACEBOOK, formData).then(async res => {
+			await AsyncStorage.setItem('tokenData', res.data.key)
+			await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+			// this.storeData('tokenData', res.data.key)
+			// this.storeData('userData', JSON.stringify(res.data))
 			this.goToScreen('UserProfile', res.data)
 		}, err => {
 			Alert.alert('Warning', JSON.stringify(err))
@@ -120,15 +119,12 @@ export default class SignIn extends ValidationComponent {
 		LoginManager.logInWithPermissions(['public_profile', 'email']).then(
 			(result) => {
 				if (result.isCancelled) {
-					console.log('Login cancelled')
 				} else {
 					AccessToken.getCurrentAccessToken().then(data => {
 						const accessToken = data.accessToken.toString()
 						this.facebookLogin(accessToken)
-						console.log('access token', accessToken)
 						// this.getInfoFromToken(accessToken);
 					})
-					console.log('Login success with permissions: ' + result.grantedPermissions.toString())
 				}
 			},
 			function (error) {
@@ -156,15 +152,18 @@ export default class SignIn extends ValidationComponent {
 				password: this.state.password,
 			}
 			Axios.post(API.LOGIN, formData)
-				.then(res => {
-					console.log('res', res)
+				.then(async res => {
 					this.setState({dataLoading: false})
-					this.storeData('tokenData', res.data.key)
-					this.storeData('userData', JSON.stringify(res.data))
+					await AsyncStorage.setItem('tokenData', res.data.key)
+					await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+					// this.storeData('tokenData', res.data.key)
+					// this.storeData('userData', JSON.stringify(res.data))
+					setTimeout(async () => {
+						const tokenLS = await AsyncStorage.getItem('tokenData')
+					})
 					this.goToScreen('UserProfile', res.data)
 				})
 				.catch(err => {
-					console.log(err.response)
 					const nonFieldErrors = err.response.data.non_field_errors
 					if (nonFieldErrors) {
 						Alert.alert('Warning', nonFieldErrors[0])
@@ -243,9 +242,9 @@ export default class SignIn extends ValidationComponent {
 										</View>
 										<View style={{marginTop: 2, marginBottom: 30}}>
 											<TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-											<Text style={styles.forgotPassword}>
-												Forgot password
-											</Text>
+												<Text style={styles.forgotPassword}>
+													Forgot password
+												</Text>
 											</TouchableOpacity>
 
 										</View>

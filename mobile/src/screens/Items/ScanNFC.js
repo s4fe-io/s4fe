@@ -17,27 +17,14 @@ import Colors from '../../constants/Colors'
 import {Icon} from 'native-base'
 import NfcManager, {Ndef, NdefParser, NfcTech} from 'react-native-nfc-manager'
 
+import NfcProxy from "../../utils/NFCProxy";
+
 const hash = require('object-hash')
 const generateNFCKey = () => {
 	const generatedHash = hash(Math.round(Math.random() * 10000000000))
 	console.log('generated hash', generatedHash)
 	return generatedHash
 }
-
-function strToBytes(str) {
-	let result = []
-	for (let i = 0; i < str.length; i++) {
-		result.push(str.charCodeAt(i))
-	}
-	return result
-}
-
-// function buildTextPayload(valueToWrite) {
-// 	const textBytes = strToBytes(valueToWrite)
-// 	// in this example. we always use `en`
-// 	const headerBytes = [0xd1, 0x01, textBytes.length + 3, 0x54, 0x02, 0x65, 0x6e]
-// 	return [...headerBytes, ...textBytes]
-// }
 
 function buildTextPayload(valueToWrite) {
 	return Ndef.encodeMessage([
@@ -55,21 +42,18 @@ export default class ScanNFC extends Component {
 			text: 'hi, nfc!',
 			parsedText: null,
 			tag: null,
+			showNFCAnimation: false
 		}
 	}
 
 	componentDidMount() {
-		NfcManager.start();
-		this.writeNFC()
-		// NfcManager.isSupported().then(supported => {
-		// 	this.setState({supported})
-		// 	if (supported) {
-		// 		this._startNfc()
-		// 	}
-		// })
+		this.focusListener = this.props.navigation.addListener('didFocus', () => {
+			this.setState({showNFCAnimation: false})
+		})
 	}
 
 	componentWillUnmount() {
+		this.focusListener.remove()
 		this._cleanUp();
 	}
 
@@ -77,27 +61,31 @@ export default class ScanNFC extends Component {
 		NfcManager.cancelTechnologyRequest().catch(() => 0);
 	}
 
-	writeNFC = async () => {
-		try {
-			const NFCKey = generateNFCKey()
-			let resp = await NfcManager.requestTechnology(NfcTech.Ndef, {
-				alertMessage: 'Place your phone close to the S4FE sticker.'
-			});
-			console.log(resp);
-			let ndef = await NfcManager.getNdefMessage();
-			console.log(ndef);
-			let bytes = buildTextPayload(NFCKey);
-			await NfcManager.writeNdefMessage(bytes);
-			console.log('successfully write ndef');
-			await NfcManager.setAlertMessageIOS('Unique ID is written to the Tag');
-			this._cleanUp();
-			this.goToScreen(NFCKey)
-		} catch (ex) {
-			this._cleanUp();
-			console.log('ex', ex);
-			Alert.alert('Warning!', 'The tag is not empty! Please use the new (empty) S4FE tag.')
-		}
-	}
+	// writeNFC = async () => {
+	// 	try {
+	// 		const NFCKey = generateNFCKey()
+	// 		let resp = await NfcManager.requestTechnology(NfcTech.Ndef, {
+	// 			alertMessage: 'Place your phone close to the S4FE sticker.'
+	// 		});
+	// 		console.log(resp);
+	// 		let ndef = await NfcManager.getNdefMessage();
+	// 		console.log(ndef);
+	// 		let bytes = buildTextPayload(NFCKey);
+	// 		await NfcManager.writeNdefMessage(bytes);
+	// 		console.log('successfully write ndef');
+	// 		await NfcManager.setAlertMessageIOS('Unique ID is written to the Tag');
+	// 		this._cleanUp();
+	// 		this.goToScreen(NFCKey)
+	// 	} catch (ex) {
+	// 		this._cleanUp();
+	// 		console.log('ex', ex);
+	// 		if (ex !== 'cancelled') {
+	// 			if (ex !== 'NFCError:200') {
+	// 				Alert.alert('Warning!', 'The tag is not empty! Please use the new (empty) S4FE tag.')
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	goToScreen(nfcKey) {
 		this.props.navigation.navigate('AddItem', {
@@ -105,11 +93,26 @@ export default class ScanNFC extends Component {
 		})
 	}
 
+	async writeNdef () {
+		if (Platform.OS === 'android') {
+			this.setState({showNFCAnimation: true})
+		}
+		const NFCKey = generateNFCKey()
+
+		const scanTagResult = await NfcProxy.writeNdef({type: 'TEXT', value: NFCKey});
+		console.log('scan tag result', scanTagResult)
+		if (scanTagResult) {
+			if (Platform.OS === 'android') {
+				this.setState({showNFCAnimation: false})
+			}
+			this.goToScreen(NFCKey)
+		}
+	};
+
 
 
 	render() {
 		const {navigation} = this.props
-		let {supported, enabled, tag, text, parsedText, isTestRunning} = this.state
 		return (
 			<Fragment>
 				<View style={styles.background}>
@@ -145,9 +148,9 @@ export default class ScanNFC extends Component {
 									source={require('../../assets/images/Gradient_EsLX0zX.png')}>
 									<View style={styles.icon10Column}>
 										<Text style={styles.scanS4FeTarcker}>
-											SCAN S4FE TRACKER
+											ADD NEW ITEM {this.state.showNFCAnimation}
 										</Text>
-										{ Platform.OS === 'android' ?
+										{ Platform.OS === 'android' && this.state.showNFCAnimation ?
 											<View style={styles.animation}>
 
 												<LottieView
@@ -158,19 +161,44 @@ export default class ScanNFC extends Component {
 											</View>  : null }
 
 										<Text style={[styles.text, {marginTop: 30}]}>
-											Place your phone close to the S4FE sticker
+											Add your item with S4FE NFC Tag or without?
 										</Text>
 
-										<TouchableOpacity onPress={() => this.writeNFC()}>
+										<TouchableOpacity
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'center',
+												borderWidth: 1,
+												borderColor: 'white',
+												margin: 20,
+												borderRadius: 5
+											}}
+											onPress={() => this.writeNdef()}>
+											<MaterialIconsIcon name={'nfc'} style={{color: 'white', fontSize: 25, marginTop: 20, marginRight: -17}} />
 											<Text style={styles.text}>
-												Scan NFC
+												With S4FE Tag
 											</Text>
 										</TouchableOpacity>
 
 										{/*	Skip scanning */}
-										<TouchableOpacity onPress={() => this.goToScreen('none')}>
-											<Text style={styles.skipText}>Add without NFC</Text>
+										<TouchableOpacity
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'center',
+												borderWidth: 1,
+												borderColor: 'white',
+												margin: 20,
+												borderRadius: 5
+											}}
+											onPress={() => this.goToScreen('none')}>
+											<MaterialIconsIcon name={'description'} style={{color: 'white', fontSize: 25, marginTop: 20, marginRight: -17}} />
+											<Text style={styles.text}>
+												Without S4FE Tag
+											</Text>
 										</TouchableOpacity>
+										{/*<TouchableOpacity onPress={() => this.goToScreen('none')}>*/}
+										{/*	<Text style={styles.skipText}>Add without NFC</Text>*/}
+										{/*</TouchableOpacity>*/}
 									</View>
 								</ImageBackground>
 							</View>
@@ -365,11 +393,9 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		color: 'white',
+		padding: 20,
 		fontSize: 20,
 		textAlign: 'center',
-		paddingLeft: 20,
-		paddingRight: 20,
-		paddingBottom: 30,
 	},
 	skipText: {
 		color: '#e9e9e9',

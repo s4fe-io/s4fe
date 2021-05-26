@@ -9,7 +9,6 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 	ScrollView,
-	AsyncStorage,
 	Alert,
 } from 'react-native'
 import MaterialIconsIcon from 'react-native-vector-icons/MaterialIcons'
@@ -116,7 +115,7 @@ export default class AddItem extends ValidationComponent {
 	}
 
 	deleteItemConfirm () {
-		Alert.alert('Error', 'Please enter some text', [
+		Alert.alert('Error', 'Are you sure that you want to delete this item?', [
 				{
 					text: "Cancel",
 					onPress: () => console.log("Cancel Pressed"),
@@ -145,7 +144,6 @@ export default class AddItem extends ValidationComponent {
 		const item = navigation.getParam('item')
 		let {selectedCategory, title, description, selectedStatus, serial} = this.state
 
-		console.log('item', item)
 		const placeholder = {
 			label: 'Categories',
 			value: null,

@@ -10,7 +10,6 @@ import {
 	SafeAreaView,
 	ScrollView,
 	Alert,
-	AsyncStorage,
 } from 'react-native'
 import {Center} from '@builderx/utils'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -33,16 +32,6 @@ export default class SignIn extends ValidationComponent {
 		}
 	}
 
-	// Store data
-	storeData = async (key, value) => {
-		try {
-			await AsyncStorage.setItem(key, value)
-		} catch (e) {
-			// saving error
-			console.log(e)
-		}
-	}
-
 	handleChange = (name, value) => {
 		this.setState({[name]: value})
 	}
@@ -62,7 +51,6 @@ export default class SignIn extends ValidationComponent {
 			}
 			Axios.post(API.FORGOT_PASSWORD, formData)
 				.then(res => {
-					console.log('res', res)
 					this.setState({dataLoading: false})
 					Alert.alert('Info', 'Please check your inbox for the password reset link')
 					this.goToScreen('LogIn')
@@ -70,8 +58,10 @@ export default class SignIn extends ValidationComponent {
 				.catch(err => {
 					console.log(err.response)
 					const email = err.response.data.email.email
-					if (email) {
+					if (email.lenght > 0) {
 						Alert.alert('Warning', email[0])
+					} else {
+						Alert.alert('Warning', 'Something went wrong, please try again.')
 					}
 					this.setState({dataLoading: false})
 					// Alert.alert('Warning!', 'Something went wrong!')
