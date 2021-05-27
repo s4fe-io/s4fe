@@ -7,7 +7,8 @@ import {
 	SafeAreaView,
 	FlatList,
 	ImageBackground,
-	RefreshControl
+	RefreshControl,
+	Platform
 } from 'react-native'
 
 import {
