@@ -5,6 +5,7 @@ export const API = {
 	FORGOT_PASSWORD: 'rest-auth/password/reset/',
 	FACEBOOK: 'rest-auth/facebook/',
 	GOOGLE: 'rest-auth/google/',
+	APPLE: 'rest-auth/apple/',
 	ITEMS: 'api/v1/items/',
 	ITEMS_STATUS: 'api/v1/item-status/',
 	CATEGORIES: 'api/v1/categories/',
