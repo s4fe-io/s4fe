@@ -60,6 +60,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.apple',
     'django_extensions',
     'drf_yasg',
     'push_notifications',
@@ -186,6 +187,24 @@ ACCOUNT_ADAPTER = "users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "users.adapters.SocialAccountAdapter"
 ACCOUNT_ALLOW_REGISTRATION = env.bool("ACCOUNT_ALLOW_REGISTRATION", True)
 SOCIALACCOUNT_ALLOW_REGISTRATION = env.bool("SOCIALACCOUNT_ALLOW_REGISTRATION", True)
+
+SOCIALACCOUNT_PROVIDERS = {
+    "apple": {
+        "APP": {
+            # Your service identifier.
+            "client_id": env.str("ACCOUNT_APPLE_CLIENT_ID", ""),
+            # The Key ID (visible in the "View Key Details" page).
+            "secret":  env.str("ACCOUNT_APPLE_KEY_ID",""),
+             # Member ID/App ID Prefix -- you can find it below your name
+             # at the top right corner of the page, or it’s your App ID
+             # Prefix in your App ID.
+            "key":  env.str("ACCOUNT_APPLE_TEAM_ID", ""),
+            # The certificate you downloaded when generating the key.
+            "certificate": env.str("ACCOUNT_APPLE_CERTIFICATE", "", multiline=True)
+        }
+    }
+}
+API_APPLE_CALLBACK_URL = 'https://s4fe.org/accounts/apple/login/callback/'
 
 REST_AUTH_SERIALIZERS = {
     # Replace password reset serializer to fix 500 error

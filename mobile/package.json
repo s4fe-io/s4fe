@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@builderx/utils": "^0.1.6",
+    "@invertase/react-native-apple-authentication": "^2.1.2",
     "@react-native-clipboard/clipboard": "^1.7.0",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/google-signin": "^5.0.0",

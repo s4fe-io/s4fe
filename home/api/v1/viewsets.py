@@ -1,4 +1,6 @@
 import json
+import jwt
+import requests
 
 from django import apps
 from django.core.management import call_command
@@ -21,12 +23,18 @@ from home.models import Item, OTP, Category, Message, DeviceInfo, Transaction, I
 from  .filters import ItemFilter, CategoryFilter, MessageFilter, ItemInterfaceFilter
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
+from datetime import timedelta
+
 import logging
 from random import randint
 from .helpers import sendSMS
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from allauth.socialaccount.providers.apple.views import AppleOAuth2Adapter
+from allauth.socialaccount.providers.apple.client import AppleOAuth2Client
 from rest_auth.registration.views import SocialLoginView
+from .apple_serializer import AppleSocialLoginSerializer
+
 import csv
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -446,3 +454,8 @@ class FacebookLogin(SocialLoginView):
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
+class AppleLogin(SocialLoginView):
+    adapter_class = AppleOAuth2Adapter
+    callback_url = getattr(settings, 'API_APPLE_CALLBACK_URL')
+    client_class = AppleOAuth2Client
+    serializer_class = AppleSocialLoginSerializer
