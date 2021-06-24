@@ -70,7 +70,12 @@ export default class SignIn extends ValidationComponent {
 				await AsyncStorage.setItem('userData', JSON.stringify(res.data))
 				this.goToScreen('UserProfile', res.data)
 			}, err => {
-				Alert.alert('Warning', JSON.stringify(err))
+				if ('data' in err.response && 'non_field_errors' in err.response['data']){
+					const errors = err.response['data']['non_field_errors'].join("\n");
+					Alert.alert('Unable to login', errors)
+				}else{
+					Alert.alert('Warning', JSON.stringify(err))
+				}
 			})
 		} catch (error) {
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -111,7 +116,12 @@ export default class SignIn extends ValidationComponent {
 			// this.storeData('userData', JSON.stringify(res.data))
 			this.goToScreen('UserProfile', res.data)
 		}, err => {
-			Alert.alert('Warning', JSON.stringify(err))
+			if ('data' in err.response && 'non_field_errors' in err.response['data']){
+				const errors = err.response['data']['non_field_errors'].join("\n");
+				Alert.alert('Unable to login', errors)
+			}else{
+				Alert.alert('Warning', JSON.stringify(err))
+			}
 		})
 	}
 
@@ -140,11 +150,15 @@ export default class SignIn extends ValidationComponent {
 		Axios.post(API.APPLE, formData).then(async res => {
 			await AsyncStorage.setItem('tokenData', res.data.key)
 			await AsyncStorage.setItem('userData', JSON.stringify(res.data))
-			// this.storeData('tokenData', res.data.key)
-			// this.storeData('userData', JSON.stringify(res.data))
 			this.goToScreen('UserProfile', res.data)
 		}, err => {
-			Alert.alert('Warning', JSON.stringify(err))
+			if ('data' in err.response && 'non_field_errors' in err.response['data']){
+				const errors = err.response['data']['non_field_errors'].join("\n");
+				Alert.alert('Unable to login', errors)
+			}else{
+				Alert.alert('Warning', JSON.stringify(err))
+			}
+			
 		})
 	}
 
@@ -158,7 +172,6 @@ export default class SignIn extends ValidationComponent {
 					appleAuth.Scope.FULL_NAME
 				],
 			});
-			//console.log('appleAuthRequestResponse', appleAuthRequestResponse);
 			const {
 				authorizationCode,
 				authorizedScopes,
@@ -172,7 +185,6 @@ export default class SignIn extends ValidationComponent {
 			if (authorizationCode) {
 			 	await this.appleLogin(authorizationCode);
 		 	}
-			//console.warn(`Apple Authentication Completed, ${email}`);
 		} catch (error) {
 			if (error.code === appleAuth.Error.CANCELED) {
 				console.warn('User canceled Apple Sign in.');
