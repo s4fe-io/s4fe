@@ -26,6 +26,7 @@ import {
 	LoginManager
 } from 'react-native-fbsdk';
 import {GoogleSignin, statusCodes} from "@react-native-community/google-signin";
+import appleAuth from '@invertase/react-native-apple-authentication';
 const countryTelData = require('country-telephone-data')
 
 export default class PhoneNumber extends ValidationComponent {
@@ -155,6 +156,55 @@ export default class PhoneNumber extends ValidationComponent {
 		}
 	};
 
+	appleLogin = async (accessToken) => {
+		const formData = {
+			code: accessToken
+		}
+		Axios.post(API.APPLE, formData).then(async res => {
+			await AsyncStorage.setItem('tokenData', res.data.key)
+			await AsyncStorage.setItem('userData', JSON.stringify(res.data))
+			this.goToScreen('UserProfile', res.data)
+		}, err => {
+			if ('data' in err.response && 'non_field_errors' in err.response['data']){
+				const errors = err.response['data']['non_field_errors'].join("\n");
+				Alert.alert('Unable to login', errors)
+			}else{
+				Alert.alert('Warning', JSON.stringify(err))
+			}
+		})
+	}
+
+	handleAppleLogin =  async () => {
+		console.log('Beginning Apple Authentication');
+		try {
+			const appleAuthRequestResponse = await appleAuth.performRequest({
+				requestedOperation: appleAuth.Operation.LOGIN,
+				requestedScopes: [
+					appleAuth.Scope.EMAIL,
+					appleAuth.Scope.FULL_NAME
+				],
+			});
+			const {
+				authorizationCode,
+				authorizedScopes,
+				user: newUser,
+				email,
+				nonce,
+				identityToken,
+				realUserStatus /* etc */,
+			  } = appleAuthRequestResponse;
+
+			if (authorizationCode) {
+			 	await this.appleLogin(authorizationCode);
+		 	}
+		} catch (error) {
+			if (error.code === appleAuth.Error.CANCELED) {
+				console.warn('User canceled Apple Sign in.');
+			  } else {
+				console.error(error);
+			  }
+		}
+	}
 	// Phone verification
 	verifyPhone(countryCode, phoneNumber) {
 		const isValid = this.validate({
@@ -292,6 +342,18 @@ export default class PhoneNumber extends ValidationComponent {
 									Sign Up using Social Platforms
 								</Text>
 								<View style={{flexDirection: 'row'}}>
+									{
+										appleAuth.isSupported
+											?
+											<TouchableOpacity
+												style={[styles.socialWrapper, { marginRight: 10 }]}
+												onPress={() => this.handleAppleLogin()}>
+												<Icon type={'FontAwesome5'} name={'apple'} style={{ color: 'white' }} />
+												<Text style={styles.socialIcons}>Apple </Text>
+											</TouchableOpacity>
+
+											: null
+									}
 									<TouchableOpacity
 										style={[styles.socialWrapper, {marginRight: 10}]}
 										onPress={() => this.handleFacebookLogin()}>
