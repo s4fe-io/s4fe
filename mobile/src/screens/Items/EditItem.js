@@ -23,6 +23,8 @@ import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
 import RNPickerSelect from 'react-native-picker-select'
 
+import CategoryButton from '../Category/CategoryButton'
+
 const hash = require('object-hash')
 
 export default class AddItem extends ValidationComponent {
@@ -33,7 +35,7 @@ export default class AddItem extends ValidationComponent {
 			title: '',
 			description: '',
 			categories: [],
-			selectedCategory: '',
+			selectedCategory: null,
 			selectedStatus: '',
 			dataLoading: false,
 			userId: '',
@@ -42,30 +44,6 @@ export default class AddItem extends ValidationComponent {
 		this.state.userId = this.props.navigation.getParam('userId')
 	}
 
-	fetchCategories() {
-		Axios.get(API.CATEGORIES)
-			.then(res => {
-				const result = []
-				res.data.forEach(category => {
-					result.push({
-						value: category.id,
-						label: category.title,
-					})
-				})
-				this.setState({
-					categories: result,
-				})
-			})
-			.catch(e => {
-				console.log(e)
-			})
-	}
-
-	handleCategoriesSelect = value => {
-		this.setState({
-			selectedCategory: value,
-		})
-	}
 	handleInput = (model, value) => {
 		this.setState({[model]: value})
 	}
@@ -80,12 +58,16 @@ export default class AddItem extends ValidationComponent {
 			title: {required: true},
 			selectedCategory: {required: true},
 		})
-
+		if (this.state.selectedCategory === null){
+			Alert.alert('Warning', 'The field "Category" is mandatory')
+			return;
+		}
 		if (isValid) {
 			this.setState({dataLoading: true})
 			const formData = {
 				title: this.state.title,
-				category: this.state.selectedCategory,
+				category_data: this.state.selectedCategory,
+				category: this.state.selectedCategory.id,
 				desc: this.state.description,
 				status: this.state.selectedStatus,
 				serial: this.state.serial
@@ -136,7 +118,7 @@ export default class AddItem extends ValidationComponent {
 	}
 
 	componentDidMount() {
-		this.fetchCategories()
+		//this.fetchCategories()
 	}
 
 	render() {
@@ -144,11 +126,6 @@ export default class AddItem extends ValidationComponent {
 		const item = navigation.getParam('item')
 		let {selectedCategory, title, description, selectedStatus, serial} = this.state
 
-		const placeholder = {
-			label: 'Categories',
-			value: null,
-			color: '#cacaca',
-		}
 		const statusPlaceholder = {
 			label: 'Status',
 			value: null,
@@ -168,9 +145,9 @@ export default class AddItem extends ValidationComponent {
 				value: 'S',
 			},
 		]
-		if (selectedCategory === '') {
+		if (selectedCategory === null) {
 			this.setState({
-				selectedCategory: item.category,
+				selectedCategory: item.category_info,
 				title: item.title,
 				description: item.desc,
 				selectedStatus: item.status,
@@ -215,17 +192,13 @@ export default class AddItem extends ValidationComponent {
 										<KeyboardAwareScrollView
 											contentContainerStyle={{flexGrow: 1}}>
 											<View style={styles.form}>
-												<View style={styles.selectPicker}>
-													{/*<FeatherIcon name="check" style={styles.icon6} />*/}
-													<RNPickerSelect
-														value={selectedCategory}
-														placeholder={placeholder}
-														placeholderTextColor="white"
-														style={pickerSelectStyles}
-														onValueChange={this.handleCategoriesSelect}
-														items={this.state.categories}
-													/>
-												</View>
+												<CategoryButton onCategorySelected={(value) => 
+														this.handleInput('selectedCategory', value)
+													}
+													navigation={navigation}
+													selectedCategory={selectedCategory}
+													redirectTo="EditItem"
+												/>
 												{/*Item title */}
 												<View style={styles.group}>
 													<MaterialIconsIcon

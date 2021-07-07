@@ -13,7 +13,7 @@ class CategoryFilter(filterset.FilterSet):
     class Meta:
         model = Category
         fields = '__all__'
-
+        exclude = ['img']
 
 class MessageFilter(filterset.FilterSet):
     user = filters.CharFilter(method='name_filter')

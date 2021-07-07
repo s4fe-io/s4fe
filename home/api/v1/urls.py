@@ -7,6 +7,8 @@ from home.api.v1.viewsets import SignupViewSet, LoginViewSet, ItemViewSet, Categ
     DeviceViewSet, get_item_status, TransactionsViewSet, search_by_serial, ItemInterfaceViewSet, copy_data,\
     item_transfer, messages_by_users, messages_within_topic
 
+from home.api.v1.categorylist.urls import urlpatterns as categoryListUrls
+
 router = DefaultRouter()
 router.register('signup', SignupViewSet, basename='signup')
 router.register('login', LoginViewSet, basename='login')
@@ -27,4 +29,5 @@ urlpatterns = [
     url(r'item-transfer', item_transfer),
     url(r'messages-by-user', messages_by_users),
     url(r'messages-within-topic', messages_within_topic),
+    url(r'^categorylist/', include(categoryListUrls)),
 ]

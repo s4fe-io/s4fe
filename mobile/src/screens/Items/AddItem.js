@@ -22,6 +22,7 @@ import ValidationComponent from 'react-native-form-validator'
 import {API} from '../../utils/api'
 import {Axios} from '../../utils/axios'
 import RNPickerSelect from 'react-native-picker-select'
+import CategoryButton from '../Category/CategoryButton'
 
 const hash = require('object-hash')
 
@@ -32,7 +33,7 @@ export default class AddItem extends ValidationComponent {
 			title: '',
 			description: '',
 			categories: [],
-			selectedCategory: '',
+			selectedCategory: null,
 			dataLoading: false,
 			userId: '',
 			serial: null
@@ -40,30 +41,6 @@ export default class AddItem extends ValidationComponent {
 		this.state.userId = this.props.navigation.getParam('userId')
 	}
 
-	fetchCategories() {
-		Axios.get(API.CATEGORIES)
-			.then(res => {
-				const result = []
-				res.data.forEach(category => {
-					result.push({
-						value: category.id,
-						label: category.title,
-					})
-				})
-				this.setState({
-					categories: result,
-				})
-			})
-			.catch(e => {
-				console.log(e)
-			})
-	}
-
-	handleCategoriesSelect = value => {
-		this.setState({
-			selectedCategory: value,
-		})
-	}
 	handleInput = (model, value) => {
 		this.setState({[model]: value})
 	}
@@ -73,11 +50,15 @@ export default class AddItem extends ValidationComponent {
 			title: {required: true},
 			selectedCategory: {required: true},
 		})
+		if (this.state.selectedCategory === null){
+			Alert.alert('Warning', 'The field "Category" is mandatory')
+			return;
+		}
 		if (isValid) {
 			this.setState({dataLoading: true})
 			const formData = {
 				title: this.state.title,
-				category: this.state.selectedCategory,
+				category: this.state.selectedCategory.id,
 				serial: this.state.serial,
 				desc: this.state.description,
 				key: NFCKey
@@ -106,18 +87,12 @@ export default class AddItem extends ValidationComponent {
 	}
 
 	componentDidMount() {
-		this.fetchCategories()
+		//this.fetchCategories()
 	}
 
 	render() {
 		const {navigation} = this.props
-		const placeholder = {
-			label: 'Categories',
-			value: null,
-			color: '#cacaca',
-		}
 		const NFCKey = navigation.getParam('nfcKey')
-
 		return (
 			<Fragment>
 				<View style={styles.background}>
@@ -150,16 +125,14 @@ export default class AddItem extends ValidationComponent {
 										<KeyboardAwareScrollView
 											contentContainerStyle={{flexGrow: 1}}>
 											<View style={styles.form}>
-												<View style={styles.selectPicker}>
-													{/*<FeatherIcon name="check" style={styles.icon6} />*/}
-													<RNPickerSelect
-														placeholder={placeholder}
-														placeholderTextColor="white"
-														style={pickerSelectStyles}
-														onValueChange={this.handleCategoriesSelect}
-														items={this.state.categories}
-													/>
-												</View>
+												<CategoryButton onCategorySelected={(value) =>
+														this.handleInput('selectedCategory', value)
+													}
+													navigation={this.props.navigation}
+													selectedCategory={this.state.selectedCategory}
+													redirectTo="AddItem"
+												/>
+												
 												{/*Item title */}
 												<View style={styles.group}>
 													<MaterialIconsIcon
@@ -448,5 +421,5 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		marginTop: 40,
 		marginBottom: 40,
-	},
+	}
 })

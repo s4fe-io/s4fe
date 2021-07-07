@@ -31,6 +31,9 @@ SITE_ID = 1
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django_filters',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 LOCAL_APPS = [
     'home',
@@ -110,6 +115,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 's4fe.wsgi.application'
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -167,11 +173,22 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend'
 )
 
+if env.str("CLOUDINARY_CLOUD_NAME", "") and \
+        env.str("CLOUDINARY_API_KEY", "") and \
+        env.str("CLOUDINARY_API_SECRET", ""):
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': env.str("CLOUDINARY_CLOUD_NAME", ""),
+        'API_KEY': env.str("CLOUDINARY_API_KEY", ""),
+        'API_SECRET': env.str("CLOUDINARY_API_SECRET", ""),
+    }
+    DEFAULT_FILE_STORAGE='cloudinary_storage.storage.MediaCloudinaryStorage'
+
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # allauth / users
 ACCOUNT_EMAIL_REQUIRED = True

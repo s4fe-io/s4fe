@@ -18,13 +18,21 @@ class Category(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(default="")
     created = models.DateTimeField(auto_now_add=True, editable=False)
+    parent = models.ForeignKey("self", blank=True, null=True, on_delete=models.CASCADE, related_name="children")
+    can_have_items = models.BooleanField(default=True)
+    img = models.ImageField(upload_to='categories/', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
         ordering = ('-created',)
 
     def __str__(self):
-        return str(self.title)
+        full_path = [self.title]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.title)
+            k = k.parent
+        return ' / '.join(full_path[::-1])
 
 
 class Item(models.Model):
@@ -53,7 +61,6 @@ class Item(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.unique_identifier = str(uuid.uuid4())
         super(Item, self).save(*args, **kwargs)
 
 

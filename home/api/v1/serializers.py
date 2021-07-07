@@ -17,11 +17,21 @@ User = get_user_model()
 
 
 class ItemSerializer(serializers.ModelSerializer):
+    category_info = serializers.SerializerMethodField('get_category_info')
+
     class Meta:
         model = Item
-        fields = ('id', 'title', 'key', 'serial', 'unique_identifier', 'category', 'desc', 'status', 'created', 'user',
+        fields = ('id', 'title', 'key', 'serial', 'unique_identifier', 'category', 'category_info', 'desc', 'status', 'created', 'user',
                   'deleted')
 
+    def get_category_info(self, obj):
+        if obj.category:
+            return {
+                'id': obj.category.id,
+                'title': obj.category.title
+            }
+        else:
+            return {}
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

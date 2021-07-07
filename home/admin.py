@@ -9,7 +9,7 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description',)
+    list_display = ('title', 'description', 'parent')
     search_fields = ('title', 'description',)
 
 
