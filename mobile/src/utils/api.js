@@ -9,6 +9,7 @@ export const API = {
 	ITEMS: 'api/v1/items/',
 	ITEMS_STATUS: 'api/v1/item-status/',
 	CATEGORIES: 'api/v1/categories/',
+	CATEGORYLIST: 'api/v1/categorylist/',
 	MESSAGES: 'api/v1/messages/',
 	MESSAGES_WITHIN_TOPIC: 'api/v1/messages-within-topic/',
 	MESSAGES_BY_USER: 'api/v1/messages-by-user/',

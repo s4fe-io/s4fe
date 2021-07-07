@@ -160,7 +160,7 @@ export default class ScanNFC extends Component {
 												/>
 											</View>  : null }
 
-										<Text style={[styles.text, {marginTop: 30}]}>
+										<Text style={[styles.text, {marginTop: 0}]}>
 											Add your item with S4FE NFC Tag or without?
 										</Text>
 
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
 	scanS4FeTarcker: {
 		color: 'rgba(255,255,255,1)',
 		fontSize: 24,
-		marginTop: 36,
+		marginTop: 30,
 		textAlign: 'center',
 	},
 	image: {
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
 		marginLeft: 69,
 	},
 	icon10Column: {
-		marginTop: 23,
+		marginTop: 0,
 	},
 	icon10ColumnFiller: {
 		flex: 1,

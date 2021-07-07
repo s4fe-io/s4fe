@@ -1,7 +1,7 @@
 import React from 'react'
-import {createAppContainer, createSwitchNavigator} from 'react-navigation'
-import {createStackNavigator} from 'react-navigation-stack'
-import {createDrawerNavigator} from 'react-navigation-drawer'
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createDrawerNavigator } from 'react-navigation-drawer'
 import { createBottomTabNavigator, BottomTabBar } from 'react-navigation-tabs';
 import AuthLoadingScreen from '../screens/Auth/AuthLoading'
 
@@ -24,13 +24,15 @@ import ContactOwnerScreen from '../screens/Items/ContactOwner'
 import SearchBySerialScreen from '../screens/SearchBySerial/'
 import SearchItemDetailsScreen from '../screens/SearchItemDetails/'
 import QRCodeScreen from '../screens/QRCode/'
+import CategoryScreen from '../screens/Category/CategoriesScreen';
+import Colors from "../constants/Colors";
 
 // import SocialAuthScreen from '../screens/SocialAuth'
 const TabBarComponent = (props) => <BottomTabBar {...props} />;
 
 const tabBarOptions = {
 	activeTintColor: '#e91e63',
-		labelStyle: {
+	labelStyle: {
 		fontSize: 12,
 	},
 	style: {
@@ -44,87 +46,97 @@ const BottomTabs = createBottomTabNavigator(
 		Chat: ChatScreen
 	},
 	{
-	tabBarComponent: (props) => (
-		<TabBarComponent {...props} style={{ borderTopColor: '#605F60' }} />
-	),
-})
+		tabBarComponent: (props) => (
+			<TabBarComponent {...props} style={{ borderTopColor: '#605F60' }} />
+		),
+	})
 
 const AppStack = createStackNavigator({
 	UserProfile: {
 		screen: UserProfileScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	EditUserProfile: {
 		screen: EditProfileScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
-
+	CategorySelection: {
+		screen: CategoryScreen,
+		navigationOptions: {
+			headerShow: true,
+			headerTitleAlign: 'center',
+			headerStyle: {
+				backgroundColor: Colors.PRIMARY,
+			},
+			headerTintColor: 'white'
+		},
+	},
 	ScanNFC: {
 		screen: ScanNFCScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	AddItem: {
 		screen: AddItemScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	EditItem: {
 		screen: EditItemScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	TransferItem: {
 		screen: TransferItemScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	ScanNFCTag: {
 		screen: ScanNFCTagScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	ContactOwner: {
 		screen: ContactOwnerScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	Topics: {
 		screen: TopicsScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	Chat: {
 		screen: ChatScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	SearchBySerial: {
 		screen: SearchBySerialScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	SearchItemDetails: {
 		screen: SearchItemDetailsScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	QRCode: {
 		screen: QRCodeScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 })
 
 const AuthStack = createStackNavigator({
 	LogIn: {
 		screen: LogInScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	PhoneNumber: {
 		screen: PhoneNumberScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	EnterPin: {
 		screen: EnterPinScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	Register: {
 		screen: RegisterScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	ForgotPassword: {
 		screen: ForgotPasswordScreen,
-		navigationOptions: {headerShown: false},
+		navigationOptions: { headerShown: false },
 	},
 	// SocialAuth: {
 	// 	screen: SocialAuthScreen,

@@ -26,7 +26,7 @@ import {
 	LoginManager
 } from 'react-native-fbsdk';
 import {GoogleSignin, statusCodes} from "@react-native-community/google-signin";
-import appleAuth from '@invertase/react-native-apple-authentication';
+import {appleAuth, AppleButton} from '@invertase/react-native-apple-authentication';
 const countryTelData = require('country-telephone-data')
 
 export default class PhoneNumber extends ValidationComponent {
@@ -342,18 +342,6 @@ export default class PhoneNumber extends ValidationComponent {
 									Sign Up using Social Platforms
 								</Text>
 								<View style={{flexDirection: 'row'}}>
-									{
-										appleAuth.isSupported
-											?
-											<TouchableOpacity
-												style={[styles.socialWrapper, { marginRight: 10 }]}
-												onPress={() => this.handleAppleLogin()}>
-												<Icon type={'FontAwesome5'} name={'apple'} style={{ color: 'white' }} />
-												<Text style={styles.socialIcons}>Apple </Text>
-											</TouchableOpacity>
-
-											: null
-									}
 									<TouchableOpacity
 										style={[styles.socialWrapper, {marginRight: 10}]}
 										onPress={() => this.handleFacebookLogin()}>
@@ -368,6 +356,22 @@ export default class PhoneNumber extends ValidationComponent {
 										<Text style={styles.socialIcons}>Google </Text>
 									</TouchableOpacity>
 								</View>
+								{
+									appleAuth.isSupported
+										?
+										<View style={{ flexDirection: 'row' }}>
+										<AppleButton
+											buttonStyle={AppleButton.Style.WHITE}
+											buttonType={AppleButton.Type.SIGN_IN}
+											style={{
+												width: 160, // You must specify a width
+												height: 45, // You must specify a height
+											}}
+											onPress={() => this.handleAppleLogin()}
+											/>
+										</View>
+										: null
+								}
 							</View>
 
 							<View style={{marginTop: 10}}>

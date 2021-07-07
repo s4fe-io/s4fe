@@ -1,6 +1,7 @@
 import json
 import jwt
 import requests
+import uuid
 
 from django import apps
 from django.core.management import call_command
@@ -71,7 +72,8 @@ class ItemViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user
-        serializer.save(user=user)
+        uid = str(uuid.uuid4())
+        serializer.save(user=user, unique_identifier=uid)
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
@@ -81,13 +83,18 @@ class ItemViewSet(ModelViewSet):
             trans.save()
         return self.update(request, *args, **kwargs)
 
+    def perform_destroy(self, instance):
+        instance.deleted = True
+        instance.save()
 
 class CategoryViewSet(ModelViewSet):
     http_method_names = ('get',)
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_class = CategoryFilter
-
+    
+    def get_queryset(self):
+       return Category.objects.filter(can_have_items=True)
 
 class MessageViewSet(ModelViewSet):
     serializer_class = MessageSerializer
