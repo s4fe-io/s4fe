@@ -10,7 +10,7 @@ from home.notifications import send_push_message
 from home.api.v1.notifications import push_notification
 import uuid
 from django.utils import timezone
-
+from django_extensions.db.fields import AutoSlugField
 
 class Category(models.Model):
 
@@ -53,6 +53,8 @@ class Item(models.Model):
     updated = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
 
+    serial_slug = AutoSlugField(null=True, default=None, populate_from='serial', allow_duplicates=True)
+
     class Meta:
         verbose_name_plural = 'Items'
         ordering = ('-updated',)
@@ -62,7 +64,6 @@ class Item(models.Model):
 
     def save(self, *args, **kwargs):
         super(Item, self).save(*args, **kwargs)
-
 
 class OTP(models.Model):
     otp = models.CharField(max_length=4, default="")

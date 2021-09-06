@@ -5,7 +5,7 @@ from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
 
 from home.api.v1.viewsets import SignupViewSet, LoginViewSet, ItemViewSet, CategoryViewSet, MessageViewSet, get_otp,\
     DeviceViewSet, get_item_status, TransactionsViewSet, search_by_serial, ItemInterfaceViewSet, copy_data,\
-    item_transfer, messages_by_users, messages_within_topic
+    item_transfer, messages_by_users, messages_within_topic, get_stolen_items
 
 from home.api.v1.categorylist.urls import urlpatterns as categoryListUrls
 
@@ -30,4 +30,6 @@ urlpatterns = [
     url(r'messages-by-user', messages_by_users),
     url(r'messages-within-topic', messages_within_topic),
     url(r'^categorylist/', include(categoryListUrls)),
+    path('stolen/', get_stolen_items),
+    path('stolen/<slug:serial>/', get_stolen_items),
 ]
