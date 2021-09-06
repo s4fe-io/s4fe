@@ -10,7 +10,7 @@ from home.api.v1.categorylist.serializers import CategoryListSerializer
 @permission_classes([permissions.IsAuthenticated])
 def category_list(request, pk=None):
     categoryId = 'categoryId' in request.GET and request.GET['categoryId'] or pk
-    foundCategories = Category.objects.filter(Q(parent=categoryId)).order_by('-title')
+    foundCategories = Category.objects.filter(Q(parent=categoryId)).order_by('title')
 
     serializer = CategoryListSerializer(foundCategories, many=True, context={"request": request})
 

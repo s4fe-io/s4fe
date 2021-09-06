@@ -310,6 +310,33 @@ def get_item_status(request):
         }
         return Response(return_obj)
 
+@api_view(['GET',])
+@permission_classes([permissions.AllowAny])
+def get_stolen_items(request, serial=''):
+    if not serial:
+        items = Item.objects.filter(deleted=False, status__in=['L', 'S'])
+        result_items = [{
+            'title': item.title,
+            'serial': item.serial,
+            'serial_slug': item.serial_slug,
+            'key': item.key,
+            'status': item.get_status_display()
+        } for item in items]
+        return Response(result_items)
+
+    items = Item.objects.filter(serial_slug=serial, deleted=False, status__in=['L', 'S'])
+
+    if len(items) == 0:
+        return Response(data={"status": "Item not found !!"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    result_items = [{
+            'title': item.title,
+            'serial': item.serial,
+            'serial_slug': item.serial_slug,
+            'key': item.key,
+            'status': item.get_status_display()
+        } for item in items]
+    return Response(result_items)
 
 @api_view(['POST', ])
 @permission_classes([permissions.AllowAny])
@@ -358,17 +385,17 @@ def search_by_serial(request):
         return Response(data={"error": "Serial not specified!"},
                         status=status.HTTP_400_BAD_REQUEST)
 
-    item = Item.objects.filter(serial=request.GET['serial'], deleted=False)
+    items = Item.objects.filter(serial=request.GET['serial'], deleted=False)
 
-    if len(item) == 0:
+    if len(items) == 0:
         return Response(data={"status": "Item not found !!"},
                         status=status.HTTP_400_BAD_REQUEST)
     else:
-        return_obj = {
-           "title": item[0].title,
-           "user_id": item[0].user_id,
-           "status": item[0].get_status_display()
-        }
+        return_obj = [{
+           "title": x.title,
+           "user_id": x.user_id,
+           "status": x.get_status_display()
+        } for x in items]
         return Response(return_obj)
 
 
