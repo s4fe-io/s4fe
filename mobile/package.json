@@ -20,7 +20,7 @@
     "@react-native-community/push-notification-ios": "^1.8.0",
     "@react-native-community/toolbar-android": "0.1.0-rc.2",
     "@react-native-firebase/app": "^11.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "country-telephone-data": "^0.6.2",
     "lottie-react-native": "^3.4.0",
     "native-base": "^2.13.12",
