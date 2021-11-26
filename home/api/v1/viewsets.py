@@ -45,6 +45,7 @@ from django.db.models import Count
 from django.db.models import Q
 from home.api.v1.notifications import push_notification
 from fcm_django.models import FCMDevice
+from rest_framework.decorators import action
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +88,11 @@ class ItemViewSet(ModelViewSet):
         instance.deleted = True
         instance.save()
 
+    @action(methods=["get"], detail=False, url_path="count", url_name="count", permission_classes=[AllowAny])
+    def count(self, request, *args, **kwargs):
+        item_count = Item.objects.filter(deleted=False).count()
+        return Response(item_count)
+
 class CategoryViewSet(ModelViewSet):
     http_method_names = ('get',)
     queryset = Category.objects.all()
@@ -127,6 +133,11 @@ class TransactionsViewSet(ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionsSerializer
     permission_classes = [permissions.AllowAny, ]
+
+    @action(methods=["get"], detail=False, url_path="count", url_name="count")
+    def count(self, request, *args, **kwargs):
+        item_count = Transaction.objects.count()
+        return Response(item_count)
 
 
 class ItemInterfaceViewSet(ModelViewSet):
