@@ -128,7 +128,7 @@ DATABASES = {
 
 if env.str("DATABASE_URL", default=None):
     DATABASES = {
-        'default': env.db()
+        'default1': env.db()
     }
 
 
